@@ -1,0 +1,51 @@
+# Who may use which tools. Code hands each agent only the tools listed here;
+# tests/test_manifest.py reads this same file and fails on extras.
+coordinator:
+  model: accounts/fireworks/models/glm-5p3
+  tools: [launch_triage, launch_plan, launch_implement,
+          launch_reviewer, launch_escalate, launch_writer]   # dispatch only
+
+agents:
+  triage:
+    model: accounts/fireworks/models/deepseek-v4p1-flash
+    tools: [read_file]
+    isolated_context: true
+    workflow: triage
+    eval: evals/promptfoo.triage.yaml
+    results: results/triage.json
+  plan:
+    model: accounts/fireworks/models/deepseek-v4p1-flash
+    tools: [read_file]
+    isolated_context: true
+    workflow: plan
+    eval: evals/promptfoo.plan.yaml
+    results: results/plan.json
+  implement:
+    model: accounts/fireworks/models/deepseek-v4p1-flash
+    tools: [read_file, edit_file, run_test]
+    isolated_context: true
+    workflow: implement
+    eval: evals/promptfoo.implement.yaml
+    results: results/implement.json
+  reviewer:
+    model: accounts/fireworks/models/deepseek-v4p1-flash
+    tools: [read_file]
+    isolated_context: true
+    workflow: review
+    reviews: [triage, plan, implement, escalate, writer]
+    eval: evals/promptfoo.review.yaml
+    results: results/review.json
+  escalate:
+    model: accounts/fireworks/models/deepseek-v4p1-flash
+    tools: []
+    isolated_context: true
+    workflow: escalate
+    eval: evals/promptfoo.escalate.yaml
+    results: results/escalate.json
+  writer:
+    model: accounts/fireworks/models/deepseek-v4p1-flash
+    tools: []
+    isolated_context: true
+    workflow: writer
+    eval: evals/promptfoo.writer.yaml
+    results: results/writer.json
