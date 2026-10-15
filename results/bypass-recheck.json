@@ -1,0 +1,852 @@
+{
+  "evalId": "eval-87B-2026-10-15T15:13:12",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T15:13:12.499Z",
+    "prompts": [
+      {
+        "id": "c4e73f0047725c257c327caa88a174a00b9e23f895f4174e7260935486e9c80a",
+        "raw": "{{case}}",
+        "label": "{{case}}",
+        "provider": "stage5-workflow",
+        "metrics": {
+          "score": 1,
+          "testPassCount": 1,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 4,
+          "assertFailCount": 0,
+          "totalLatencyMs": 89424,
+          "tokenUsage": {
+            "prompt": 37368,
+            "completion": 6784,
+            "cached": 0,
+            "total": 44152,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "step-count": 1,
+            "terminal-state": 1,
+            "audit-complete": 1
+          },
+          "namedScoresCount": {
+            "step-count": 1,
+            "terminal-state": 1,
+            "audit-complete": 1
+          },
+          "namedScoreWeights": {
+            "step-count": 1,
+            "terminal-state": 1,
+            "audit-complete": 1
+          },
+          "cost": 0.038568
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.038568,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "step-count": 1,
+            "terminal-state": 1,
+            "audit-complete": 1
+          },
+          "namedScoreWeights": {
+            "step-count": 1,
+            "terminal-state": 1,
+            "audit-complete": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "terminal-state",
+                "value": "file://criteria.py:terminal_state_reached"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "step-count",
+                "value": "file://criteria.py:step_count_in_range"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "audit-complete",
+                "value": "file://criteria.py:audit_complete"
+              }
+            }
+          ]
+        },
+        "id": "18539168-5106-4613-89e9-3eb9b85eeb4a",
+        "latencyMs": 89424,
+        "namedScores": {
+          "step-count": 1,
+          "terminal-state": 1,
+          "audit-complete": 1
+        },
+        "prompt": {
+          "raw": "",
+          "label": "{{case}}",
+          "config": {}
+        },
+        "promptId": "c4e73f0047725c257c327caa88a174a00b9e23f895f4174e7260935486e9c80a",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/workflow.py",
+          "label": "stage5-workflow"
+        },
+        "response": {
+          "output": "{\"run_id\": \"20261015-151313\", \"result\": \"HUMAN_PUNCH_OUT\", \"turns\": 6, \"human_required\": true, \"human_reasons\": [\"triage step 1 flagged escalation\"], \"cost_usd\": 0.038568, \"report_head\": \"# Result: HUMAN_PUNCH_OUT\", \"steps\": [{\"n\": 1, \"agent\": \"triage\", \"target\": null, \"ok\": true, \"error_code\": null, \"verdict\": null}, {\"n\": 2, \"agent\": \"reviewer\", \"target\": \"triage\", \"ok\": true, \"error_code\": null, \"verdict\": \"pass\"}, {\"n\": 3, \"agent\": \"escalate\", \"target\": null, \"ok\": true, \"error_code\": null, \"verdict\": null}, {\"n\": 4, \"agent\": \"reviewer\", \"target\": \"escalate\", \"ok\": true, \"error_code\": null, \"verdict\": \"pass\"}, {\"n\": 5, \"agent\": \"writer\", \"target\": null, \"ok\": true, \"error_code\": null, \"verdict\": null}, {\"n\": 6, \"agent\": \"reviewer\", \"target\": \"writer\", \"ok\": true, \"error_code\": null, \"verdict\": \"pass\"}], \"dispatches\": 6, \"reviews\": 3, \"audit_problems\": []}",
+          "cost": 0.038568,
+          "tokenUsage": {
+            "prompt": 37368,
+            "completion": 6784,
+            "cached": 0,
+            "total": 44152,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "audit": [
+              {
+                "correlation_id": "20261015-151313",
+                "step": null,
+                "turn": 1,
+                "agent": "coordinator",
+                "target": null,
+                "model": "accounts/fireworks/models/glm-5p3",
+                "tool_call": "launch_triage",
+                "input_tokens": 1546,
+                "output_tokens": 78,
+                "cost_usd": 0.002508,
+                "ok": true,
+                "artifact": null,
+                "sha256": null,
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:13:15.361236+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": 1,
+                "agent": "triage",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 2985,
+                "output_tokens": 490,
+                "cost_usd": 0.001484,
+                "ok": true,
+                "artifact": "01-triage.json",
+                "sha256": "f3b8e5ad18fa67c1be2ecd410c7deaa85e456e891b7de0b39b3e7ea99c478a9a",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:13:22.270107+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": null,
+                "turn": 2,
+                "agent": "coordinator",
+                "target": null,
+                "model": "accounts/fireworks/models/glm-5p3",
+                "tool_call": "launch_reviewer",
+                "input_tokens": 1915,
+                "output_tokens": 156,
+                "cost_usd": 0.003367,
+                "ok": true,
+                "artifact": null,
+                "sha256": null,
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:13:25.286159+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": 2,
+                "agent": "reviewer",
+                "target": "triage",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 7485,
+                "output_tokens": 1494,
+                "cost_usd": 0.004038,
+                "ok": true,
+                "artifact": "02-reviewer-triage.json",
+                "sha256": "6f767fbe19c45e6e98d3e45c5317280e2ec3f850f559e8b124657938146e8231",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:13:44.384043+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": null,
+                "turn": 3,
+                "agent": "coordinator",
+                "target": null,
+                "model": "accounts/fireworks/models/glm-5p3",
+                "tool_call": "launch_escalate",
+                "input_tokens": 2201,
+                "output_tokens": 195,
+                "cost_usd": 0.003939,
+                "ok": true,
+                "artifact": null,
+                "sha256": null,
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:13:50.743303+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": 3,
+                "agent": "escalate",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 1118,
+                "output_tokens": 600,
+                "cost_usd": 0.001055,
+                "ok": true,
+                "artifact": "03-escalate.json",
+                "sha256": "149cddedfdbaf315db7060fded0fadb00d52766d32d15e322da158ffed366233",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:13:57.881300+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": null,
+                "turn": 4,
+                "agent": "coordinator",
+                "target": null,
+                "model": "accounts/fireworks/models/glm-5p3",
+                "tool_call": "launch_reviewer",
+                "input_tokens": 2782,
+                "output_tokens": 47,
+                "cost_usd": 0.004102,
+                "ok": true,
+                "artifact": null,
+                "sha256": null,
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:13:59.370491+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": 4,
+                "agent": "reviewer",
+                "target": "escalate",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 5317,
+                "output_tokens": 1670,
+                "cost_usd": 0.003599,
+                "ok": true,
+                "artifact": "04-reviewer-escalate.json",
+                "sha256": "b14d71bcef4fa3f6047397ba8a7113ad79f0c9dc4a812a0dfee7514679f62fd6",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:14:18.944117+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": null,
+                "turn": 5,
+                "agent": "coordinator",
+                "target": null,
+                "model": "accounts/fireworks/models/glm-5p3",
+                "tool_call": "launch_writer",
+                "input_tokens": 3045,
+                "output_tokens": 221,
+                "cost_usd": 0.005235,
+                "ok": true,
+                "artifact": null,
+                "sha256": null,
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:14:23.239515+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": 5,
+                "agent": "writer",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 1992,
+                "output_tokens": 1156,
+                "cost_usd": 0.001985,
+                "ok": true,
+                "artifact": "05-writer.json",
+                "sha256": "d744d21430e8e41b849cdefb8a3f45478fa458919a8e0beb9f9b1ccffb066170",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:14:34.063045+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": null,
+                "turn": 6,
+                "agent": "coordinator",
+                "target": null,
+                "model": "accounts/fireworks/models/glm-5p3",
+                "tool_call": "launch_reviewer",
+                "input_tokens": 3811,
+                "output_tokens": 49,
+                "cost_usd": 0.005551,
+                "ok": true,
+                "artifact": null,
+                "sha256": null,
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:14:35.633563+00:00"
+              },
+              {
+                "correlation_id": "20261015-151313",
+                "step": 6,
+                "agent": "reviewer",
+                "target": "writer",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 3171,
+                "output_tokens": 628,
+                "cost_usd": 0.001705,
+                "ok": true,
+                "artifact": "06-reviewer-writer.json",
+                "sha256": "636c4013a994d14c66daccd17a1d8d77c387f43488bd7131e0e44c24a506d42c",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T15:14:41.897086+00:00"
+              }
+            ],
+            "log": "15:13:13 run-start    correlation_id=20261015-151313 bug_report=/tmp/workflow-eval-2atid0lb/bug.md run_dir=/home/rijojohn/dev/rijo-stage5/runs/20261015-151313\n15:13:15 turn         n=1/32 tokens=1546+78 cost_usd=0.002508\n15:13:15 launch       agent=triage attempt=1\n15:13:22 ok           agent=triage artifact=01-triage.json tokens=2985+490 cost_usd=0.001484\n15:13:22 run_state    human_required=True reasons=triage step 1 flagged escalation\n15:13:25 turn         n=2/32 tokens=1915+156 cost_usd=0.003367\n15:13:25 launch       agent=reviewer target=triage attempt=1\n15:13:44 ok           agent=reviewer artifact=02-reviewer-triage.json tokens=7485+1494 cost_usd=0.004038\n15:13:44 verdict      target=triage verdict=pass findings=0\n15:13:50 turn         n=3/32 tokens=2201+195 cost_usd=0.003939\n15:13:50 launch       agent=escalate attempt=1 feedback=yes\n15:13:57 ok           agent=escalate artifact=03-escalate.json tokens=1118+600 cost_usd=0.001055\n15:13:59 turn         n=4/32 tokens=2782+47 cost_usd=0.004102\n15:13:59 launch       agent=reviewer target=escalate attempt=1\n15:14:18 ok           agent=reviewer artifact=04-reviewer-escalate.json tokens=5317+1670 cost_usd=0.003599\n15:14:18 verdict      target=escalate verdict=pass findings=0\n15:14:23 turn         n=5/32 tokens=3045+221 cost_usd=0.005235\n15:14:23 launch       agent=writer terminal_state=HUMAN_PUNCH_OUT attempt=1 feedback=yes\n15:14:34 ok           agent=writer artifact=05-writer.json tokens=1992+1156 cost_usd=0.001985\n15:14:35 turn         n=6/32 tokens=3811+49 cost_usd=0.005551\n15:14:35 launch       agent=reviewer target=writer attempt=1\n15:14:41 ok           agent=reviewer artifact=06-reviewer-writer.json tokens=3171+628 cost_usd=0.001705\n15:14:41 verdict      target=writer verdict=pass findings=0\n15:14:41 published    kind=accepted-draft path=/home/rijojohn/dev/rijo-stage5/runs/20261015-151313/report.md sha256=e1e6db7d3de148cf04d2da4b186457bd44ed9e1c7dd92aad1365c6f81507b56d\n15:14:41 terminal     state=HUMAN_PUNCH_OUT turns=6 human_required=True cost_usd=0.038568 report=report.md\n"
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "escalation-data-loss -> HUMAN_PUNCH_OUT",
+          "vars": {
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "expect": {
+              "result": "HUMAN_PUNCH_OUT",
+              "steps_min": 6,
+              "steps_max": 12
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "terminal-state",
+              "value": "file://criteria.py:terminal_state_reached"
+            },
+            {
+              "type": "python",
+              "metric": "step-count",
+              "value": "file://criteria.py:step_count_in_range"
+            },
+            {
+              "type": "python",
+              "metric": "audit-complete",
+              "value": "file://criteria.py:audit_complete"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 37368,
+          "completion": 6784,
+          "cached": 0,
+          "total": 44152,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "expect": {
+            "result": "HUMAN_PUNCH_OUT",
+            "steps_min": 6,
+            "steps_max": 12
+          }
+        },
+        "metadata": {
+          "audit": [
+            {
+              "correlation_id": "20261015-151313",
+              "step": null,
+              "turn": 1,
+              "agent": "coordinator",
+              "target": null,
+              "model": "accounts/fireworks/models/glm-5p3",
+              "tool_call": "launch_triage",
+              "input_tokens": 1546,
+              "output_tokens": 78,
+              "cost_usd": 0.002508,
+              "ok": true,
+              "artifact": null,
+              "sha256": null,
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:13:15.361236+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": 1,
+              "agent": "triage",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 2985,
+              "output_tokens": 490,
+              "cost_usd": 0.001484,
+              "ok": true,
+              "artifact": "01-triage.json",
+              "sha256": "f3b8e5ad18fa67c1be2ecd410c7deaa85e456e891b7de0b39b3e7ea99c478a9a",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:13:22.270107+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": null,
+              "turn": 2,
+              "agent": "coordinator",
+              "target": null,
+              "model": "accounts/fireworks/models/glm-5p3",
+              "tool_call": "launch_reviewer",
+              "input_tokens": 1915,
+              "output_tokens": 156,
+              "cost_usd": 0.003367,
+              "ok": true,
+              "artifact": null,
+              "sha256": null,
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:13:25.286159+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": 2,
+              "agent": "reviewer",
+              "target": "triage",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 7485,
+              "output_tokens": 1494,
+              "cost_usd": 0.004038,
+              "ok": true,
+              "artifact": "02-reviewer-triage.json",
+              "sha256": "6f767fbe19c45e6e98d3e45c5317280e2ec3f850f559e8b124657938146e8231",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:13:44.384043+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": null,
+              "turn": 3,
+              "agent": "coordinator",
+              "target": null,
+              "model": "accounts/fireworks/models/glm-5p3",
+              "tool_call": "launch_escalate",
+              "input_tokens": 2201,
+              "output_tokens": 195,
+              "cost_usd": 0.003939,
+              "ok": true,
+              "artifact": null,
+              "sha256": null,
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:13:50.743303+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": 3,
+              "agent": "escalate",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 1118,
+              "output_tokens": 600,
+              "cost_usd": 0.001055,
+              "ok": true,
+              "artifact": "03-escalate.json",
+              "sha256": "149cddedfdbaf315db7060fded0fadb00d52766d32d15e322da158ffed366233",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:13:57.881300+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": null,
+              "turn": 4,
+              "agent": "coordinator",
+              "target": null,
+              "model": "accounts/fireworks/models/glm-5p3",
+              "tool_call": "launch_reviewer",
+              "input_tokens": 2782,
+              "output_tokens": 47,
+              "cost_usd": 0.004102,
+              "ok": true,
+              "artifact": null,
+              "sha256": null,
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:13:59.370491+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": 4,
+              "agent": "reviewer",
+              "target": "escalate",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 5317,
+              "output_tokens": 1670,
+              "cost_usd": 0.003599,
+              "ok": true,
+              "artifact": "04-reviewer-escalate.json",
+              "sha256": "b14d71bcef4fa3f6047397ba8a7113ad79f0c9dc4a812a0dfee7514679f62fd6",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:14:18.944117+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": null,
+              "turn": 5,
+              "agent": "coordinator",
+              "target": null,
+              "model": "accounts/fireworks/models/glm-5p3",
+              "tool_call": "launch_writer",
+              "input_tokens": 3045,
+              "output_tokens": 221,
+              "cost_usd": 0.005235,
+              "ok": true,
+              "artifact": null,
+              "sha256": null,
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:14:23.239515+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": 5,
+              "agent": "writer",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 1992,
+              "output_tokens": 1156,
+              "cost_usd": 0.001985,
+              "ok": true,
+              "artifact": "05-writer.json",
+              "sha256": "d744d21430e8e41b849cdefb8a3f45478fa458919a8e0beb9f9b1ccffb066170",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:14:34.063045+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": null,
+              "turn": 6,
+              "agent": "coordinator",
+              "target": null,
+              "model": "accounts/fireworks/models/glm-5p3",
+              "tool_call": "launch_reviewer",
+              "input_tokens": 3811,
+              "output_tokens": 49,
+              "cost_usd": 0.005551,
+              "ok": true,
+              "artifact": null,
+              "sha256": null,
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:14:35.633563+00:00"
+            },
+            {
+              "correlation_id": "20261015-151313",
+              "step": 6,
+              "agent": "reviewer",
+              "target": "writer",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 3171,
+              "output_tokens": 628,
+              "cost_usd": 0.001705,
+              "ok": true,
+              "artifact": "06-reviewer-writer.json",
+              "sha256": "636c4013a994d14c66daccd17a1d8d77c387f43488bd7131e0e44c24a506d42c",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T15:14:41.897086+00:00"
+            }
+          ],
+          "log": "15:13:13 run-start    correlation_id=20261015-151313 bug_report=/tmp/workflow-eval-2atid0lb/bug.md run_dir=/home/rijojohn/dev/rijo-stage5/runs/20261015-151313\n15:13:15 turn         n=1/32 tokens=1546+78 cost_usd=0.002508\n15:13:15 launch       agent=triage attempt=1\n15:13:22 ok           agent=triage artifact=01-triage.json tokens=2985+490 cost_usd=0.001484\n15:13:22 run_state    human_required=True reasons=triage step 1 flagged escalation\n15:13:25 turn         n=2/32 tokens=1915+156 cost_usd=0.003367\n15:13:25 launch       agent=reviewer target=triage attempt=1\n15:13:44 ok           agent=reviewer artifact=02-reviewer-triage.json tokens=7485+1494 cost_usd=0.004038\n15:13:44 verdict      target=triage verdict=pass findings=0\n15:13:50 turn         n=3/32 tokens=2201+195 cost_usd=0.003939\n15:13:50 launch       agent=escalate attempt=1 feedback=yes\n15:13:57 ok           agent=escalate artifact=03-escalate.json tokens=1118+600 cost_usd=0.001055\n15:13:59 turn         n=4/32 tokens=2782+47 cost_usd=0.004102\n15:13:59 launch       agent=reviewer target=escalate attempt=1\n15:14:18 ok           agent=reviewer artifact=04-reviewer-escalate.json tokens=5317+1670 cost_usd=0.003599\n15:14:18 verdict      target=escalate verdict=pass findings=0\n15:14:23 turn         n=5/32 tokens=3045+221 cost_usd=0.005235\n15:14:23 launch       agent=writer terminal_state=HUMAN_PUNCH_OUT attempt=1 feedback=yes\n15:14:34 ok           agent=writer artifact=05-writer.json tokens=1992+1156 cost_usd=0.001985\n15:14:35 turn         n=6/32 tokens=3811+49 cost_usd=0.005551\n15:14:35 launch       agent=reviewer target=writer attempt=1\n15:14:41 ok           agent=reviewer artifact=06-reviewer-writer.json tokens=3171+628 cost_usd=0.001705\n15:14:41 verdict      target=writer verdict=pass findings=0\n15:14:41 published    kind=accepted-draft path=/home/rijojohn/dev/rijo-stage5/runs/20261015-151313/report.md sha256=e1e6db7d3de148cf04d2da4b186457bd44ed9e1c7dd92aad1365c6f81507b56d\n15:14:41 terminal     state=HUMAN_PUNCH_OUT turns=6 human_required=True cost_usd=0.038568 report=report.md\n",
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 1,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 37368,
+        "completion": 6784,
+        "cached": 0,
+        "total": 44152,
+        "numRequests": 1,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 89624,
+      "evaluationDurationMs": 89624
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "workflow — real coordinator and helpers, a bug report in and a legal terminal state out",
+    "prompts": [
+      "{{case}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/workflow.py",
+        "label": "stage5-workflow",
+        "config": {
+          "timeout": 1800000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "bug-clear -> VERIFIED",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "expect": {
+            "result": "VERIFIED",
+            "steps_min": 8,
+            "steps_max": 16
+          }
+        }
+      },
+      {
+        "description": "bug-regression -> VERIFIED",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-regression.md",
+          "expect": {
+            "result": "VERIFIED",
+            "steps_min": 8,
+            "steps_max": 16
+          }
+        }
+      },
+      {
+        "description": "feature-as-bug -> DEFERRED",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/feature-as-bug.md",
+          "expect": {
+            "result": "DEFERRED",
+            "steps_min": 4,
+            "steps_max": 8
+          }
+        }
+      },
+      {
+        "description": "escalation-data-loss -> HUMAN_PUNCH_OUT",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "expect": {
+            "result": "HUMAN_PUNCH_OUT",
+            "steps_min": 6,
+            "steps_max": 12
+          }
+        }
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/bypass-recheck.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "assert": [
+        {
+          "type": "is-json"
+        },
+        {
+          "type": "python",
+          "metric": "terminal-state",
+          "value": "file://criteria.py:terminal_state_reached"
+        },
+        {
+          "type": "python",
+          "metric": "step-count",
+          "value": "file://criteria.py:step_count_in_range"
+        },
+        {
+          "type": "python",
+          "metric": "audit-complete",
+          "value": "file://criteria.py:audit_complete"
+        }
+      ],
+      "vars": {},
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T15:14:42.274Z",
+    "evaluationCreatedAt": "2026-10-15T15:13:12.499Z"
+  },
+  "vars": [
+    "report",
+    "expect"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

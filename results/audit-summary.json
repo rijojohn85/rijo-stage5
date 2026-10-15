@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-10-15T14:43:51.173221+00:00",
+  "generated_at": "2026-10-15T15:18:01.917552+00:00",
   "totals": {
-    "audit_lines": 487,
-    "input_tokens": 1491609,
-    "output_tokens": 163775,
-    "cost_usd": 1.378184
+    "audit_lines": 511,
+    "input_tokens": 1567644,
+    "output_tokens": 176502,
+    "cost_usd": 1.45753
   },
   "by_model": {
     "accounts/fireworks/models/deepseek-v4p1-flash": {
-      "audit_lines": 252,
-      "input_tokens": 893642,
-      "output_tokens": 139895,
-      "cost_usd": 0.43596
+      "audit_lines": 264,
+      "input_tokens": 938029,
+      "output_tokens": 150606,
+      "cost_usd": 0.462129
     },
     "accounts/fireworks/models/glm-5p3": {
-      "audit_lines": 231,
-      "input_tokens": 597967,
-      "output_tokens": 23880,
-      "cost_usd": 0.942224
+      "audit_lines": 243,
+      "input_tokens": 629615,
+      "output_tokens": 25896,
+      "cost_usd": 0.995401
     },
     "stub": {
       "audit_lines": 4,
@@ -28,16 +28,16 @@
   },
   "by_agent": {
     "coordinator": {
-      "audit_lines": 231,
-      "input_tokens": 597967,
-      "output_tokens": 23880,
-      "cost_usd": 0.942224
+      "audit_lines": 243,
+      "input_tokens": 629615,
+      "output_tokens": 25896,
+      "cost_usd": 0.995401
     },
     "escalate": {
-      "audit_lines": 20,
-      "input_tokens": 19914,
-      "output_tokens": 12018,
-      "cost_usd": 0.020396
+      "audit_lines": 22,
+      "input_tokens": 22229,
+      "output_tokens": 13234,
+      "cost_usd": 0.022549
     },
     "implement": {
       "audit_lines": 15,
@@ -52,25 +52,32 @@
       "cost_usd": 0.021998
     },
     "reviewer": {
-      "audit_lines": 124,
-      "input_tokens": 595301,
-      "output_tokens": 87025,
-      "cost_usd": 0.283017
+      "audit_lines": 130,
+      "input_tokens": 627234,
+      "output_tokens": 93791,
+      "cost_usd": 0.300716
     },
     "triage": {
-      "audit_lines": 40,
-      "input_tokens": 94741,
-      "output_tokens": 12065,
-      "cost_usd": 0.042897
+      "audit_lines": 42,
+      "input_tokens": 100785,
+      "output_tokens": 12967,
+      "cost_usd": 0.045793
     },
     "writer": {
-      "audit_lines": 37,
-      "input_tokens": 50570,
-      "output_tokens": 16902,
-      "cost_usd": 0.035454
+      "audit_lines": 39,
+      "input_tokens": 54665,
+      "output_tokens": 18729,
+      "cost_usd": 0.038875
     }
   },
   "sources": {
+    "results/bypass-recheck.json": {
+      "audit_lines": 12,
+      "input_tokens": 37368,
+      "output_tokens": 6784,
+      "cost_usd": 0.038568,
+      "duplicate_lines_skipped": 0
+    },
     "results/coordinator.json": {
       "audit_lines": 114,
       "input_tokens": 144159,
@@ -336,6 +343,20 @@
       "output_tokens": 0,
       "cost_usd": 0,
       "duplicate_lines_skipped": 12
+    },
+    "runs/20261015-151313": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261015-151449": {
+      "audit_lines": 12,
+      "input_tokens": 38667,
+      "output_tokens": 5943,
+      "cost_usd": 0.040778,
+      "duplicate_lines_skipped": 0
     }
   },
   "results_without_audit_lines": {},

@@ -1,4 +1,8 @@
 suite,case,criterion,passed,total,pass_rate,observed
+bypass-recheck,escalation-data-loss -> HUMAN_PUNCH_OUT,(all assertions),1,1,1.0,HUMAN_PUNCH_OUT x1
+bypass-recheck,(all cases),audit-complete,1,1,1.0,
+bypass-recheck,(all cases),step-count,1,1,1.0,
+bypass-recheck,(all cases),terminal-state,1,1,1.0,
 coordinator,"clean: every review passes -> the whole fix-now path, VERIFIED",(all assertions),1,1,1.0,VERIFIED x1
 coordinator,"plan challenged: plan review revise -> plan re-run, re-reviewed, then implement",(all assertions),1,1,1.0,VERIFIED x1
 coordinator,triage challenged: triage review revise -> triage re-run and re-reviewed before any plan,(all assertions),1,1,1.0,VERIFIED x1

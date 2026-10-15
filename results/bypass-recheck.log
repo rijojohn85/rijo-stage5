@@ -1,0 +1,33 @@
+Cache is disabled.
+Starting evaluation eval-87B-2026-10-15T15:13:12
+Running 1 test cases (up to 1 at a time)...
+
+[90m┌────────────────────────────────────────[39m[90m┬────────────────────────────────────────[39m[90m┬────────────────────────────────────────┐[39m
+[90m│[39m[1m[34m report                                 [39m[22m[90m│[39m[1m[34m expect                                 [39m[22m[90m│[39m[1m[34m [stage5-workflow] {{case}}             [39m[22m[90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-151313",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.038568, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tr...                        [90m│[39m
+[90m└────────────────────────────────────────[39m[90m┴────────────────────────────────────────[39m[90m┴────────────────────────────────────────┘[39m
+✓ Eval complete (ID: eval-87B-2026-10-15T15:13:12)
+
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 44,152
+  Provider: 44,152 (37,368 prompt, 6,784 completion)
+
+Results:
+  ✓ 1 passed (100%)
+  0 failed (0%)
+  0 errors (0%)
+Duration: 1m 30s (concurrency: 1)
+
+Writing output to results/bypass-recheck.json
+telemetry.shutdown() timed out during shutdown
