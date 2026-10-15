@@ -1,0 +1,38 @@
+13:13:05 run-start    correlation_id=20261015-131305 bug_report=test-data/bugs/bug-clear.md run_dir=/home/rijojohn/dev/rijo-stage5/runs/20261015-131305
+13:13:06 turn         n=1/32 tokens=1501+46 cost_usd=0.002304
+13:13:06 launch       agent=triage attempt=1
+13:13:09 ok           agent=triage artifact=01-triage.json tokens=2895+294 cost_usd=0.001221
+13:13:10 turn         n=2/32 tokens=1825+61 cost_usd=0.002823
+13:13:10 launch       agent=reviewer target=triage attempt=1
+13:13:15 ok           agent=reviewer artifact=02-reviewer-triage.json tokens=6914+288 cost_usd=0.00242
+13:13:15 verdict      target=triage verdict=pass findings=0
+13:13:16 turn         n=3/32 tokens=2100+36 cost_usd=0.003098
+13:13:16 launch       agent=plan attempt=1
+13:13:21 ok           agent=plan artifact=03-plan.json tokens=4242+393 cost_usd=0.001744
+13:13:22 turn         n=4/32 tokens=2471+26 cost_usd=0.003574
+13:13:22 launch       agent=reviewer target=plan attempt=1
+13:13:30 ok           agent=reviewer artifact=04-reviewer-plan.json tokens=10025+461 cost_usd=0.003561
+13:13:30 verdict      target=plan verdict=pass findings=0
+13:13:31 turn         n=5/32 tokens=2730+21 cost_usd=0.003914
+13:13:31 launch       agent=implement attempt=1
+13:13:43 ok           agent=implement artifact=05-implement.json tokens=6995+327 cost_usd=0.002491
+13:13:44 turn         n=6/32 tokens=2993+32 cost_usd=0.004331
+13:13:44 launch       agent=reviewer target=implement attempt=1
+13:13:48 ok           agent=reviewer artifact=06-reviewer-implement.json tokens=5390+309 cost_usd=0.001988
+13:13:48 verdict      target=implement verdict=pass findings=0
+13:13:49 turn         n=7/32 tokens=3309+48 cost_usd=0.004844
+13:13:49 launch       agent=writer terminal_state=VERIFIED attempt=1
+13:13:53 ok           agent=writer artifact=07-writer.json tokens=1861+515 cost_usd=0.001176
+13:13:54 turn         n=8/32 tokens=3850+52 cost_usd=0.005619
+13:13:54 launch       agent=reviewer target=writer attempt=1
+13:13:59 ok           agent=reviewer artifact=08-reviewer-writer.json tokens=2901+488 cost_usd=0.001456
+13:13:59 verdict      target=writer verdict=pass findings=0
+13:13:59 published    kind=accepted-draft path=/home/rijojohn/dev/rijo-stage5/runs/20261015-131305/report.md sha256=e9f89d372981fe6db8106415c42d69d54fada2f115c6d62778822fa38769d257
+13:13:59 terminal     state=VERIFIED turns=8 human_required=False cost_usd=0.046564 report=report.md
+result: VERIFIED
+human_required: False
+turns: 8
+cost_usd (calculated): 0.046564
+report: /home/rijojohn/dev/rijo-stage5/runs/20261015-131305/report.md
+audit: /home/rijojohn/dev/rijo-stage5/runs/20261015-131305/audit.jsonl
+log: /home/rijojohn/dev/rijo-stage5/runs/20261015-131305/run.log

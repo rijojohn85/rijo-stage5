@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "writer",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sections"],
+  "properties": {
+    "sections": {
+      "description": "Prose only: one markdown string per report section. Headings and PASS/FAIL labels are written by code. The harness derives the exact required set; overview and review are always required.",
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "propertyNames": { "enum": ["overview", "triage", "plan", "implement", "escalation", "review"] },
+      "required": ["overview", "review"]
+    }
+  }
+}

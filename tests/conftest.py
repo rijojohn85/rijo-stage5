@@ -41,6 +41,15 @@ def review_reply(verdict="pass", findings=(), **overrides):
     return build
 
 
+def writer_reply(sections=None, **overrides):
+    """A writer that returns prose for exactly the sections the harness asks for (read from its own prompt)."""
+    def build(messages):
+        required = json.loads(messages[1]["content"])["required_sections"]
+        body = {key: f"Thank you for the report. Prose for {key}." for key in required}
+        return json_reply({"sections": sections if sections is not None else {**body, **overrides}})
+    return build
+
+
 class FakeLlm:
     """Scripted replies; an item may be a reply, an exception to raise, or a callable(messages)."""
 
@@ -92,10 +101,10 @@ class Env:
             bug_report_path=self.bug_report_path, correlation_id=CORRELATION_ID, clock=lambda: FIXED_TIME,
         )
 
-    def run(self, agent, *reply, target=None, feedback=None):
+    def run(self, agent, *reply, target=None, feedback=None, terminal_state=None):
         """Script `reply` then dispatch once."""
         self.script(*reply)
-        return self.dispatcher().dispatch(agent, target=target, feedback=feedback)
+        return self.dispatcher().dispatch(agent, target=target, feedback=feedback, terminal_state=terminal_state)
 
     def reviewed(self, agent, artifact):
         """Produce an artifact and a passing review of it."""

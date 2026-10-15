@@ -1,7 +1,7 @@
 """One eval case, parsed from a promptfoo test's `vars`.
 
 The var names are the contract between the promptfoo yamls and the provider:
-    agent      triage | plan | implement | escalate | reviewer
+    agent      triage | plan | implement | escalate | writer | reviewer
     target     for reviewer: the artifact under review
     report     bug report text (optional; a neutral stand-in is used otherwise)
     triage, plan, implement, escalate    upstream artifacts, as JSON text or objects
@@ -10,6 +10,9 @@ The var names are the contract between the promptfoo yamls and the provider:
     sources    for reviewer on writer: the artifacts the draft summarises
     feedback   reviewer findings or stop reason handed to the agent
     first_pass revision cases: the producer's own earlier artifact, seeded so it sees it as previous_artifact
+    terminal_state  for writer: the state the coordinator proposes (the real terminal-state check still runs)
+    history    for writer: the run so far, in order: {"produce": <agent>, "artifact": {...}} and
+               {"review": <target>, "verdict": ..., "findings": [...]} entries, seeded as saved steps
 """
 import json
 from dataclasses import dataclass, field
@@ -17,12 +20,28 @@ from dataclasses import dataclass, field
 from harness.agents import ARTIFACT_CHAIN
 from harness.store import REVIEWER
 
-WRITER_TARGET = "writer"  # reviewable only once the writer exists (step 5)
+WRITER_TARGET = "writer"  # a reviewer target whose artifact is a rendered draft
 NO_REPORT = "(no bug report text was supplied for this case)"
 
 
 class CaseError(ValueError):
     """The test's vars do not describe a runnable case."""
+
+
+def _as_list(value, name):
+    if value in (None, ""):
+        return ()
+    parsed = value if isinstance(value, list) else _parse_json(value, name)
+    if not isinstance(parsed, list):
+        raise CaseError(f"var {name!r} is not a JSON list")
+    return tuple(parsed)
+
+
+def _parse_json(value, name):
+    try:
+        return json.loads(value)
+    except (TypeError, json.JSONDecodeError) as exc:
+        raise CaseError(f"var {name!r} is not valid JSON: {exc}") from exc
 
 
 def _as_object(value, name):
@@ -47,6 +66,8 @@ class EvalCase:
     draft: str | None = None
     feedback: str | None = None
     previous: dict | None = None  # the producer's own earlier artifact (revision cases)
+    terminal_state: str | None = None
+    history: tuple = ()
 
     @classmethod
     def from_vars(cls, case_vars):
@@ -60,6 +81,7 @@ class EvalCase:
             artifacts=artifacts, diff=case_vars.get("diff") or "",
             draft=case_vars.get("draft"), feedback=case_vars.get("feedback"),
             previous=_as_object(case_vars["first_pass"], "first_pass") if case_vars.get("first_pass") else None,
+            terminal_state=case_vars.get("terminal_state"), history=_as_list(case_vars.get("history"), "history"),
         )
 
     @staticmethod

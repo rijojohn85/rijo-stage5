@@ -1,8 +1,9 @@
 """Entry point: `python -m harness.run <bug.md>` runs the coordinator on one bug report.
 
 Creates runs/<correlation-id>/ with 00-report.md (a copy of the bug report), the numbered
-artifacts, audit.jsonl and run.log (follow it live with `tail -f runs/<id>/run.log`).
-Until step 5 the writer is a stub, so no final report is produced.
+artifacts, audit.jsonl and run.log (follow it live with `tail -f runs/<id>/run.log`). Every run
+ends with report.md: the writer draft that passed review, or the deterministic FAILED_<reason>
+report when no draft could be accepted.
 """
 import argparse
 import sys
@@ -58,7 +59,7 @@ def main(argv=None):
     run_dir, outcome = run_bug(args.bug_report, llm=FireworksClient.from_env())
     print(f"result: {outcome.result}\nhuman_required: {outcome.human_required}\n"
           f"turns: {outcome.turns}\ncost_usd (calculated): {outcome.cost_usd}\n"
-          f"audit: {run_dir / 'audit.jsonl'}\nlog: {run_dir / RUN_LOG_FILENAME}")
+          f"report: {outcome.report_path}\naudit: {run_dir / 'audit.jsonl'}\nlog: {run_dir / RUN_LOG_FILENAME}")
     return 1 if outcome.result.startswith(FAILED_PREFIX) else 0
 
 

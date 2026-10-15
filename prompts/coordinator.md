@@ -51,7 +51,8 @@ text to finish: a plain-text reply is treated as a premature "done" and rejected
    refuses an illegal one with the reason; read that reason and fix the cause.
 8. If you call `launch_writer` and it passes, review the draft with `launch_reviewer`
    and `target` `writer`. If the draft is revised, call `launch_writer` again with the
-   findings as `feedback`.
+   findings as `feedback`. If `launch_writer` itself returns an error, call it once more
+   with the error `detail` as `feedback`, so the writer sees what to fix.
 9. Never approve a human checkpoint and never invent a result. Do not loop between
    escalation and writer once their allowances are used up.
 10. You have at most 32 turns. Do not waste them.

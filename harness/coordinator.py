@@ -7,6 +7,7 @@ draft (finalization rechecks the state); a plain-text "done" before that is reje
 """
 import json
 from dataclasses import dataclass
+from pathlib import Path
 
 from harness.launch_tools import launch_definitions, parse_launch
 from harness.llm import LlmError
@@ -15,6 +16,7 @@ from harness.results import ErrorCode
 from harness.run_log import NullRunLog
 
 MAX_TURNS = 32
+FAILED_PREFIX = "FAILED_"
 FAILED_TURN_BUDGET = "FAILED_TURN_BUDGET"
 FAILED_COORDINATOR_API = "FAILED_COORDINATOR_API"
 COORDINATOR = "coordinator"
@@ -27,13 +29,15 @@ class RunOutcome:
     human_required: bool
     human_reasons: tuple
     cost_usd: float
+    report_path: Path | None = None   # report.md: the accepted draft, or the deterministic failure report
 
 
 class Coordinator:
-    def __init__(self, *, llm, spec, system_prompt, router, run_state, writer, terminal_check,
+    def __init__(self, *, llm, spec, system_prompt, router, run_state, publisher, terminal_check,
                  audit, prices, correlation_id, clock, log=None, max_turns=MAX_TURNS):
         self._llm, self._spec, self._system_prompt = llm, spec, system_prompt
-        self._router, self._state, self._writer, self._terminal_check = router, run_state, writer, terminal_check
+        self._router, self._state, self._publisher = router, run_state, publisher
+        self._terminal_check = terminal_check
         self._audit, self._prices = audit, prices
         self._correlation_id, self._clock = correlation_id, clock
         self._log, self._max_turns = log or NullRunLog(), max_turns
@@ -44,13 +48,12 @@ class Coordinator:
         messages = [{"role": "system", "content": self._system_prompt},
                     {"role": "user", "content": json.dumps({"bug_report": bug_report_text}, indent=2)}]
         for turn in range(1, self._max_turns + 1):
-            self._log.event("turn", n=f"{turn}/{self._max_turns}")
             try:
                 reply = self._llm.chat(self._spec.model, list(messages), self._tools)
             except LlmError as exc:
-                self._audit_turn(turn, None, ok=False, error=(ErrorCode.API_ERROR, str(exc)))
+                self._log_turn(turn, self._audit_turn(turn, None, ok=False, error=(ErrorCode.API_ERROR, str(exc))))
                 return self._outcome(FAILED_COORDINATOR_API, turn)
-            self._audit_turn(turn, reply)
+            self._log_turn(turn, self._audit_turn(turn, reply))
             messages.append(assistant_message(reply))
             messages.extend(self._claim_done(turn) if not reply.tool_calls else self._act(reply.tool_calls))
             accepted = self._accepted_state()
@@ -91,21 +94,23 @@ class Coordinator:
 
     def _accepted_state(self):
         """The reviewed draft's state, if the evidence still supports it right now."""
-        proposed = self._writer.accepted_state()
+        proposed = self._publisher.accepted_state()
         return proposed if proposed and self._terminal_check.run(proposed) is None else None
 
     def _not_finished_detail(self):
-        proposed = self._writer.accepted_state()
+        proposed = self._publisher.accepted_state()
         if proposed is None:
-            return "there is no writer draft with a passing review of that exact draft."
+            return ("there is no writer draft with a passing review of that exact draft "
+                    "(or its headings no longer match the current evidence).")
         return f"the evidence for {proposed} no longer holds: {self._terminal_check.run(proposed).detail}."
 
     # --- audit and log -------------------------------------------------------------------------
 
     def _audit_turn(self, turn, reply, ok=True, error=None):
+        """Append the turn's audit line and return it."""
         usage = reply.usage if reply else None
         first = reply.tool_calls[0].name if reply and reply.tool_calls else None
-        self._audit.append({
+        entry = {
             "correlation_id": self._correlation_id, "step": None, "turn": turn, "agent": COORDINATOR,
             "target": None, "model": self._spec.model, "tool_call": first,
             "input_tokens": usage.input_tokens if usage else 0, "output_tokens": usage.output_tokens if usage else 0,
@@ -114,7 +119,14 @@ class Coordinator:
             "error_code": str(error[0]) if error else None, "detail": error[1] if error else None,
             "refused_tool_calls": max(0, len(reply.tool_calls) - 1) if reply else 0,
             "ts": self._clock().isoformat(),
-        })
+        }
+        self._audit.append(entry)
+        return entry
+
+    def _log_turn(self, turn, entry):
+        """One line per coordinator turn with its calculated cost, so the log's costs add up to the total."""
+        self._log.event("turn", n=f"{turn}/{self._max_turns}", tokens=f"{entry['input_tokens']}+{entry['output_tokens']}",
+                        cost_usd=entry["cost_usd"], error_code=entry["error_code"])
 
     def _log_launch(self, launch):
         key = (launch.agent, launch.target)
@@ -146,8 +158,16 @@ class Coordinator:
         self._seen = {"human_required": snapshot["human_required"], "stale": stale}
 
     def _outcome(self, result, turns):
+        path = self._publish(result)
         outcome = RunOutcome(result, turns, self._state.human_required(), tuple(self._state.human_reasons()),
-                             self._audit.total_cost_usd())
+                             self._audit.total_cost_usd(), path)
         self._log.event("terminal", state=result, turns=turns, human_required=outcome.human_required,
-                        cost_usd=outcome.cost_usd)
+                        cost_usd=outcome.cost_usd, report=path.name)
         return outcome
+
+    def _publish(self, result):
+        """Every run ends with report.md: the reviewed draft when finalized, otherwise the failure report."""
+        failed = result.startswith(FAILED_PREFIX)
+        path, sha256 = self._publisher.publish_failure(result) if failed else self._publisher.publish_accepted()
+        self._log.event("published", kind="failure-report" if failed else "accepted-draft", path=path, sha256=sha256)
+        return path

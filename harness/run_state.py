@@ -12,6 +12,11 @@ UNRECOVERED_FAILURES = 2  # an errored call is retried once; a second consecutiv
 NO_REVIEW, STALE_REVIEW = "none", "stale"
 
 
+def is_caller_mistake(entry):
+    """A refused call (missing precondition, spent allowance): no model output was produced."""
+    return entry["error_code"] in (str(ErrorCode.PRECONDITION_MISSING), str(ErrorCode.REVISION_CAP_REACHED))
+
+
 def _review_requires_human(review):
     artifact = review.artifact
     return artifact["verdict"] == "escalate" or any(f["category"] == "dangerous" for f in artifact["findings"])
@@ -71,13 +76,9 @@ class RunState:
         for entry in self._audit.dispatches():
             key = (entry["agent"], entry["target"])
             streaks[key] = 0 if entry["ok"] else streaks.get(key, 0) + 1
-            if streaks[key] == UNRECOVERED_FAILURES and not self._is_caller_mistake(entry):
+            if streaks[key] == UNRECOVERED_FAILURES and not is_caller_mistake(entry):
                 unrecovered.append(f"{entry['agent']} failed {UNRECOVERED_FAILURES} times in a row ({entry['error_code']})")
         return unrecovered
-
-    @staticmethod
-    def _is_caller_mistake(entry):
-        return entry["error_code"] in (str(ErrorCode.PRECONDITION_MISSING), str(ErrorCode.REVISION_CAP_REACHED))
 
     # --- what the coordinator is shown --------------------------------------------------------
 

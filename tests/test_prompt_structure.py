@@ -9,7 +9,7 @@ from harness.tools import PROJECT_ROOT
 PROMPTS = PROJECT_ROOT / "prompts"
 SCHEMAS = PROJECT_ROOT / "schemas"
 PRODUCERS = {"triage": "triage", "plan": "plan", "implement": "implement", "escalate": "escalation"}
-ALL_PROMPTS = {**PRODUCERS, "review": "review"}
+ALL_PROMPTS = {**PRODUCERS, "review": "review", "writer": "writer"}
 REVIEW_INPUT_KEYS = ("review_target", "echo_these_fields_in_your_reply")
 
 
@@ -89,3 +89,43 @@ def test_coordinator_prompt_names_every_launch_tool_and_terminal_state():
 def test_coordinator_prompt_tells_it_to_pass_the_stop_reason_as_escalate_feedback():
     text = prompt_text("coordinator")
     assert "feedback" in text and "launch_escalate" in text and "run_state" in text
+
+
+WRITER_INPUT_KEYS = ("terminal_state", "reason", "required_sections", "artifacts", "reviews",
+                     "historical_challenges", "human_required", "human_reasons", "writer_feedback")
+
+
+def test_writer_prompt_documents_every_input_the_harness_sends():
+    text = prompt_text("writer")
+    for key in WRITER_INPUT_KEYS:
+        assert f"`{key}`" in text, f"writer.md does not mention {key!r}"
+    assert text.index("`writer_feedback`") < text.index("## Output")
+
+
+def test_writer_prompt_is_never_shown_its_previous_draft_and_says_so():
+    text = prompt_text("writer")
+    assert "previous_artifact" not in text and "never see the earlier" in text
+
+
+def test_writer_prompt_forbids_headings_labels_and_new_findings():
+    text = prompt_text("writer").lower()
+    for phrase in ("never write a heading", "start with `#`", "pass or fail", "add no new findings"):
+        assert phrase in text, phrase
+
+
+def test_writer_prompt_names_every_schema_section_key():
+    schema = json.loads((SCHEMAS / "writer.json").read_text(encoding="utf-8"))
+    text = prompt_text("writer")
+    for key in schema["properties"]["sections"]["propertyNames"]["enum"]:
+        assert f'"{key}"' in text, f"writer.md example lacks section {key!r}"
+
+
+def test_review_prompt_describes_the_writer_draft_inputs():
+    text = prompt_text("review")
+    for key in ("draft", "reviews", "historical_challenges", "human_required"):
+        assert f"`{key}`" in text
+
+
+def test_coordinator_prompt_tells_it_to_retry_a_failed_writer_with_the_error_detail():
+    text = prompt_text("coordinator")
+    assert "launch_writer` itself returns an error" in text

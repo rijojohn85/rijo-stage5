@@ -3,7 +3,8 @@ import json
 
 from harness.agents import ARTIFACT_CHAIN
 from harness.binding import DIFF_TARGET, expected_binding
-from harness.store import REVIEWER
+from harness.store import REVIEWER, WRITER
+from harness.writer_inputs import draft_review_extras, writer_message
 
 JSON_INDENT = 2
 
@@ -28,6 +29,8 @@ def previous_artifact(ctx):
 def build_user_message(ctx, profile, bug_report_text):
     if ctx.spec.name == REVIEWER:
         body = _review_inputs(ctx, bug_report_text)
+    elif ctx.spec.name == WRITER:
+        body = writer_message(ctx, bug_report_text)
     else:
         body = _producer_inputs(ctx, profile, bug_report_text)
     return json.dumps(body, indent=JSON_INDENT)
@@ -50,9 +53,11 @@ def _review_inputs(ctx, bug_report_text):
     body = {
         "bug_report": bug_report_text,
         "review_target": ctx.target,
-        "artifacts": {a: r.artifact for a in chain if (r := ctx.store.latest(a)) is not None},
+        "artifacts": {a: r.artifact for a in chain if a != WRITER and (r := ctx.store.latest(a)) is not None},
         "echo_these_fields_in_your_reply": expected_binding(ctx.target, ctx.store, ctx.sandbox),
     }
+    if ctx.target == WRITER:
+        body.update(draft_review_extras(ctx))
     if ctx.target == DIFF_TARGET:
         body["diff"] = ctx.sandbox.diff()
     return body

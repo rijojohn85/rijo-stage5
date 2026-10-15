@@ -22,7 +22,7 @@ sys.path[:0] = [str(EVALS), str(EVALS / "providers")]
 import criteria  # noqa: E402
 import fireworks  # noqa: E402
 
-SUITES = ("triage", "plan", "implement", "review", "escalate")
+SUITES = ("triage", "plan", "implement", "review", "escalate", "writer")
 # plan section 8: the named criteria each suite reports, as promptfoo `metric:` labels
 EXPECTED_METRICS = {
     "triage": {"valid-enums", "root-cause-cites-real-file", "escalation-flagged", "addresses-feedback"},
@@ -30,6 +30,7 @@ EXPECTED_METRICS = {
     "implement": {"changes-only-plan-files", "test-red-to-green", "no-unreported-edits", "addresses-feedback"},
     "review": {"zero-findings-on-clean", "catches-real-defect", "escalates-danger", "targets-correct-artifact"},
     "escalate": {"names-trigger", "offers-safe-default", "no-decision-made"},
+    "writer": {"structure-valid", "no-new-findings", "tone", "headings-untouched"},
 }
 FIXTURES = EVALS / "fixtures"
 CALC = "sandbox/demo-app/calc.py"
@@ -247,10 +248,24 @@ def test_reviewer_can_review_every_non_writer_target(target):
     assert grade("targets_correct_artifact", response, case_vars)["pass"]
 
 
-def test_writer_review_is_reported_pending_not_faked():
-    response, llm = call({"agent": "reviewer", "target": "writer", "draft": "## Overview\nhi"})
-    assert "pending" in response["error"].lower() or "step 5" in response["error"]
-    assert llm.calls == []
+WRITER_REVIEW_VARS = {"agent": "reviewer", "target": "writer", "report": "bug", "draft": "# Result: VERIFIED\n\n## Overview\n\nhi\n",
+                      "sources": json.loads(fixture("review/writer-sources.json"))}
+
+
+def test_writer_draft_review_runs_through_the_dispatcher_bound_to_the_draft():
+    response, llm = call(WRITER_REVIEW_VARS, review_reply())
+    sent = json.loads(llm.calls[0]["messages"][1]["content"])
+    assert sent["draft"] == WRITER_REVIEW_VARS["draft"] and set(sent["artifacts"]) == {"triage", "plan", "implement"}
+    assert all(r["status"] == "pass" for r in sent["reviews"].values())   # sources are seeded as reviewed
+    assert sent["echo_these_fields_in_your_reply"]["draft_sha256"] == sha256_text(WRITER_REVIEW_VARS["draft"])
+    assert output_of(response)["draft_sha256"] == sha256_text(WRITER_REVIEW_VARS["draft"])
+    assert grade("targets_correct_artifact", response, WRITER_REVIEW_VARS)["pass"]
+    assert grade("zero_findings_on_clean", response, WRITER_REVIEW_VARS)["pass"]
+
+
+def test_writer_draft_review_with_a_wrong_draft_hash_is_rejected():
+    response, _ = call(WRITER_REVIEW_VARS, review_reply(draft_sha256="0" * 64))
+    assert output_of(response)["error_code"] == "REVIEW_BINDING_MISMATCH"
 
 
 def test_missing_agent_var_is_a_clear_error():
@@ -381,19 +396,17 @@ def test_every_metric_assertion_points_at_a_real_criterion(suite):
             assert callable(getattr(criteria, function)), assertion
 
 
-@pytest.mark.parametrize("suite,cases", [("triage", 5), ("plan", 4), ("implement", 3), ("review", 8), ("escalate", 2)])
+@pytest.mark.parametrize("suite,cases", [("triage", 5), ("plan", 4), ("implement", 3), ("review", 8), ("escalate", 2), ("writer", 3)])
 def test_case_counts_match_the_plan(suite, cases):
     assert len(load_suite(suite)["tests"]) == cases
 
 
-def test_reviewer_suite_has_the_planned_mix_and_marks_writer_cases_pending():
+def test_reviewer_suite_has_the_planned_mix_and_no_case_is_pending_any_more():
     tests = load_suite("review")["tests"]
     by_target = [t["vars"]["target"] for t in tests]
     assert sorted(by_target) == sorted(["implement"] * 3 + ["triage", "plan", "escalate"] + ["writer"] * 2)
-    pending = [t["description"] for t in tests if t["vars"]["target"] == "writer"]
-    assert all(d.startswith("[pending step 5]") for d in pending)
-    assert not any(t["description"].startswith("[pending") for t in tests if t["vars"]["target"] != "writer")
-    assert re.match(r"^(?!\[pending step 5\])", tests[0]["description"])
+    assert not any("pending" in t["description"] for t in tests)
+    assert "pending" not in (PROJECT_ROOT / "scripts" / "run_helper_evals.sh").read_text(encoding="utf-8")
 
 
 def test_no_agentic_cli_provider_is_left_in_the_helper_suites():

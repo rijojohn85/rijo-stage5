@@ -1,0 +1,50 @@
+[
+  {
+    "produce": "triage",
+    "artifact": {
+      "classification": "bug",
+      "decision": "fix-now",
+      "root_cause": "calc.py:average divides sum(values) by len(values) with no empty-input guard, so an empty list raises ZeroDivisionError instead of the required 0.0.",
+      "rationale": "SPEC.md requires calc.average to return 0.0 for an empty list, and the report shows ZeroDivisionError instead. The cause is localized to calc.py:average and nothing is unactionable.",
+      "escalation": false
+    }
+  },
+  {
+    "review": "triage",
+    "verdict": "pass",
+    "findings": []
+  },
+  {
+    "produce": "plan",
+    "artifact": {
+      "files": [
+        "sandbox/demo-app/calc.py"
+      ],
+      "steps": [
+        "In sandbox/demo-app/calc.py, add an empty-input guard to average() so that it returns 0.0 when values is empty.",
+        "Leave the non-empty path unchanged: the arithmetic mean, sum(values) / len(values)."
+      ],
+      "test": "python3 -c \"import sys; sys.path.insert(0, 'sandbox/demo-app'); import calc; assert calc.average([]) == 0.0\""
+    }
+  },
+  {
+    "review": "plan",
+    "verdict": "pass",
+    "findings": []
+  },
+  {
+    "produce": "implement",
+    "artifact": {
+      "changed": [
+        "sandbox/demo-app/calc.py"
+      ],
+      "summary": "Added an empty-input guard to average() returning 0.0, leaving the sum(values)/len(values) path unchanged.",
+      "test_passed": true
+    }
+  },
+  {
+    "review": "implement",
+    "verdict": "pass",
+    "findings": []
+  }
+]

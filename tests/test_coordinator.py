@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 import pytest
 
 from conftest import (CORRELATION_ID, ESCALATION, FIXED_TIME, IMPLEMENT, PLAN, PLAN_FILE, TRIAGE, FakeLlm,
-                      FakeSandbox, json_reply, review_reply, text_reply, tool_reply)
+                      FakeSandbox, json_reply, review_reply, text_reply, tool_reply, writer_reply)
 from harness.audit import AuditLog
 from harness.coordinator import FAILED_TURN_BUDGET, MAX_TURNS
 from harness.coordinator_wiring import build_coordinator
@@ -50,7 +50,7 @@ HAPPY_COORDINATOR = [
     launch("launch_writer", terminal_state="VERIFIED"), reviewing("writer"),
 ]
 HAPPY_HELPERS = [json_reply(TRIAGE), review_reply(), json_reply(PLAN), review_reply(),
-                 json_reply(IMPLEMENT), review_reply()]
+                 json_reply(IMPLEMENT), review_reply(), writer_reply(), review_reply()]
 
 
 def build(tmp_path, coordinator, helpers, *, log=None, max_turns=MAX_TURNS, sandbox=None):
@@ -83,7 +83,10 @@ def test_happy_path_ends_verified_with_every_producer_reviewed(tmp_path):
     assert sum(e["agent"] == "coordinator" for e in audit.entries()) == 8
     assert {e["correlation_id"] for e in audit.entries()} == {CORRELATION_ID}
     assert (run_dir / "audit.jsonl").exists()
-    assert all(e.get("stub") for e in audit.dispatches() if e["agent"] == "writer" or e["target"] == "writer")
+    assert all(e["model"].endswith("deepseek-v4p1-flash") for e in audit.dispatches())  # the writer is a real model call
+    draft = (run_dir / "07-writer-draft.md").read_text()
+    assert outcome.report_path == run_dir / "report.md" and outcome.report_path.read_text() == draft
+    assert draft.startswith("# Result: VERIFIED") and "## Implement: PASS" in draft
 
 
 def test_coordinator_is_offered_only_launch_tools(tmp_path):
@@ -105,10 +108,13 @@ def test_revision_cap_then_escalation_ends_human_punch_out(tmp_path):
     ]
     helpers = [json_reply(TRIAGE), review_reply(), json_reply(PLAN), review_reply("revise", REVISE),
                json_reply(PLAN), review_reply("revise", REVISE), json_reply(ESCALATION), review_reply(),
-               ]
-    coordinator, llm, audit, _ = build(tmp_path, coordinator_script, helpers)
+               writer_reply(), review_reply()]
+    coordinator, llm, audit, run_dir = build(tmp_path, coordinator_script, helpers)
     outcome = coordinator.run(BUG)
     assert outcome.result == "HUMAN_PUNCH_OUT" and outcome.human_required
+    report = (run_dir / "report.md").read_text()
+    assert "**Human decision required**" in report and "## Escalation: AWAITING HUMAN (review: pass)" in report
+    assert "## Plan: FAIL (revise)" in report
     assert any("plan revision allowance exhausted" in r for r in outcome.human_reasons)
     refused = [e for e in audit.dispatches() if e["error_code"] == "REVISION_CAP_REACHED"]
     assert len(refused) == 1 and refused[0]["agent"] == "plan"
@@ -209,18 +215,22 @@ def test_bad_launch_arguments_and_unknown_tools_are_structured_errors(tmp_path):
 def test_defer_path_finishes_deferred(tmp_path):
     script = [launch("launch_triage"), reviewing("triage"),
               launch("launch_writer", terminal_state="DEFERRED"), reviewing("writer")]
-    coordinator, _, audit, _ = build(tmp_path, script, [json_reply({**TRIAGE, "decision": "defer"}), review_reply()])
+    helpers = [json_reply({**TRIAGE, "decision": "defer"}), review_reply(), writer_reply(), review_reply()]
+    coordinator, _, audit, run_dir = build(tmp_path, script, helpers)
     assert coordinator.run(BUG).result == "DEFERRED"
+    report = (run_dir / "report.md").read_text()
+    assert "## Triage: PASS" in report and "- Plan: NOT RUN" in report and "## Plan" not in report.split("Review status")[0]
 
 
 def test_finalization_rechecks_the_state_when_evidence_goes_stale(tmp_path):
     defer = {**TRIAGE, "decision": "defer"}
     script = [launch("launch_triage"), reviewing("triage"), launch("launch_writer", terminal_state="DEFERRED"),
               launch("launch_triage", feedback="again"), reviewing("writer")]
-    helpers = [json_reply(defer), review_reply(), json_reply({**defer, "rationale": "reworded"})]
-    coordinator, llm, audit, _ = build(tmp_path, script, helpers, max_turns=5)
-    assert coordinator.run(BUG).result == FAILED_TURN_BUDGET   # the draft review passed, but triage is unreviewed
-    assert audit.dispatches()[-1]["ok"] is True
+    helpers = [json_reply(defer), review_reply(), writer_reply(), json_reply({**defer, "rationale": "reworded"})]
+    coordinator, llm, audit, run_dir = build(tmp_path, script, helpers, max_turns=5)
+    assert coordinator.run(BUG).result == FAILED_TURN_BUDGET   # triage changed under the draft, so it is stale
+    assert audit.dispatches()[-1]["error_code"] == "PRECONDITION_MISSING"  # the stale draft cannot even be reviewed
+    assert (run_dir / "report.md").read_text().startswith("# Result: FAILED_TURN_BUDGET")
 
 
 def make_state(env):
@@ -290,3 +300,59 @@ def test_log_reports_cap_hit_stale_and_human_required(tmp_path):
     text = stream.getvalue()
     assert "cap-hit      agent=triage" in text and "run_state    human_required=True" in text
     assert "error        agent=triage error_code=REVISION_CAP_REACHED" in text
+
+
+def logged_costs(text):
+    """cost_usd on coordinator `turn` lines and on helper `ok` lines: together they are every model call."""
+    return [float(line.split("cost_usd=")[1].split()[0]) for line in text.splitlines()
+            if (line.split() or [""])[1:2] in (["turn"], ["ok"]) and "cost_usd=" in line]
+
+
+def test_turn_log_lines_carry_cost_and_all_logged_costs_add_up_to_the_total(tmp_path):
+    stream = io.StringIO()
+    coordinator, *_ = build(tmp_path, HAPPY_COORDINATOR, HAPPY_HELPERS, log=RunLog([stream], lambda: FIXED_TIME))
+    outcome = coordinator.run(BUG)
+    text = stream.getvalue()
+    assert "turn         n=1/32 tokens=100+50 cost_usd=0.00036" in text
+    assert len(logged_costs(text)) == 16 and outcome.cost_usd > 0
+    assert round(sum(logged_costs(text)), 6) == outcome.cost_usd
+    assert f"terminal     state=VERIFIED turns=8 human_required=False cost_usd={outcome.cost_usd}" in text
+
+
+def test_turn_budget_failure_publishes_the_deterministic_failure_report(tmp_path):
+    stream = io.StringIO()
+    coordinator, _, _, run_dir = build(tmp_path, [reviewing("triage")] * 2, [], max_turns=2,
+                                       log=RunLog([stream], lambda: FIXED_TIME))
+    outcome = coordinator.run(BUG)
+    report = (run_dir / "report.md").read_text()
+    assert outcome.report_path == run_dir / "report.md" and report.startswith("# Result: FAILED_TURN_BUDGET")
+    assert "No accepted writer artifact exists" in report and "## Triage: NOT RUN" in report
+    assert "published    kind=failure-report" in stream.getvalue()
+
+
+def test_coordinator_api_failure_publishes_the_failure_report(tmp_path):
+    from harness.llm import LlmError
+    coordinator, _, _, run_dir = build(tmp_path, [LlmError("boom")], [], max_turns=3)
+    assert coordinator.run(BUG).result == "FAILED_COORDINATOR_API"
+    assert (run_dir / "report.md").read_text().startswith("# Result: FAILED_COORDINATOR_API")
+
+
+def test_the_published_report_is_the_reviewed_draft_byte_for_byte(tmp_path):
+    from harness.hashing import sha256_text
+    coordinator, _, audit, run_dir = build(tmp_path, HAPPY_COORDINATOR, HAPPY_HELPERS)
+    coordinator.run(BUG)
+    draft = (run_dir / "07-writer-draft.md").read_text()
+    assert sha256_text((run_dir / "report.md").read_text()) == sha256_text(draft)
+    review = json.loads((run_dir / "08-reviewer-writer.json").read_text())
+    assert review["draft_sha256"] == sha256_text(draft) and review["verdict"] == "pass"
+
+
+def test_a_failed_draft_review_never_publishes_the_draft(tmp_path):
+    script = HAPPY_COORDINATOR[:-1] + [reviewing("writer")]
+    helpers = HAPPY_HELPERS[:-1] + [review_reply("revise", REVISE)]
+    coordinator, _, _, run_dir = build(tmp_path, script, helpers, max_turns=8)
+    outcome = coordinator.run(BUG)
+    assert outcome.result == FAILED_TURN_BUDGET
+    report = (run_dir / "report.md").read_text()
+    assert report.startswith("# Result: FAILED_TURN_BUDGET") and "07-writer-draft.md" in report
+    assert report != (run_dir / "07-writer-draft.md").read_text()

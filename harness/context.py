@@ -14,3 +14,7 @@ class DispatchContext:
     sandbox: Any  # GitSandbox-like: changed_files(), diff()
     audit: Any  # audit.AuditLog
     bug_report_path: Path
+    terminal_state: str | None = None  # writer only: the state the coordinator proposes
+    run_state: Any = None  # run_state.RunState
+    terminal_check: Any = None  # terminal_state.TerminalStateCheck
+    report: Any = None  # report_builder.ReportBuilder

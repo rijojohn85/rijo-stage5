@@ -5,9 +5,10 @@ Adding an agent or a check means editing this table, not the dispatcher.
 from dataclasses import dataclass
 
 from harness.checks import EscalationBackstop, PlanScopeCheck, ReviewBindingCheck, SchemaCheck
-from harness.preconditions import (FreshPassingReviewOf, ReviewableTarget, TriageIsFixNow,
+from harness.preconditions import (FreshPassingReviewOf, ReviewableTarget, TerminalStateIsLegal, TriageIsFixNow,
                                    WithinRevisionAllowance)
-from harness.store import REVIEWER
+from harness.store import REVIEWER, WRITER
+from harness.writer_checks import AssembledDraft, ExactSectionSet, NoHeadingLines, NonEmptySections
 
 # Artifacts an agent's work builds on, ending with its own. Producers are shown everything
 # before their own entry; the reviewer is shown the whole chain of its target.
@@ -16,6 +17,7 @@ ARTIFACT_CHAIN = {
     "plan": ("triage", "plan"),
     "implement": ("triage", "plan", "implement"),
     "escalate": ("triage", "escalate"),
+    "writer": ("triage", "plan", "implement", "escalate", "writer"),
 }
 
 
@@ -57,5 +59,10 @@ PROFILES = {
         checks=(SchemaCheck("escalation"),),
         summarize=lambda a: a["reason"],
         shows_audit_failures=True,
+    ),
+    WRITER: AgentProfile(
+        preconditions=(TerminalStateIsLegal(), WithinRevisionAllowance()),
+        checks=(SchemaCheck("writer"), NonEmptySections(), NoHeadingLines(), ExactSectionSet(), AssembledDraft()),
+        summarize=lambda a: f"{len(a['sections'])} section(s)",
     ),
 }

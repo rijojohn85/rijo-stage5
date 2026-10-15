@@ -7,10 +7,8 @@
 # binding is wrong. Case 1 is the bar that matters: a correct artifact must come back `pass`
 # with an empty findings list; a reviewer that invents defects is worse than useless.
 #
-# Cases 7 and 8 review a writer draft. The writer, its schema and the draft binding arrive in
-# build step 5, so the provider reports them as pending (a provider error, not a pass). Until
-# then run the suite without them:
-#   promptfoo eval -c evals/promptfoo.review.yaml --filter-pattern '^(?!\[pending step 5\])'
+# Cases 7 and 8 review a writer draft. The provider seeds the fixture draft as the latest writer
+# attempt (with passing reviews of its sources), and the reviewer must echo its `draft_sha256`.
 description: reviewer — pass only on a correct artifact, catch the real defect, escalate danger
 prompts:
   - '{{agent}}'  # unused by the provider; the test vars describe the case
@@ -87,7 +85,7 @@ tests:
         categories_include: ['incorrect']
     assert:
       - *catches
-  - description: '[pending step 5] writer draft: faithful to its sources -> pass with no findings'
+  - description: 'writer draft: faithful to its sources -> pass with no findings'
     vars:
       target: writer
       report: file://../test-data/bugs/bug-clear.md
@@ -95,7 +93,7 @@ tests:
       draft: file://fixtures/review/writer-draft-clean.md
     assert:
       - { type: python, metric: zero-findings-on-clean, value: 'file://criteria.py:zero_findings_on_clean' }
-  - description: '[pending step 5] writer draft: invents a finding -> revise, incorrect'
+  - description: 'writer draft: invents a finding -> revise, incorrect'
     vars:
       target: writer
       report: file://../test-data/bugs/bug-clear.md

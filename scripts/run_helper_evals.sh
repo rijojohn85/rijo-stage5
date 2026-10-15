@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Run the five helper eval suites (paid Fireworks calls) and log everything.
-# Usage: scripts/run_helper_evals.sh [suite ...]   (default: all five)
+# Run the six helper eval suites (paid Fireworks calls) and log everything.
+# Usage: scripts/run_helper_evals.sh [suite ...]   (default: all six)
 # Tail the log from another terminal:  tail -f results/eval.log
 set -euo pipefail
 
@@ -19,13 +19,8 @@ run_suite() {
     -o "results/$suite.json" "$@" 2>&1 | tee -a "$LOG" || true  # a failing suite must not stop the rest
 }
 
-SUITES=${*:-"triage plan implement escalate review"}
+SUITES=${*:-"triage plan implement escalate review writer"}
 for suite in $SUITES; do
-  if [ "$suite" = review ]; then
-    # Writer-draft cases are pending step 5, so skip them.
-    run_suite review --filter-pattern '^(?!\[pending step 5\])'
-  else
-    run_suite "$suite"
-  fi
+  run_suite "$suite"
 done
 echo "=== $(date -Is) done ===" | tee -a "$LOG"

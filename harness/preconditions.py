@@ -51,3 +51,10 @@ class WithinRevisionAllowance:
             return Failure(ErrorCode.REVISION_CAP_REACHED,
                            f"{ctx.spec.name} already used its initial artifact and one replacement")
         return None
+
+
+class TerminalStateIsLegal:
+    """The writer drafts only for a terminal state the evidence supports (the Section 5 table)."""
+
+    def run(self, ctx):
+        return ctx.terminal_check.run(ctx.terminal_state)

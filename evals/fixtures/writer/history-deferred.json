@@ -1,0 +1,17 @@
+[
+  {
+    "produce": "triage",
+    "artifact": {
+      "classification": "feature-as-bug",
+      "decision": "defer",
+      "root_cause": "calc.py has no median() function; SPEC.md documents no median requirement, so this is a new feature, not a defect.",
+      "rationale": "The report asks for new behaviour that SPEC.md does not require, so it is a feature request filed as a bug and is deferred to the product backlog.",
+      "escalation": false
+    }
+  },
+  {
+    "review": "triage",
+    "verdict": "pass",
+    "findings": []
+  }
+]

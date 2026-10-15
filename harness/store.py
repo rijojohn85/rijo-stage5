@@ -10,11 +10,17 @@ from pathlib import Path
 from harness.hashing import sha256_json
 
 REVIEWER = "reviewer"
+WRITER = "writer"
+DRAFT_SUFFIX = "-draft.md"  # NN-writer-draft.md sits next to NN-writer.json
 
 
 def artifact_stem(step, agent, target=None):
     suffix = f"-{target}" if target else ""
     return f"{step:02d}-{agent}{suffix}"
+
+
+def draft_filename(record):
+    return record.filename.removesuffix(".json") + DRAFT_SUFFIX
 
 
 @dataclass(frozen=True)
@@ -54,6 +60,17 @@ class ArtifactStore:
 
     def path_of(self, record):
         return self._dir / record.filename
+
+    def write_draft(self, record, text):
+        """A writer attempt's rendered markdown. Exclusive create: a draft is never overwritten."""
+        with self._draft_path(record).open("x", encoding="utf-8") as handle:
+            handle.write(text)
+
+    def draft_text(self, record):
+        return self._draft_path(record).read_text(encoding="utf-8")
+
+    def _draft_path(self, record):
+        return self._dir / draft_filename(record)
 
     def _load(self, meta_path):
         meta = json.loads(meta_path.read_text(encoding="utf-8"))

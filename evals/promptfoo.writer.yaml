@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# writer — the saved run so far in, report prose out (headings and PASS/FAIL come from code).
+#
+# Each case seeds a run history (fixtures/writer/*.json: artifacts and their reviews in order) and
+# proposes a terminal state. The provider runs the real dispatcher, so the terminal-state check,
+# the five writer checks and the draft assembly are the production ones. The output is the
+# writer's `{"sections": ...}` JSON; the assembled draft markdown comes back in metadata.
+# `tone` and `no-new-findings` are LLM-judged against the fixed texts in evals/rubrics/ with the
+# coordinator-grade model; `structure-valid` and `headings-untouched` are deterministic.
+description: writer — prose under code-made headings, nothing invented, polite and direct
+prompts:
+  - '{{agent}}'  # unused by the provider; the test vars describe the case
+providers:
+  - id: file://providers/fireworks.py
+    label: deepseek-v4p1-flash
+    config:
+      timeout: 600000
+defaultTest:
+  vars:
+    agent: writer
+  assert:
+    - type: is-json
+    - &structure { type: python, metric: structure-valid, value: 'file://criteria.py:structure_valid' }
+    - &no-new { type: python, metric: no-new-findings, value: 'file://criteria.py:no_new_findings' }
+    - &tone { type: python, metric: tone, value: 'file://criteria.py:tone' }
+    - &headings { type: python, metric: headings-untouched, value: 'file://criteria.py:headings_untouched' }
+tests:
+  - description: 'clean pass: every step reviewed and passing -> VERIFIED report'
+    vars:
+      terminal_state: VERIFIED
+      report: file://../test-data/bugs/bug-clear.md
+      history: file://fixtures/writer/history-clean.json
+      expect:
+        sections: [overview, triage, plan, implement, review]
+        headings:
+          - '# Result: VERIFIED'
+          - '## Overview'
+          - '## Triage: PASS'
+          - '## Plan: PASS'
+          - '## Implement: PASS'
+          - '## Review'
+  - description: 'deferred: a feature request filed as a bug -> DEFERRED report, no plan or implement section'
+    vars:
+      terminal_state: DEFERRED
+      report: file://../test-data/bugs/feature-as-bug.md
+      history: file://fixtures/writer/history-deferred.json
+      expect:
+        sections: [overview, triage, review]
+        headings:
+          - '# Result: DEFERRED'
+          - '## Overview'
+          - '## Triage: PASS'
+          - '## Review'
+  - description: 'escalated after an earlier revise: triage was challenged, replaced, then data loss stopped the run -> HUMAN_PUNCH_OUT'
+    vars:
+      terminal_state: HUMAN_PUNCH_OUT
+      report: file://../test-data/bugs/escalation-data-loss.md
+      history: file://fixtures/writer/history-escalated.json
+      expect:
+        sections: [overview, triage, escalation, review]
+        headings:
+          - '# Result: HUMAN_PUNCH_OUT'
+          - '## Overview'
+          - '## Triage: PASS'
+          - '## Escalation: AWAITING HUMAN (review: pass)'
+          - '## Review'

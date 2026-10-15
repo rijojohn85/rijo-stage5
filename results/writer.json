@@ -1,0 +1,1098 @@
+{
+  "evalId": "eval-N1o-2026-10-15T13:04:43",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T13:04:43.217Z",
+    "prompts": [
+      {
+        "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "raw": "{{agent}}",
+        "label": "{{agent}}",
+        "provider": "deepseek-v4p1-flash",
+        "metrics": {
+          "score": 3,
+          "testPassCount": 3,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 15,
+          "assertFailCount": 0,
+          "totalLatencyMs": 14286,
+          "tokenUsage": {
+            "prompt": 5035,
+            "completion": 1194,
+            "cached": 0,
+            "total": 6229,
+            "numRequests": 3,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "structure-valid": 3,
+            "headings-untouched": 3,
+            "tone": 3,
+            "no-new-findings": 3
+          },
+          "namedScoresCount": {
+            "structure-valid": 3,
+            "headings-untouched": 3,
+            "tone": 3,
+            "no-new-findings": 3
+          },
+          "namedScoreWeights": {
+            "structure-valid": 3,
+            "headings-untouched": 3,
+            "tone": 3,
+            "no-new-findings": 3
+          },
+          "cost": 0.0029430000000000003
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.001039,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "structure-valid": 1,
+            "headings-untouched": 1,
+            "tone": 1,
+            "no-new-findings": 1
+          },
+          "namedScoreWeights": {
+            "structure-valid": 1,
+            "headings-untouched": 1,
+            "tone": 1,
+            "no-new-findings": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "structure-valid",
+                "value": "file://criteria.py:structure_valid"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-new-findings",
+                "value": "file://criteria.py:no_new_findings"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "tone",
+                "value": "file://criteria.py:tone"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "headings-untouched",
+                "value": "file://criteria.py:headings_untouched"
+              }
+            }
+          ]
+        },
+        "id": "b13b3a1f-edec-4147-800c-8ebdb250dcff",
+        "latencyMs": 5535,
+        "namedScores": {
+          "structure-valid": 1,
+          "headings-untouched": 1,
+          "tone": 1,
+          "no-new-findings": 1
+        },
+        "prompt": {
+          "raw": "writer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"sections\": {\"overview\": \"Thank you for the clear report: `average([])` raised `ZeroDivisionError` where SPEC.md requires `0.0`. Triage classified this as a bug to fix now, the plan and the implementation were both reviewed and accepted, and the plan's test passed, so the run ends with the fix verified.\", \"triage\": \"Triage classified the report as a bug and decided to fix it now. It identified the root cause as `calc.py:average` dividing `sum(values)` by `len(values)` with no empty-input guard, so an empty list raises `ZeroDivisionError` instead of the required `0.0`. The rationale was that SPEC.md requires `calc.average` to return `0.0` for an empty list, the cause is localized to `calc.py:average`, and nothing in the report was unactionable.\", \"plan\": \"The plan targeted a single file, `sandbox/demo-app/calc.py`, with two steps: add an empty-input guard to `average()` so it returns `0.0` when `values` is empty, and leave the non-empty path unchanged as the arithmetic mean, `sum(values) / len(values)`. It would be tested by importing `calc` from `sandbox/demo-app` and asserting that `calc.average([]) == 0.0`.\", \"implement\": \"The change was made in `sandbox/demo-app/calc.py`: an empty-input guard was added to `average()` returning `0.0`, with the `sum(values)/len(values)` path left unchanged. The plan's test passed.\", \"review\": \"Each step was independently reviewed and each review passed with no findings: triage, plan and implement were all accepted as they stood. No earlier challenges were recorded, so nothing was left outstanding.\"}}",
+          "cost": 0.001039,
+          "tokenUsage": {
+            "prompt": 1784,
+            "completion": 420,
+            "cached": 0,
+            "total": 2204,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "writer",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 1784,
+                "output_tokens": 420,
+                "cost_usd": 0.001039,
+                "ok": true,
+                "artifact": "01-writer.json",
+                "sha256": "cdcd5f9d852865dc8857ce1a116966356cd7b2678bf46b019ed2c2488f4630a8",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T13:04:48.781111+00:00"
+              }
+            ],
+            "draft": "# Result: VERIFIED\n\n## Overview\n\nThank you for the clear report: `average([])` raised `ZeroDivisionError` where SPEC.md requires `0.0`. Triage classified this as a bug to fix now, the plan and the implementation were both reviewed and accepted, and the plan's test passed, so the run ends with the fix verified.\n\n## Triage: PASS\n\nTriage classified the report as a bug and decided to fix it now. It identified the root cause as `calc.py:average` dividing `sum(values)` by `len(values)` with no empty-input guard, so an empty list raises `ZeroDivisionError` instead of the required `0.0`. The rationale was that SPEC.md requires `calc.average` to return `0.0` for an empty list, the cause is localized to `calc.py:average`, and nothing in the report was unactionable.\n\n## Plan: PASS\n\nThe plan targeted a single file, `sandbox/demo-app/calc.py`, with two steps: add an empty-input guard to `average()` so it returns `0.0` when `values` is empty, and leave the non-empty path unchanged as the arithmetic mean, `sum(values) / len(values)`. It would be tested by importing `calc` from `sandbox/demo-app` and asserting that `calc.average([]) == 0.0`.\n\n## Implement: PASS\n\nThe change was made in `sandbox/demo-app/calc.py`: an empty-input guard was added to `average()` returning `0.0`, with the `sum(values)/len(values)` path left unchanged. The plan's test passed.\n\n## Review\n\nEach step was independently reviewed and each review passed with no findings: triage, plan and implement were all accepted as they stood. No earlier challenges were recorded, so nothing was left outstanding.\n\nReview status of each step, written by the harness:\n\n- Triage: PASS\n- Plan: PASS\n- Implement: PASS\n"
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "clean pass: every step reviewed and passing -> VERIFIED report",
+          "vars": {
+            "agent": "writer",
+            "terminal_state": "VERIFIED",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-clean.json",
+            "expect": {
+              "sections": [
+                "overview",
+                "triage",
+                "plan",
+                "implement",
+                "review"
+              ],
+              "headings": [
+                "# Result: VERIFIED",
+                "## Overview",
+                "## Triage: PASS",
+                "## Plan: PASS",
+                "## Implement: PASS",
+                "## Review"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "structure-valid",
+              "value": "file://criteria.py:structure_valid"
+            },
+            {
+              "type": "python",
+              "metric": "no-new-findings",
+              "value": "file://criteria.py:no_new_findings"
+            },
+            {
+              "type": "python",
+              "metric": "tone",
+              "value": "file://criteria.py:tone"
+            },
+            {
+              "type": "python",
+              "metric": "headings-untouched",
+              "value": "file://criteria.py:headings_untouched"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 1784,
+          "completion": 420,
+          "cached": 0,
+          "total": 2204,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "writer",
+          "terminal_state": "VERIFIED",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-clean.json",
+          "expect": {
+            "sections": [
+              "overview",
+              "triage",
+              "plan",
+              "implement",
+              "review"
+            ],
+            "headings": [
+              "# Result: VERIFIED",
+              "## Overview",
+              "## Triage: PASS",
+              "## Plan: PASS",
+              "## Implement: PASS",
+              "## Review"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "writer",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 1784,
+              "output_tokens": 420,
+              "cost_usd": 0.001039,
+              "ok": true,
+              "artifact": "01-writer.json",
+              "sha256": "cdcd5f9d852865dc8857ce1a116966356cd7b2678bf46b019ed2c2488f4630a8",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T13:04:48.781111+00:00"
+            }
+          ],
+          "draft": "# Result: VERIFIED\n\n## Overview\n\nThank you for the clear report: `average([])` raised `ZeroDivisionError` where SPEC.md requires `0.0`. Triage classified this as a bug to fix now, the plan and the implementation were both reviewed and accepted, and the plan's test passed, so the run ends with the fix verified.\n\n## Triage: PASS\n\nTriage classified the report as a bug and decided to fix it now. It identified the root cause as `calc.py:average` dividing `sum(values)` by `len(values)` with no empty-input guard, so an empty list raises `ZeroDivisionError` instead of the required `0.0`. The rationale was that SPEC.md requires `calc.average` to return `0.0` for an empty list, the cause is localized to `calc.py:average`, and nothing in the report was unactionable.\n\n## Plan: PASS\n\nThe plan targeted a single file, `sandbox/demo-app/calc.py`, with two steps: add an empty-input guard to `average()` so it returns `0.0` when `values` is empty, and leave the non-empty path unchanged as the arithmetic mean, `sum(values) / len(values)`. It would be tested by importing `calc` from `sandbox/demo-app` and asserting that `calc.average([]) == 0.0`.\n\n## Implement: PASS\n\nThe change was made in `sandbox/demo-app/calc.py`: an empty-input guard was added to `average()` returning `0.0`, with the `sum(values)/len(values)` path left unchanged. The plan's test passed.\n\n## Review\n\nEach step was independently reviewed and each review passed with no findings: triage, plan and implement were all accepted as they stood. No earlier challenges were recorded, so nothing was left outstanding.\n\nReview status of each step, written by the harness:\n\n- Triage: PASS\n- Plan: PASS\n- Implement: PASS\n",
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.000665,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "structure-valid": 1,
+            "headings-untouched": 1,
+            "no-new-findings": 1,
+            "tone": 1
+          },
+          "namedScoreWeights": {
+            "structure-valid": 1,
+            "headings-untouched": 1,
+            "no-new-findings": 1,
+            "tone": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "structure-valid",
+                "value": "file://criteria.py:structure_valid"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-new-findings",
+                "value": "file://criteria.py:no_new_findings"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "tone",
+                "value": "file://criteria.py:tone"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "headings-untouched",
+                "value": "file://criteria.py:headings_untouched"
+              }
+            }
+          ]
+        },
+        "id": "ed79009b-ed87-409b-9569-e4ff54e3b7d0",
+        "latencyMs": 2494,
+        "namedScores": {
+          "structure-valid": 1,
+          "headings-untouched": 1,
+          "no-new-findings": 1,
+          "tone": 1
+        },
+        "prompt": {
+          "raw": "writer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"sections\": {\"overview\": \"Thank you for the request to add a `median(values)` function to the calculator alongside `average()`. Triage looked at it and decided to leave it for later, and its review accepted that decision, so the run ends here without a code change.\", \"triage\": \"Triage classified the report as a feature filed as a bug: `calc.py` has no `median()` function, and `SPEC.md` documents no median requirement, so this is new behaviour rather than a defect. On that basis it deferred the request to the product backlog, and it did not ask for a human decision.\", \"review\": \"The independent review of triage passed with no findings, so the classification and the decision to defer stand as recorded.\"}}",
+          "cost": 0.000665,
+          "tokenUsage": {
+            "prompt": 1445,
+            "completion": 193,
+            "cached": 0,
+            "total": 1638,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "writer",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 1445,
+                "output_tokens": 193,
+                "cost_usd": 0.000665,
+                "ok": true,
+                "artifact": "01-writer.json",
+                "sha256": "e50874f77c851d9c62614ee8276572ea1c0b6b41e14b4561940c82b8a068e807",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T13:05:00.154650+00:00"
+              }
+            ],
+            "draft": "# Result: DEFERRED\n\n## Overview\n\nThank you for the request to add a `median(values)` function to the calculator alongside `average()`. Triage looked at it and decided to leave it for later, and its review accepted that decision, so the run ends here without a code change.\n\n## Triage: PASS\n\nTriage classified the report as a feature filed as a bug: `calc.py` has no `median()` function, and `SPEC.md` documents no median requirement, so this is new behaviour rather than a defect. On that basis it deferred the request to the product backlog, and it did not ask for a human decision.\n\n## Review\n\nThe independent review of triage passed with no findings, so the classification and the decision to defer stand as recorded.\n\nReview status of each step, written by the harness:\n\n- Triage: PASS\n- Plan: NOT RUN\n- Implement: NOT RUN\n"
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "deferred: a feature request filed as a bug -> DEFERRED report, no plan or implement section",
+          "vars": {
+            "agent": "writer",
+            "terminal_state": "DEFERRED",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/feature-as-bug.md",
+            "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-deferred.json",
+            "expect": {
+              "sections": [
+                "overview",
+                "triage",
+                "review"
+              ],
+              "headings": [
+                "# Result: DEFERRED",
+                "## Overview",
+                "## Triage: PASS",
+                "## Review"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "structure-valid",
+              "value": "file://criteria.py:structure_valid"
+            },
+            {
+              "type": "python",
+              "metric": "no-new-findings",
+              "value": "file://criteria.py:no_new_findings"
+            },
+            {
+              "type": "python",
+              "metric": "tone",
+              "value": "file://criteria.py:tone"
+            },
+            {
+              "type": "python",
+              "metric": "headings-untouched",
+              "value": "file://criteria.py:headings_untouched"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 1445,
+          "completion": 193,
+          "cached": 0,
+          "total": 1638,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "writer",
+          "terminal_state": "DEFERRED",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/feature-as-bug.md",
+          "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-deferred.json",
+          "expect": {
+            "sections": [
+              "overview",
+              "triage",
+              "review"
+            ],
+            "headings": [
+              "# Result: DEFERRED",
+              "## Overview",
+              "## Triage: PASS",
+              "## Review"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "writer",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 1445,
+              "output_tokens": 193,
+              "cost_usd": 0.000665,
+              "ok": true,
+              "artifact": "01-writer.json",
+              "sha256": "e50874f77c851d9c62614ee8276572ea1c0b6b41e14b4561940c82b8a068e807",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T13:05:00.154650+00:00"
+            }
+          ],
+          "draft": "# Result: DEFERRED\n\n## Overview\n\nThank you for the request to add a `median(values)` function to the calculator alongside `average()`. Triage looked at it and decided to leave it for later, and its review accepted that decision, so the run ends here without a code change.\n\n## Triage: PASS\n\nTriage classified the report as a feature filed as a bug: `calc.py` has no `median()` function, and `SPEC.md` documents no median requirement, so this is new behaviour rather than a defect. On that basis it deferred the request to the product backlog, and it did not ask for a human decision.\n\n## Review\n\nThe independent review of triage passed with no findings, so the classification and the decision to defer stand as recorded.\n\nReview status of each step, written by the harness:\n\n- Triage: PASS\n- Plan: NOT RUN\n- Implement: NOT RUN\n",
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.001239,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "structure-valid": 1,
+            "headings-untouched": 1,
+            "tone": 1,
+            "no-new-findings": 1
+          },
+          "namedScoreWeights": {
+            "structure-valid": 1,
+            "headings-untouched": 1,
+            "tone": 1,
+            "no-new-findings": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "structure-valid",
+                "value": "file://criteria.py:structure_valid"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-new-findings",
+                "value": "file://criteria.py:no_new_findings"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "tone",
+                "value": "file://criteria.py:tone"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "headings-untouched",
+                "value": "file://criteria.py:headings_untouched"
+              }
+            }
+          ]
+        },
+        "id": "b1367583-b466-44f7-a3fd-86adc0d7c16f",
+        "latencyMs": 6257,
+        "namedScores": {
+          "structure-valid": 1,
+          "headings-untouched": 1,
+          "tone": 1,
+          "no-new-findings": 1
+        },
+        "prompt": {
+          "raw": "writer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"sections\": {\"overview\": \"Thank you for the report: it describes `save_records()` in `sandbox/demo-app/storage.py` opening the target path with mode `w` before serializing, so a serialization failure truncates the file and the records already stored there are lost, with customer records lost twice this week in production. Triage classified this as a bug and decided to defer the change, and it also flagged the case for escalation. The run therefore stopped on purpose: a person must decide before anything else happens, because triage step 3 flagged escalation.\", \"triage\": \"Triage classified the report as a bug and decided to defer, with the root cause that `storage.py:save_records` opens the path with mode `w` before `json.dumps` runs, so a serialization failure truncates the file and the records already stored there are lost. Its rationale was that customer records were lost twice this week in production, so the data-loss trigger applies, and that SPEC.md requires a failed write never to destroy the records already stored. Triage also set escalation to true, which is why the run stopped for a human decision.\", \"escalation\": \"The question put to a person is: how should the data-loss defect in `storage.py` be fixed? The options recorded are to serialize first and then write the file in a single step, or to leave `storage.py` unchanged until a person has decided. The stated risk if the wrong choice is made is that further customer records could be lost in production.\", \"review\": \"The independent review of triage accepted it and raised no findings, and the review of the escalation brief also accepted it and raised no findings. An earlier review of triage had asked for a revision, saying the root cause did not name the mechanism that `save_records` truncates the file before serializing, and that triage did not escalate although the report describes customer records lost in production; a newer triage artifact replaced the one that review challenged, and both points are now reflected in it.\"}}",
+          "cost": 0.001239,
+          "tokenUsage": {
+            "prompt": 1806,
+            "completion": 581,
+            "cached": 0,
+            "total": 2387,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "writer",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 1806,
+                "output_tokens": 581,
+                "cost_usd": 0.001239,
+                "ok": true,
+                "artifact": "01-writer.json",
+                "sha256": "4ac7d753e41a87aa64d970b27c5a2c06294b75202a83fc95d8580e23c52c368e",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T13:05:27.001458+00:00"
+              }
+            ],
+            "draft": "# Result: HUMAN_PUNCH_OUT\n\n**Human decision required**\n\n## Overview\n\nThank you for the report: it describes `save_records()` in `sandbox/demo-app/storage.py` opening the target path with mode `w` before serializing, so a serialization failure truncates the file and the records already stored there are lost, with customer records lost twice this week in production. Triage classified this as a bug and decided to defer the change, and it also flagged the case for escalation. The run therefore stopped on purpose: a person must decide before anything else happens, because triage step 3 flagged escalation.\n\n## Triage: PASS\n\nTriage classified the report as a bug and decided to defer, with the root cause that `storage.py:save_records` opens the path with mode `w` before `json.dumps` runs, so a serialization failure truncates the file and the records already stored there are lost. Its rationale was that customer records were lost twice this week in production, so the data-loss trigger applies, and that SPEC.md requires a failed write never to destroy the records already stored. Triage also set escalation to true, which is why the run stopped for a human decision.\n\n## Escalation: AWAITING HUMAN (review: pass)\n\nThe question put to a person is: how should the data-loss defect in `storage.py` be fixed? The options recorded are to serialize first and then write the file in a single step, or to leave `storage.py` unchanged until a person has decided. The stated risk if the wrong choice is made is that further customer records could be lost in production.\n\n## Review\n\nThe independent review of triage accepted it and raised no findings, and the review of the escalation brief also accepted it and raised no findings. An earlier review of triage had asked for a revision, saying the root cause did not name the mechanism that `save_records` truncates the file before serializing, and that triage did not escalate although the report describes customer records lost in production; a newer triage artifact replaced the one that review challenged, and both points are now reflected in it.\n\nReview status of each step, written by the harness:\n\n- Triage: PASS\n- Plan: NOT RUN\n- Implement: NOT RUN\n- Escalation: AWAITING HUMAN (review: pass)\n"
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "escalated after an earlier revise: triage was challenged, replaced, then data loss stopped the run -> HUMAN_PUNCH_OUT",
+          "vars": {
+            "agent": "writer",
+            "terminal_state": "HUMAN_PUNCH_OUT",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-escalated.json",
+            "expect": {
+              "sections": [
+                "overview",
+                "triage",
+                "escalation",
+                "review"
+              ],
+              "headings": [
+                "# Result: HUMAN_PUNCH_OUT",
+                "## Overview",
+                "## Triage: PASS",
+                "## Escalation: AWAITING HUMAN (review: pass)",
+                "## Review"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "structure-valid",
+              "value": "file://criteria.py:structure_valid"
+            },
+            {
+              "type": "python",
+              "metric": "no-new-findings",
+              "value": "file://criteria.py:no_new_findings"
+            },
+            {
+              "type": "python",
+              "metric": "tone",
+              "value": "file://criteria.py:tone"
+            },
+            {
+              "type": "python",
+              "metric": "headings-untouched",
+              "value": "file://criteria.py:headings_untouched"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 1806,
+          "completion": 581,
+          "cached": 0,
+          "total": 2387,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "writer",
+          "terminal_state": "HUMAN_PUNCH_OUT",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-escalated.json",
+          "expect": {
+            "sections": [
+              "overview",
+              "triage",
+              "escalation",
+              "review"
+            ],
+            "headings": [
+              "# Result: HUMAN_PUNCH_OUT",
+              "## Overview",
+              "## Triage: PASS",
+              "## Escalation: AWAITING HUMAN (review: pass)",
+              "## Review"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "writer",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 1806,
+              "output_tokens": 581,
+              "cost_usd": 0.001239,
+              "ok": true,
+              "artifact": "01-writer.json",
+              "sha256": "4ac7d753e41a87aa64d970b27c5a2c06294b75202a83fc95d8580e23c52c368e",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T13:05:27.001458+00:00"
+            }
+          ],
+          "draft": "# Result: HUMAN_PUNCH_OUT\n\n**Human decision required**\n\n## Overview\n\nThank you for the report: it describes `save_records()` in `sandbox/demo-app/storage.py` opening the target path with mode `w` before serializing, so a serialization failure truncates the file and the records already stored there are lost, with customer records lost twice this week in production. Triage classified this as a bug and decided to defer the change, and it also flagged the case for escalation. The run therefore stopped on purpose: a person must decide before anything else happens, because triage step 3 flagged escalation.\n\n## Triage: PASS\n\nTriage classified the report as a bug and decided to defer, with the root cause that `storage.py:save_records` opens the path with mode `w` before `json.dumps` runs, so a serialization failure truncates the file and the records already stored there are lost. Its rationale was that customer records were lost twice this week in production, so the data-loss trigger applies, and that SPEC.md requires a failed write never to destroy the records already stored. Triage also set escalation to true, which is why the run stopped for a human decision.\n\n## Escalation: AWAITING HUMAN (review: pass)\n\nThe question put to a person is: how should the data-loss defect in `storage.py` be fixed? The options recorded are to serialize first and then write the file in a single step, or to leave `storage.py` unchanged until a person has decided. The stated risk if the wrong choice is made is that further customer records could be lost in production.\n\n## Review\n\nThe independent review of triage accepted it and raised no findings, and the review of the escalation brief also accepted it and raised no findings. An earlier review of triage had asked for a revision, saying the root cause did not name the mechanism that `save_records` truncates the file before serializing, and that triage did not escalate although the report describes customer records lost in production; a newer triage artifact replaced the one that review challenged, and both points are now reflected in it.\n\nReview status of each step, written by the harness:\n\n- Triage: PASS\n- Plan: NOT RUN\n- Implement: NOT RUN\n- Escalation: AWAITING HUMAN (review: pass)\n",
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 3,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 5035,
+        "completion": 1194,
+        "cached": 0,
+        "total": 6229,
+        "numRequests": 3,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 158359,
+      "evaluationDurationMs": 158359
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "writer — prose under code-made headings, nothing invented, polite and direct",
+    "prompts": [
+      "{{agent}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/fireworks.py",
+        "label": "deepseek-v4p1-flash",
+        "config": {
+          "timeout": 600000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "clean pass: every step reviewed and passing -> VERIFIED report",
+        "vars": {
+          "terminal_state": "VERIFIED",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-clean.json",
+          "expect": {
+            "sections": [
+              "overview",
+              "triage",
+              "plan",
+              "implement",
+              "review"
+            ],
+            "headings": [
+              "# Result: VERIFIED",
+              "## Overview",
+              "## Triage: PASS",
+              "## Plan: PASS",
+              "## Implement: PASS",
+              "## Review"
+            ]
+          }
+        }
+      },
+      {
+        "description": "deferred: a feature request filed as a bug -> DEFERRED report, no plan or implement section",
+        "vars": {
+          "terminal_state": "DEFERRED",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/feature-as-bug.md",
+          "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-deferred.json",
+          "expect": {
+            "sections": [
+              "overview",
+              "triage",
+              "review"
+            ],
+            "headings": [
+              "# Result: DEFERRED",
+              "## Overview",
+              "## Triage: PASS",
+              "## Review"
+            ]
+          }
+        }
+      },
+      {
+        "description": "escalated after an earlier revise: triage was challenged, replaced, then data loss stopped the run -> HUMAN_PUNCH_OUT",
+        "vars": {
+          "terminal_state": "HUMAN_PUNCH_OUT",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "history": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/writer/history-escalated.json",
+          "expect": {
+            "sections": [
+              "overview",
+              "triage",
+              "escalation",
+              "review"
+            ],
+            "headings": [
+              "# Result: HUMAN_PUNCH_OUT",
+              "## Overview",
+              "## Triage: PASS",
+              "## Escalation: AWAITING HUMAN (review: pass)",
+              "## Review"
+            ]
+          }
+        }
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/writer.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "vars": {
+        "agent": "writer"
+      },
+      "assert": [
+        {
+          "type": "is-json"
+        },
+        {
+          "type": "python",
+          "metric": "structure-valid",
+          "value": "file://criteria.py:structure_valid"
+        },
+        {
+          "type": "python",
+          "metric": "no-new-findings",
+          "value": "file://criteria.py:no_new_findings"
+        },
+        {
+          "type": "python",
+          "metric": "tone",
+          "value": "file://criteria.py:tone"
+        },
+        {
+          "type": "python",
+          "metric": "headings-untouched",
+          "value": "file://criteria.py:headings_untouched"
+        }
+      ],
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T13:07:21.805Z",
+    "evaluationCreatedAt": "2026-10-15T13:04:43.217Z"
+  },
+  "vars": [
+    "agent",
+    "terminal_state",
+    "report",
+    "history",
+    "expect"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

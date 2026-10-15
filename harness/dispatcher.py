@@ -12,7 +12,7 @@ from harness.context import DispatchContext
 from harness.llm import Usage
 from harness.prompt_builder import build_user_message, upstream_records
 from harness.results import ErrorCode, Failure, error_result, ok_result
-from harness.store import REVIEWER
+from harness.store import REVIEWER, WRITER
 from harness.tool_schemas import tool_definitions
 
 
@@ -47,30 +47,33 @@ def parse_json_object(text):
 
 
 class Dispatcher:
-    def __init__(self, *, specs, profiles, tool_loop, prompts, prices, store, freshness, sandbox,
-                 audit, rejected, bug_report_path, correlation_id, clock):
+    def __init__(self, *, specs, profiles, tool_loop, prompts, prices, views, sandbox,
+                 rejected, bug_report_path, correlation_id, clock):
         self._specs, self._profiles = specs, profiles
         self._tool_loop, self._prompts, self._prices = tool_loop, prompts, prices
-        self._store, self._freshness, self._sandbox = store, freshness, sandbox
-        self._audit, self._rejected = audit, rejected
+        self._views, self._sandbox = views, sandbox
+        self._store, self._freshness, self._audit = views.store, views.freshness, views.audit
+        self._rejected = rejected
         self._bug_report_path = bug_report_path
         self._correlation_id, self._clock = correlation_id, clock
 
-    def dispatch(self, agent, target=None, feedback=None):
+    def dispatch(self, agent, target=None, feedback=None, terminal_state=None):
         target = target if agent == REVIEWER else None  # only reviews are aimed at a target
+        terminal_state = terminal_state if agent == WRITER else None  # only the writer proposes a state
         step = self._audit.next_step()
-        attempt = self._attempt(step, agent, target, feedback)
+        attempt = self._attempt(step, agent, target, feedback, terminal_state)
         self._record_outcome(step, agent, target, attempt)
         if attempt.failure:
             return error_result(agent, attempt.failure)
         return ok_result(agent, attempt.summary, attempt.record.artifact)
 
-    def _attempt(self, step, agent, target, feedback):
+    def _attempt(self, step, agent, target, feedback, terminal_state):
         spec, profile = self._specs.get(agent), self._profiles.get(agent)
         if spec is None or profile is None:
             return Attempt(Failure(ErrorCode.PRECONDITION_MISSING, f"agent {agent!r} cannot be dispatched yet"))
         ctx = DispatchContext(spec, target, feedback, self._store, self._freshness, self._sandbox,
-                              self._audit, self._bug_report_path)
+                              self._audit, self._bug_report_path, terminal_state, self._views.state,
+                              self._views.terminal_check, self._views.report)
         failure = first_failure(profile.preconditions, ctx)
         if failure:
             return Attempt(failure)
@@ -103,7 +106,10 @@ class Dispatcher:
             binding = expected_binding(ctx.target, self._store, self._sandbox)
             return self._store.save(step, name, ctx.target, artifact, {}, binding)
         inputs = {a: r.sha256 for a, r in upstream_records(ctx, name).items()}
-        return self._store.save(step, name, None, artifact, inputs, {})
+        record = self._store.save(step, name, None, artifact, inputs, {})
+        if name == WRITER:  # the draft is immutable evidence next to its artifact; the reviewer is bound to its hash
+            self._store.write_draft(record, ctx.report.draft(ctx.terminal_state, artifact["sections"]))
+        return record
 
     def _record_outcome(self, step, agent, target, attempt):
         if attempt.failure:

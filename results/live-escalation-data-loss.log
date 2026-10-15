@@ -1,0 +1,32 @@
+13:14:10 run-start    correlation_id=20261015-131410 bug_report=test-data/bugs/escalation-data-loss.md run_dir=/home/rijojohn/dev/rijo-stage5/runs/20261015-131410
+13:14:12 turn         n=1/32 tokens=1509+94 cost_usd=0.002526
+13:14:12 launch       agent=triage attempt=1
+13:14:18 ok           agent=triage artifact=01-triage.json tokens=2989+487 cost_usd=0.001481
+13:14:18 run_state    human_required=True reasons=triage step 1 flagged escalation
+13:14:21 turn         n=2/32 tokens=1868+216 cost_usd=0.003566
+13:14:21 launch       agent=reviewer target=triage attempt=1
+13:14:37 ok           agent=reviewer artifact=02-reviewer-triage.json tokens=13023+1469 cost_usd=0.00567
+13:14:37 verdict      target=triage verdict=pass findings=0
+13:14:41 turn         n=3/32 tokens=2159+224 cost_usd=0.004008
+13:14:41 launch       agent=escalate attempt=1 feedback=yes
+13:14:50 ok           agent=escalate artifact=03-escalate.json tokens=1081+900 cost_usd=0.001404
+13:14:51 turn         n=4/32 tokens=2726+47 cost_usd=0.004023
+13:14:51 launch       agent=reviewer target=escalate attempt=1
+13:15:15 ok           agent=reviewer artifact=04-reviewer-escalate.json tokens=5179+2886 cost_usd=0.005017
+13:15:15 verdict      target=escalate verdict=pass findings=0
+13:15:19 turn         n=5/32 tokens=2999+239 cost_usd=0.00525
+13:15:19 launch       agent=writer terminal_state=HUMAN_PUNCH_OUT attempt=1 feedback=yes
+13:15:26 ok           agent=writer artifact=05-writer.json tokens=2003+951 cost_usd=0.001742
+13:15:28 turn         n=6/32 tokens=3724+49 cost_usd=0.005429
+13:15:28 launch       agent=reviewer target=writer attempt=1
+13:15:32 ok           agent=reviewer artifact=06-reviewer-writer.json tokens=3029+550 cost_usd=0.001569
+13:15:32 verdict      target=writer verdict=pass findings=0
+13:15:32 published    kind=accepted-draft path=/home/rijojohn/dev/rijo-stage5/runs/20261015-131410/report.md sha256=980caf4e71e2eae3ed02651b92a6889e04a1bcffcf0047a62217507a5d93b58e
+13:15:32 terminal     state=HUMAN_PUNCH_OUT turns=6 human_required=True cost_usd=0.041685 report=report.md
+result: HUMAN_PUNCH_OUT
+human_required: True
+turns: 6
+cost_usd (calculated): 0.041685
+report: /home/rijojohn/dev/rijo-stage5/runs/20261015-131410/report.md
+audit: /home/rijojohn/dev/rijo-stage5/runs/20261015-131410/audit.jsonl
+log: /home/rijojohn/dev/rijo-stage5/runs/20261015-131410/run.log

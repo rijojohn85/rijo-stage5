@@ -21,7 +21,7 @@ for entry in (str(REPO), str(PROVIDERS_DIR)):
     if entry not in sys.path:
         sys.path.insert(0, entry)
 
-from case_runner import PendingStepError, run_case  # noqa: E402
+from case_runner import run_case  # noqa: E402
 from eval_case import CaseError, EvalCase  # noqa: E402
 
 from harness.llm import FireworksClient  # noqa: E402
@@ -49,7 +49,7 @@ def call_api(prompt, options, context, llm=None):
     try:
         case = EvalCase.from_vars((context or {}).get("vars") or {})
         return _response(run_case(case, llm or FireworksClient.from_env()))
-    except (CaseError, PendingStepError) as exc:
+    except CaseError as exc:
         return {"error": f"{type(exc).__name__}: {exc}"}
 
 

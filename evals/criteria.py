@@ -17,9 +17,11 @@ from pathlib import Path
 import jsonschema
 
 REPO = Path(__file__).resolve().parents[1]
-if str(REPO) not in sys.path:
-    sys.path.insert(0, str(REPO))
+for entry in (str(REPO), str(Path(__file__).resolve().parent)):  # the project (harness) and evals/ (judge)
+    if entry not in sys.path:
+        sys.path.insert(0, entry)
 
+from harness import report, writer_checks  # noqa: E402
 from harness.hashing import sha256_json, sha256_text  # noqa: E402
 
 SCHEMA_DIR = REPO / "schemas"
@@ -180,6 +182,8 @@ def targets_correct_artifact(artifact, expect, context):
     """The review echoes the requested target and the hashes of exactly the fixtures it was given."""
     target = context["vars"]["target"]
     problems = _wrong(artifact, "target", target)
+    if target == "writer":  # the saved draft's artifact is a stand-in; the dispatcher already enforced its hash
+        return problems + _wrong(artifact, "draft_sha256", sha256_text(context["vars"]["draft"]))
     problems += _wrong(artifact, "reviewed_sha256", sha256_json(_var_object(context, target)))
     if target == "implement":
         problems += _wrong(artifact, "diff_sha256", sha256_text(context["vars"]["diff"]))
@@ -226,3 +230,54 @@ def addresses_feedback(artifact, expect, context):
     for name in expect["fixes"]:
         problems += _defect_check(name)(artifact, expect, context)
     return problems
+
+
+# --- writer -------------------------------------------------------------------------------
+
+def _draft(context):
+    return _metadata(context, "draft") or ""
+
+
+def make_judge():
+    """The LLM judge for tone and no-new-findings. Tests replace this with a fake-backed one."""
+    from judge import default_judge
+    return default_judge()
+
+
+@criterion
+def structure_valid(artifact, expect, context):
+    """All five checks of plan Section 6, using the same rules the dispatcher applies."""
+    problems = _schema_problems(artifact, "writer")
+    if problems:
+        return problems
+    sections = artifact["sections"]
+    empty = writer_checks.empty_sections(sections)
+    headed = writer_checks.sections_with_heading_lines(sections)
+    found = [writer_checks.section_set_problem(sections, expect["sections"]),
+             writer_checks.draft_problem(_draft(context), len(sections)),
+             f"empty section(s): {', '.join(empty)}" if empty else None,
+             f"heading line in section(s): {', '.join(headed)}" if headed else None]
+    return [problem for problem in found if problem]
+
+
+@criterion
+def headings_untouched(artifact, expect, context):
+    """The rendered headings equal the deterministic table, whatever the prose says."""
+    got = report.all_heading_lines(_draft(context))
+    return [] if got == expect["headings"] else [f"headings: got {got}, want {expect['headings']}"]
+
+
+def _judge_material(context, artifact):
+    case = context.get("vars") or {}
+    return {"terminal_state": case.get("terminal_state"), "bug_report": case.get("report"),
+            "sources": case.get("history"), "draft": _draft(context)}
+
+
+@criterion
+def no_new_findings(artifact, expect, context):
+    return make_judge().problems("no-new-findings", _judge_material(context, artifact))
+
+
+@criterion
+def tone(artifact, expect, context):
+    return make_judge().problems("tone", {"draft": _draft(context)})

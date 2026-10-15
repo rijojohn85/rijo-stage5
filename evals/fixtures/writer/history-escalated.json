@@ -1,0 +1,58 @@
+[
+  {
+    "produce": "triage",
+    "artifact": {
+      "classification": "bug",
+      "decision": "fix-now",
+      "root_cause": "storage.py: records are lost when a write fails.",
+      "rationale": "A failed write loses records; a small fix in the storage module looks enough.",
+      "escalation": false
+    }
+  },
+  {
+    "review": "triage",
+    "verdict": "revise",
+    "findings": [
+      {
+        "category": "incorrect",
+        "detail": "The root cause does not name the mechanism: save_records truncates the file before serializing."
+      },
+      {
+        "category": "assumption",
+        "detail": "The triage does not escalate although the report describes customer records lost in production."
+      }
+    ]
+  },
+  {
+    "produce": "triage",
+    "artifact": {
+      "classification": "bug",
+      "decision": "defer",
+      "root_cause": "storage.py:save_records opens the path with mode \"w\" before json.dumps runs, so a serialization failure truncates the file and the records already stored there are lost.",
+      "rationale": "Customer records were lost twice this week in production, so the data-loss trigger applies. SPEC.md requires that a failed write never destroy the records already stored.",
+      "escalation": true
+    }
+  },
+  {
+    "review": "triage",
+    "verdict": "pass",
+    "findings": []
+  },
+  {
+    "produce": "escalate",
+    "artifact": {
+      "reason": "Data loss: customer records were lost twice this week because save_records truncates the file before serializing.",
+      "question": "How should the data-loss defect in storage.py be fixed?",
+      "options": [
+        "Serialize first, then write the file in a single step.",
+        "Leave storage.py unchanged until a person has decided."
+      ],
+      "risk_if_wrong": "Further customer records could be lost in production."
+    }
+  },
+  {
+    "review": "escalate",
+    "verdict": "pass",
+    "findings": []
+  }
+]
