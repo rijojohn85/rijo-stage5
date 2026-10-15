@@ -28,3 +28,10 @@ def load_agent_specs(path=MANIFEST_PATH):
         )
         for name, entry in raw.items()
     }
+
+
+def load_coordinator_spec(path=MANIFEST_PATH):
+    """The coordinator's model and its (launch_* only) tools, as an AgentSpec named 'coordinator'."""
+    entry = yaml.safe_load(Path(path).read_text(encoding="utf-8"))["coordinator"]
+    return AgentSpec(name="coordinator", model=entry["model"], tools=tuple(entry["tools"]),
+                     workflow="coordinator")

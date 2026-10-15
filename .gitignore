@@ -22,5 +22,5 @@ Stage 5 Certification.html
 Stage 5 Certification_files/
 
 # per-run derived state
-runs/*/.audit-state.json
+runs/
 .venv/

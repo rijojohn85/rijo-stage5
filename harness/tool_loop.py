@@ -3,10 +3,10 @@
 Every call starts from an empty history (system + user only), which is what makes a
 helper's context isolated by construction.
 """
-import json
 from dataclasses import dataclass
 
 from harness.llm import LlmError, Usage
+from harness.messages import assistant_message, tool_message
 from harness.results import ErrorCode, Failure
 
 MAX_TURNS = 8
@@ -18,19 +18,6 @@ class LoopOutcome:
     usage: Usage
     refused_tool_calls: int
     failure: Failure | None = None
-
-
-def _assistant_message(reply):
-    message = {"role": "assistant", "content": reply.content}
-    message["tool_calls"] = [
-        {"id": c.id, "type": "function", "function": {"name": c.name, "arguments": c.arguments}}
-        for c in reply.tool_calls
-    ]
-    return message
-
-
-def _tool_message(call, result):
-    return {"role": "tool", "tool_call_id": call.id, "content": json.dumps(result)}
 
 
 class ToolLoop:
@@ -52,7 +39,7 @@ class ToolLoop:
             usage += reply.usage
             if not reply.tool_calls:
                 return LoopOutcome(reply.content, usage, refused)
-            messages.append(_assistant_message(reply))
+            messages.append(assistant_message(reply))
             for call in reply.tool_calls:
                 if call.name in allowed:
                     result = self._runner.run(call.name, call.arguments)
@@ -60,6 +47,6 @@ class ToolLoop:
                     refused += 1
                     result = {"ok": False, "error_code": str(ErrorCode.EXTRA_TOOL_CALL),
                               "detail": f"tool {call.name!r} is not available to this agent"}
-                messages.append(_tool_message(call, result))
+                messages.append(tool_message(call, result))
         detail = f"no final answer within {self._max_turns} turns"
         return LoopOutcome(None, usage, refused, Failure(ErrorCode.TOOL_BUDGET_EXCEEDED, detail))

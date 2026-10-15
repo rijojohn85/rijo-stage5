@@ -67,3 +67,25 @@ def test_producer_prompt_documents_previous_artifact(name):
     text = prompt_text(name)
     assert text.count("previous_artifact") >= 2  # listed under Inputs and explained in the findings section
     assert text.index("previous_artifact") < text.index("## Output")
+
+
+def test_coordinator_prompt_has_sections_in_order_and_is_not_truncated():
+    text = prompt_text("coordinator")
+    found = headings(text)
+    assert found.index("Inputs") < found.index("Output") < found.index("Rules")
+    assert text.endswith("\n") and len(text.splitlines()) > 20
+    assert not re.search(r"\{\{.*?\}\}", text) and "TODO" not in text
+
+
+def test_coordinator_prompt_names_every_launch_tool_and_terminal_state():
+    from harness.launch_tools import LAUNCH_SPECS, TERMINAL_STATES
+    text = prompt_text("coordinator")
+    for name in LAUNCH_SPECS:
+        assert f"`{name}`" in text, f"coordinator.md does not mention {name}"
+    for state in TERMINAL_STATES:
+        assert state in text
+
+
+def test_coordinator_prompt_tells_it_to_pass_the_stop_reason_as_escalate_feedback():
+    text = prompt_text("coordinator")
+    assert "feedback" in text and "launch_escalate" in text and "run_state" in text
