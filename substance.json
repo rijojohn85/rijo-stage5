@@ -1,0 +1,10 @@
+{
+  "workflows": {
+    "triage": {"rating": "core", "why": "classifying and prioritising defects is billable QA and support work"},
+    "plan": {"rating": "core", "why": "scoping a fix is part of delivering the fix"},
+    "implement": {"rating": "core", "why": "applying a fix is the product"},
+    "review": {"rating": "core", "why": "independent review is what makes the fix trustworthy"},
+    "escalate": {"rating": "peripheral", "why": "a safety step; clients expect it but do not buy it alone"},
+    "writer": {"rating": "peripheral", "why": "reporting supports the other workflows"}
+  }
+}

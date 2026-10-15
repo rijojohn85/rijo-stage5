@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "substance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workflows"],
+  "properties": {
+    "workflows": {
+      "description": "One entry per manifest workflow. The harness also checks that the key set equals the manifest's workflow set.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rating", "why"],
+        "properties": {
+          "rating": { "enum": ["core", "peripheral", "toy"] },
+          "why": { "type": "string", "pattern": "\\S" }
+        }
+      }
+    }
+  }
+}
