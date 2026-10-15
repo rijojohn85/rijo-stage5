@@ -1,0 +1,69 @@
+Cache is disabled.
+Starting evaluation eval-YWP-2026-10-15T14:37:46
+Running 5 test cases (up to 1 at a time)...
+
+[90m┌────────────────────────────────────────[39m[90m┬────────────────────────────────────────[39m[90m┬────────────────────────────────────────┐[39m
+[90m│[39m[1m[34m report                                 [39m[22m[90m│[39m[1m[34m expect                                 [39m[22m[90m│[39m[1m[34m [stage5-workflow] {{case}}             [39m[22m[90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-143747",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.03367, "report_head": "# Result:     [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tri...                       [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-143838",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.034617, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tr...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-143940",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.033941, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tr...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-144030",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.033666, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tr...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-144125",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.035437, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tr...                        [90m│[39m
+[90m└────────────────────────────────────────[39m[90m┴────────────────────────────────────────[39m[90m┴────────────────────────────────────────┘[39m
+✓ Eval complete (ID: eval-YWP-2026-10-15T14:37:46)
+
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 199,963
+  Provider: 199,963 (174,831 prompt, 25,132 completion)
+
+Results:
+  ✓ 5 passed (100%)
+  0 failed (0%)
+  0 errors (0%)
+Duration: 4m 45s (concurrency: 1)
+
+Writing output to results/workflow-escalation-recheck.json
+telemetry.shutdown() timed out during shutdown

@@ -89,35 +89,6 @@ def _check_extra(data, expect, problems):
             problems.append(f"{key} must be absent: a human fills it in")
 
 
-def _workflow_assert(data, expect):
-    """Workflow-level checks: terminal state, route, and that the audit trail is real."""
-    problems = []
-
-    if data.get("status") != expect.get("status"):
-        problems.append(f"status: got {data.get('status')!r}, want {expect.get('status')!r}")
-    if "route" in expect and data.get("route") != expect["route"]:
-        problems.append(f"route: got {data.get('route')!r}, want {expect['route']!r}")
-
-    steps = data.get("steps") or []
-    if "min_steps" in expect and len(steps) < expect["min_steps"]:
-        names = [s.get("step") for s in steps]
-        problems.append(f"steps: {len(steps)} < {expect['min_steps']} ({names})")
-    for step in steps:
-        if not step.get("ok"):
-            problems.append(f"step {step.get('step')} failed: {step.get('error')}")
-
-    if expect.get("audit_complete"):
-        missing = [s.get("step") for s in steps if not s.get("session_id")]
-        if missing:
-            problems.append(f"no session id recorded for: {missing}")
-        if not (data.get("cost_usd") or 0) > 0:
-            problems.append(f"no measured cost: {data.get('cost_usd')!r}")
-
-    if not problems:
-        return {"pass": True, "score": 1.0, "reason": "ok"}
-    return {"pass": False, "score": 0.0, "reason": "; ".join(problems)}
-
-
 def get_assert(output, context):
     expect = (context.get("vars") or {}).get("expect") or {}
     problems = []
@@ -126,9 +97,6 @@ def get_assert(output, context):
         data = json.loads(output)
     except json.JSONDecodeError as exc:
         return {"pass": False, "score": 0.0, "reason": f"output is not JSON: {exc}"}
-
-    if expect.get("kind") == "workflow":
-        return _workflow_assert(data, expect)
 
     validator = jsonschema.Draft202012Validator(_schema(expect.get("schema", "triage")))
     for err in sorted(validator.iter_errors(data), key=lambda e: list(e.absolute_path)):

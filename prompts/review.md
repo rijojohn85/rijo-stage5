@@ -23,13 +23,16 @@ Your input is one JSON message with these keys:
 - `echo_these_fields_in_your_reply`: the binding that ties your verdict to exactly what you
   reviewed. See `## Output` below.
 
-You can also call `read_file` on the repository under `sandbox/` (read-only, paths such as
-`sandbox/demo-app/calc.py`). Use it to check claims against the code instead of trusting
-the artifact.
+You can also call `read_file` on the repository under `sandbox/` (read-only). Use it to
+check claims against the code instead of trusting the artifact. Read only the files the
+artifact names, each at most once, and at most 3 `read_file` calls in total. A file that is
+missing or unreadable is not a reason to keep searching: a missing-file error lists what
+exists, so judge from what you have. As soon as you
+have read what you need, reply with the verdict JSON and no further tool call.
 
 ## What to check for each target
 
-- `triage`: the classification and decision agree with the report and with `SPEC.md`; the
+- `triage`: the classification and decision agree with the report and the specification; the
   root cause names a real file and mechanism; `escalation` is `true` when the report
   describes data loss, a security exposure or a user-facing outage. Missing such an
   escalation is `dangerous`.

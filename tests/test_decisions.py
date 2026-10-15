@@ -237,6 +237,37 @@ def test_a_failure_report_released_stays_failed(paths):
     assert disposition["disposition"] == RELEASED and disposition["execution_result"] == "FAILED_TURN_BUDGET"
 
 
+def test_resolving_either_gate_alone_leaves_the_other_pending(paths):
+    make_run(paths)
+    desk, _ = desk_for(paths)
+    desk.sign_punch_out(RUN_ID, CONTINUE, "Rijo John")          # punch-out first: substance is still missing
+    first = desk.status(RUN_ID)
+    assert first["disposition"] == PENDING_HUMAN and first["missing"] == [SUBSTANCE]
+    desk.sign_substance(CONTINUE, "Rijo John")
+    assert desk.status(RUN_ID)["disposition"] == RELEASED
+
+
+def test_a_rejection_prevents_release_even_while_the_other_gate_is_pending(paths):
+    make_run(paths)
+    desk, _ = desk_for(paths)
+    desk.sign_punch_out(RUN_ID, REJECT, "Rijo John")
+    rejected = desk.status(RUN_ID)
+    assert rejected["disposition"] == REJECTED and rejected["missing"] == [SUBSTANCE]
+    desk.sign_substance(CONTINUE, "Rijo John")
+    assert desk.status(RUN_ID)["disposition"] == REJECTED         # the other gate passing does not release it
+
+
+def test_approving_a_coordination_failure_report_does_not_make_it_verified(paths):
+    make_run(paths, report="# Result: FAILED_COORDINATION\n\n**Human decision required**\n")
+    before = snapshot(paths.runs_dir / RUN_ID)
+    desk, _ = desk_for(paths)
+    desk.sign_substance(CONTINUE, "Rijo John")
+    desk.sign_punch_out(RUN_ID, CONTINUE, "Rijo John")
+    disposition = desk.status(RUN_ID)
+    assert disposition["disposition"] == RELEASED and disposition["execution_result"] == "FAILED_COORDINATION"
+    assert snapshot(paths.runs_dir / RUN_ID) == before
+
+
 def test_confirmation_declined_appends_nothing_and_confirmation_is_asked_before_appending(paths):
     make_run(paths)
     desk, asked = desk_for(paths, answer=False)

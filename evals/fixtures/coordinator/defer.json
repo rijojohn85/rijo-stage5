@@ -1,0 +1,11 @@
+{
+  "triage": [
+    {
+      "classification": "feature-as-bug",
+      "decision": "defer",
+      "root_cause": "calc.py: median() does not exist; this is a new feature",
+      "rationale": "a request for new behaviour, not a defect against SPEC.md",
+      "escalation": false
+    }
+  ]
+}

@@ -20,6 +20,69 @@ def test_read_inside(root):
     assert r == {"ok": True, "path": "sandbox/app/a.py", "content": "x = 1\n"}
 
 
+def test_read_missing_lists_only_sandbox_files(root):
+    (root / "sandbox/app/b.txt").write_text("second")
+    r = tools.read_file("sandbox/README.md", root=root)
+    assert r == {"ok": False, "error_code": "NOT_FOUND",
+                 "detail": "not a file: sandbox/README.md. Files available: sandbox/app/a.py, sandbox/app/b.txt"}
+    assert "secret.txt" not in r["detail"]
+    assert str(root) not in r["detail"]
+
+
+def test_read_real_sandbox_missing_lists_existing_files():
+    r = tools.read_file("sandbox/nonexistent-file")
+    assert r["error_code"] == "NOT_FOUND"
+    listing = r["detail"].split("Files available: ")[1].split(", ")
+    for path in ("sandbox/demo-app/SPEC.md", "sandbox/demo-app/calc.py", "sandbox/demo-app/storage.py"):
+        assert path in listing
+    assert listing == sorted(listing)
+    assert all(path.startswith("sandbox/") and (tools.PROJECT_ROOT / path).is_file() for path in listing)
+
+
+def test_read_directory_lists_only_files_under_that_directory(root):
+    (root / "sandbox/other.txt").write_text("outside requested directory")
+    (root / "sandbox/app/nested").mkdir()
+    (root / "sandbox/app/nested/b.txt").write_text("nested")
+    assert tools.read_file("sandbox/app", root=root) == {
+        "ok": True, "path": "sandbox/app", "listing": ["sandbox/app/a.py", "sandbox/app/nested/b.txt"]}
+
+
+def test_read_listings_skip_symlinks_caches_and_git_metadata(root):
+    os.symlink(root / "secret.txt", root / "sandbox/link.txt")
+    os.symlink(root, root / "sandbox/dirlink")
+    os.symlink(root / "sandbox", root / "sandbox/loop")
+    (root / "sandbox/app/ignored.pyc").write_bytes(b"cache")
+    (root / "sandbox/app/.git").write_text("gitdir: private metadata")
+    for name in ("__pycache__", ".git"):
+        directory = root / "sandbox" / name
+        directory.mkdir()
+        (directory / "hidden.txt").write_text("hidden")
+        assert tools.read_file(f"sandbox/{name}", root=root)["listing"] == []
+    assert tools.read_file("sandbox", root=root)["listing"] == ["sandbox/app/a.py"]
+    assert tools.read_file("sandbox/missing", root=root)["detail"].endswith("Files available: sandbox/app/a.py")
+
+
+def test_read_listings_are_capped_and_note_truncation(root):
+    for index in range(60):
+        (root / "sandbox/app" / f"file-{index:02}.txt").write_text("file")
+    r = tools.read_file("sandbox", root=root)
+    expected = ["sandbox/app/a.py"] + [f"sandbox/app/file-{index:02}.txt" for index in range(49)]
+    assert r["listing"] == expected
+    assert r["detail"] == "Listing truncated to 50 files."
+    missing = tools.read_file("sandbox/missing", root=root)
+    assert missing["error_code"] == "NOT_FOUND"
+    assert missing["detail"] == ("not a file: sandbox/missing. Files available: "
+                                 + ", ".join(expected) + ". Listing truncated to 50 files.")
+
+
+def test_read_listing_errors_do_not_raise(root, monkeypatch):
+    def fail(*args, **kwargs):
+        raise OSError("listing failed")
+    monkeypatch.setattr(tools.os, "walk", fail)
+    assert tools.read_file("sandbox", root=root)["error_code"] == "TOOL_ERROR"
+    assert tools.read_file("sandbox/missing", root=root)["error_code"] == "TOOL_ERROR"
+
+
 def test_read_traversal_refused(root):
     assert refused(tools.read_file("sandbox/../secret.txt", root=root))
     assert refused(tools.read_file("../secret.txt", root=root))
@@ -58,7 +121,6 @@ def test_edit_errors_structured(root):
 def test_bad_inputs_do_not_raise(root):
     assert tools.read_file(None, root=root)["ok"] is False
     assert tools.read_file("sandbox/missing.py", root=root)["error_code"] == "NOT_FOUND"
-    assert tools.read_file("sandbox/app", root=root)["ok"] is False
     assert tools.edit_file(None, "a", "b", root=root)["ok"] is False
     assert tools.run_test(None, root=root)["ok"] is False
 

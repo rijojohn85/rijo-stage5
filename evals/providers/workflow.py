@@ -1,165 +1,64 @@
 #!/usr/bin/env python3
-"""Workflow-level eval provider.
+"""promptfoo provider: one bug report through the real harness, end to end.
 
-Runs the whole chain in one promptfoo case: triage -> plan -> implement -> review, with the
-same branching the skills use (defer at triage, punch out on escalation, verify on a pass).
+This calls harness.run.run_bug (the coordinator on glm-5p3, every sub-agent on deepseek, the real
+dispatcher, checks and publisher) with the Fireworks client: no CLI, no stand-in. A case is one
+run; `--repeat 3` makes three. The run writes runs/<id>/ as any run does, and its audit.jsonl is
+what the criteria read. It never records a human decision: disposition.json is only computed.
 
-This is an EVAL, not the runtime. Interactive use is the five skills, driven by a human, and
-nothing here runs on that path. It exists for two reasons the certification asks for:
-
-  * the workflow is itself a Stage 3 prompt and must be evaluated as one;
-  * it can assert the audit trail end to end, which no single-agent eval can.
-
-Every case resets `sandbox/` first, so the cases cannot interfere with each other.
+Runs edit the real sandbox/, so each one starts from and ends with `git checkout HEAD -- sandbox`
+(plus a clean of untracked files), or runs would contaminate each other.
+Needs FIREWORKS_API_KEY (load .env first) and makes paid API calls.
 """
-
-import json
+import io
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from opencode_cli import REPO, call_opencode, get_usage, log_usage  # noqa: E402
+PROVIDERS_DIR = Path(__file__).resolve().parent
+EVALS_DIR = PROVIDERS_DIR.parent
+REPO = EVALS_DIR.parent
+for entry in (str(REPO), str(EVALS_DIR), str(PROVIDERS_DIR)):
+    if entry not in sys.path:
+        sys.path.insert(0, entry)
 
-PROMPTS = REPO / "prompts"
-DEFAULT_MODEL = "opencode-go/deepseek-v4.1-flash"
+from run_summary import provider_response, summarize_run  # noqa: E402
 
-
-def render(name, **variables):
-    text = (PROMPTS / f"{name}.md").read_text(encoding="utf-8")
-    for key, value in variables.items():
-        text = text.replace("{{" + key + "}}", str(value))
-    return text
-
-
-def shell(args, cwd):
-    return subprocess.run(
-        args, cwd=str(cwd), capture_output=True, text=True, stdin=subprocess.DEVNULL,
-    )
+from harness.llm import FireworksClient  # noqa: E402
+from harness.run import RUNS_DIRNAME, run_bug, utc_now  # noqa: E402
+from harness.sandbox_git import GitSandbox  # noqa: E402
+from harness.tools import SANDBOX_DIRNAME  # noqa: E402
 
 
-def reset_sandbox(cwd):
-    """Each case must start from the same buggy state, or a later case finds the fix done."""
-    shell(["git", "checkout", "--", "sandbox/"], cwd)
-    shell(["git", "clean", "-fdq", "sandbox/"], cwd)
+def reset_sandbox(root):
+    """Every run starts from the same buggy sandbox, or a later run would find the fix already applied."""
+    for args in (["checkout", "HEAD", "--", SANDBOX_DIRNAME], ["clean", "-fdq", SANDBOX_DIRNAME]):
+        subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True, stdin=subprocess.DEVNULL)
 
 
-class Chain:
-    def __init__(self, model, cwd, step_timeout, label):
-        self.model = model
-        self.cwd = cwd
-        self.step_timeout = step_timeout
-        self.label = label
-        self.steps = []
-        self.cost = 0.0
-
-    def step(self, name, prompt):
-        label = f"{self.label}:{name}"
-        output, session_id, elapsed = call_opencode(
-            prompt, self.model, self.cwd, self.step_timeout, label=label,
-        )
-        tokens, cost = get_usage(session_id)
-        log_usage(self.model, session_id, tokens, cost, elapsed, label)
-        if cost:
-            self.cost += cost
-
-        record = {
-            "step": name,
-            "ok": True,
-            "session_id": session_id,
-            "elapsed_s": elapsed,
-            "cost_usd": cost,
-            "error": None,
-        }
-        try:
-            record["output"] = json.loads(output)
-        except json.JSONDecodeError as exc:
-            record["ok"] = False
-            record["error"] = f"output is not JSON: {exc}"
-            # Keep enough of the raw reply to diagnose it. A 400-char cap once hid the
-            # actual defect, which sat past the cut.
-            record["raw"] = output[:4000]
-        self.steps.append(record)
-        return record
+def run_workflow(report, llm, root, runs_dir):
+    """The run's response; the sandbox is reset before and after, whatever happens in between."""
+    reset_sandbox(root)
+    try:
+        with tempfile.TemporaryDirectory(prefix="workflow-eval-") as directory:
+            bug = Path(directory) / "bug.md"
+            bug.write_text(report, encoding="utf-8")
+            log = io.StringIO()
+            run_dir, outcome = run_bug(bug, llm=llm, runs_dir=runs_dir, tool_root=root, sandbox=GitSandbox(root),
+                                       clock=utc_now, stderr=log)
+            return provider_response(summarize_run(run_dir, outcome), run_dir, log.getvalue())
+    finally:
+        reset_sandbox(root)
 
 
-def finish(chain, status, route, verify=None):
-    return {
-        "status": status,
-        "route": route,
-        # `raw` is only ever set on a step that failed, so it survives here on purpose:
-        # the first diagnosis of a bad step should not require guesswork.
-        "steps": chain.steps,
-        "cost_usd": round(chain.cost, 6),
-        "verify": verify or {},
-    }
-
-
-def run_workflow(report, model, cwd, step_timeout, label):
-    reset_sandbox(cwd)
-    chain = Chain(model, cwd, step_timeout, label)
-
-    triage_step = chain.step("triage", render("triage", report=report))
-    if not triage_step["ok"]:
-        return finish(chain, "FAILED_triage", None)
-    triage = triage_step["output"]
-
-    if triage.get("escalation") is True:
-        return finish(chain, "HUMAN_PUNCH_OUT", "ESCALATE")
-    if triage.get("decision") != "fix-now":
-        return finish(chain, "DEFERRED", "DEFER")
-
-    plan_step = chain.step("plan", render("plan", triage=json.dumps(triage, indent=2)))
-    if not plan_step["ok"]:
-        return finish(chain, "FAILED_plan", None)
-    plan = plan_step["output"]
-
-    implement_step = chain.step(
-        "implement", render("implement", plan=json.dumps(plan, indent=2)),
-    )
-    if not implement_step["ok"]:
-        return finish(chain, "FAILED_implement", None)
-    implement = implement_step["output"]
-
-    diff = shell(["git", "diff", "--", "sandbox/"], cwd).stdout
-    review_step = chain.step("review", render(
-        "review",
-        triage=json.dumps(triage, indent=2),
-        plan=json.dumps(plan, indent=2),
-        implement=json.dumps(implement, indent=2),
-        diff=diff,
-    ))
-    if not review_step["ok"]:
-        return finish(chain, "FAILED_review", None)
-    review = review_step["output"]
-
-    verify = {
-        "changed": implement.get("changed"),
-        "test_passed": implement.get("test_passed"),
-        "verdict": review.get("verdict"),
-        "findings": review.get("findings"),
-    }
-
-    if review.get("verdict") == "pass":
-        return finish(chain, "VERIFIED", "FIX", verify)
-    if review.get("verdict") == "escalate":
-        return finish(chain, "HUMAN_PUNCH_OUT", "ESCALATE", verify)
-    # revise: the loop is a human-driven rule in SKILL.md and is capped at one revision.
-    # /implement takes a plan, not findings, so this eval records the verdict rather than
-    # looping and pretending the second pass is a real revision.
-    return finish(chain, "NEEDS_REVISION", "REVISE", verify)
-
-
-def call_api(prompt, options, context):  # noqa: ARG001 - promptfoo protocol
-    cfg = (options or {}).get("config") or {}
-    model = cfg.get("model") or DEFAULT_MODEL
-    step_timeout = (cfg.get("step_timeout") or 300_000) / 1000
-    workspace = cfg.get("workspace")
-    cwd = REPO / workspace if workspace else REPO
-    label = str(((context or {}).get("test") or {}).get("description") or "workflow")[:40]
-
-    result = run_workflow(prompt, model, cwd, step_timeout, label)
-    return {"output": json.dumps(result), "cost": result.get("cost_usd")}
+def call_api(prompt, options, context, llm=None, root=REPO, runs_dir=None):
+    """promptfoo entry point. `llm`, `root` and `runs_dir` are for tests; promptfoo passes none of them."""
+    try:
+        report = ((context or {}).get("vars") or {})["report"]
+        return run_workflow(report, llm or FireworksClient.from_env(), root, runs_dir or root / RUNS_DIRNAME)
+    except (KeyError, subprocess.CalledProcessError, OSError) as exc:
+        return {"error": f"{type(exc).__name__}: {exc}"}
 
 
 if __name__ == "__main__":

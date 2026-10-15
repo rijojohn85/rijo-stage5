@@ -13,6 +13,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SANDBOX_DIRNAME = "sandbox"
 MAX_READ_BYTES = 200_000
+MAX_LISTING_ENTRIES = 50
 TEST_TIMEOUT_SECONDS = 60
 MAX_OUTPUT_CHARS = 8_000
 
@@ -38,14 +39,44 @@ def _resolve(path, root):
     return real, None
 
 
+def _list_files(directory, root):
+    """Return sorted sandbox-relative files and a truncation flag; never walk symlinks."""
+    files = []
+    for current, directories, names in os.walk(directory, followlinks=False):
+        directories[:] = [name for name in directories
+                          if name not in {"__pycache__", ".git"}
+                          and not (Path(current) / name).is_symlink()]
+        for name in names:
+            candidate = Path(current) / name
+            if name.endswith(".pyc") or candidate.is_symlink():
+                continue
+            real, err = _resolve(str(candidate), root)
+            if not err and real.is_file():
+                relative = real.relative_to(Path(root).resolve())
+                if not {"__pycache__", ".git"}.intersection(relative.parts):
+                    files.append(relative.as_posix())
+    files.sort()
+    return files[:MAX_LISTING_ENTRIES], len(files) > MAX_LISTING_ENTRIES
+
+
 def read_file(path, root=PROJECT_ROOT):
-    """Return a file's text. Read-only, sandbox/ only."""
+    """Return file text or a successful directory listing; misses list sandbox files."""
     try:
         real, err = _resolve(path, root)
         if err:
             return err
+        if real.is_dir():
+            listing, truncated = _list_files(real, root)
+            result = {"ok": True, "path": path, "listing": listing}
+            if truncated:
+                result["detail"] = f"Listing truncated to {MAX_LISTING_ENTRIES} files."
+            return result
         if not real.is_file():
-            return _err("NOT_FOUND", f"not a file: {path}")
+            listing, truncated = _list_files(Path(root) / SANDBOX_DIRNAME, root)
+            detail = f"not a file: {path}. Files available: {', '.join(listing) or '(none)'}"
+            if truncated:
+                detail += f". Listing truncated to {MAX_LISTING_ENTRIES} files."
+            return _err("NOT_FOUND", detail)
         data = real.read_bytes()
         if len(data) > MAX_READ_BYTES:
             return _err("TOO_LARGE", f"file exceeds {MAX_READ_BYTES} bytes")

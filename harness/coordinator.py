@@ -16,9 +16,11 @@ from harness.results import ErrorCode
 from harness.run_log import NullRunLog
 
 MAX_TURNS = 32
+MAX_REFUSED_CLAIMS = 3   # refused completion claims tolerated before the run is declared a coordination failure
 FAILED_PREFIX = "FAILED_"
 FAILED_TURN_BUDGET = "FAILED_TURN_BUDGET"
 FAILED_COORDINATOR_API = "FAILED_COORDINATOR_API"
+FAILED_COORDINATION = "FAILED_COORDINATION"
 COORDINATOR = "coordinator"
 
 
@@ -43,6 +45,7 @@ class Coordinator:
         self._log, self._max_turns = log or NullRunLog(), max_turns
         self._tools = launch_definitions(spec.tools)
         self._attempts, self._seen = {}, {"human_required": False, "stale": ()}
+        self._refused_claims = 0
 
     def run(self, bug_report_text):
         messages = [{"role": "system", "content": self._system_prompt},
@@ -59,6 +62,8 @@ class Coordinator:
             accepted = self._accepted_state()
             if accepted:
                 return self._outcome(accepted, turn)
+            if self._refused_claims >= MAX_REFUSED_CLAIMS:
+                return self._outcome(FAILED_COORDINATION, turn)
         return self._outcome(FAILED_TURN_BUDGET, self._max_turns)
 
     # --- one turn ------------------------------------------------------------------------------
@@ -81,14 +86,22 @@ class Coordinator:
         self._log_launch(launch)
         result = self._router.execute(launch)
         self._log_result(launch, result)
+        self._count_refused_claim(launch, result)
         self._log_state_changes()
         return {**result, "run_state": self._state.snapshot()}
 
     def _claim_done(self, turn):
         """The model answered without a tool call: only a finalized run may end this way."""
         detail = self._not_finished_detail()
+        self._refused_claims += 1
         self._log.event("premature", turn=turn, detail=detail)
         return [{"role": "user", "content": f"Not finished: {detail} Continue with a launch_* tool call."}]
+
+    def _count_refused_claim(self, launch, result):
+        """A writer launch the terminal-state check refused is an illegal completion claim."""
+        if launch.agent == "writer" and not result["ok"] and result["error_code"] == str(ErrorCode.PRECONDITION_MISSING):
+            self._refused_claims += 1
+            self._log.event("refused-claim", terminal_state=launch.terminal_state, count=self._refused_claims)
 
     # --- finalization --------------------------------------------------------------------------
 

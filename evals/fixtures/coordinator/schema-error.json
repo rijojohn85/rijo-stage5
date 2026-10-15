@@ -1,0 +1,14 @@
+{
+  "plan": [
+    "this is not json at all",
+    {
+      "files": [
+        "sandbox/demo-app/calc.py"
+      ],
+      "steps": [
+        "return 0.0 when the list is empty"
+      ],
+      "test": "python3 -m pytest sandbox/demo-app"
+    }
+  ]
+}

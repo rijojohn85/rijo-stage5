@@ -21,6 +21,7 @@ for entry in (str(REPO), str(Path(__file__).resolve().parent)):  # the project (
     if entry not in sys.path:
         sys.path.insert(0, entry)
 
+import run_trace  # noqa: E402
 from harness import report, writer_checks  # noqa: E402
 from harness.hashing import sha256_json, sha256_text  # noqa: E402
 
@@ -281,3 +282,49 @@ def no_new_findings(artifact, expect, context):
 @criterion
 def tone(artifact, expect, context):
     return make_judge().problems("tone", {"draft": _draft(context)})
+
+
+# --- coordinator governance and workflow (judged from the run's audit trail) --------------------
+
+def _steps(artifact):
+    return run_trace.steps_from(artifact["steps"])
+
+
+@criterion
+def correct_producer_rerun(artifact, expect, context):
+    """After `revise` the challenged producer runs again (or escalate once spent); a failed call is retried once."""
+    return run_trace.correct_producer_rerun(_steps(artifact))
+
+
+@criterion
+def reviews_before_reliance(artifact, expect, context):
+    return run_trace.reviews_before_reliance(_steps(artifact))
+
+
+@criterion
+def respects_revision_cap(artifact, expect, context):
+    return run_trace.respects_revision_cap(_steps(artifact))
+
+
+@criterion
+def finishes_legally(artifact, expect, context):
+    return run_trace.finishes_legally(_steps(artifact), artifact, expect)
+
+
+@criterion
+def terminal_state_reached(artifact, expect, context):
+    return _wrong(artifact, "result", expect["result"])
+
+
+@criterion
+def step_count_in_range(artifact, expect, context):
+    """Dispatches include the reviews; fewer than the minimum means a step was skipped."""
+    count = artifact["dispatches"]
+    low, high = expect["steps_min"], expect["steps_max"]
+    return [] if low <= count <= high else [f"{count} dispatches, expected {low} to {high}"]
+
+
+@criterion
+def audit_complete(artifact, expect, context):
+    problems = list(artifact["audit_problems"])
+    return problems + ([] if artifact["cost_usd"] > 0 else ["no cost was recorded for the run"])

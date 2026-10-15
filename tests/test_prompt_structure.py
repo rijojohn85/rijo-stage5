@@ -129,3 +129,14 @@ def test_review_prompt_describes_the_writer_draft_inputs():
 def test_coordinator_prompt_tells_it_to_retry_a_failed_writer_with_the_error_detail():
     text = prompt_text("coordinator")
     assert "launch_writer` itself returns an error" in text
+
+
+def test_review_prompt_bounds_read_file_use_without_hardcoded_filenames():
+    text = prompt_text("review")
+    paragraph = text.split("You can also call `read_file`", 1)[1].split("## What to check", 1)[0]
+    for filename in ("calc.py", "storage.py", "SPEC.md"):
+        assert filename not in text
+    assert "at most 3 `read_file` calls" in paragraph
+    assert "each at most once" in paragraph
+    assert "no further tool call" in paragraph
+    assert "reply with the verdict JSON" in paragraph

@@ -1,0 +1,35 @@
+{
+  "triage": [
+    {
+      "classification": "bug",
+      "decision": "fix-now",
+      "root_cause": "calc.py: average() divides by len() without an empty check",
+      "rationale": "a small local defect with a documented expected result in SPEC.md",
+      "escalation": false
+    },
+    {
+      "classification": "bug",
+      "decision": "fix-now",
+      "root_cause": "calc.py: average() divides by len() without an empty check",
+      "rationale": "a small local defect; SPEC.md requires average([]) to return 0.0 and nothing else depends on the crash",
+      "escalation": false
+    }
+  ],
+  "reviewer": {
+    "triage": [
+      {
+        "verdict": "revise",
+        "findings": [
+          {
+            "category": "incorrect",
+            "detail": "the rationale does not cite SPEC.md"
+          }
+        ]
+      },
+      {
+        "verdict": "pass",
+        "findings": []
+      }
+    ]
+  }
+}

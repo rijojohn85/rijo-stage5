@@ -184,10 +184,10 @@ def test_premature_done_is_rejected_and_the_run_continues(tmp_path):
 
 
 def test_a_writer_draft_without_evidence_is_refused(tmp_path):
-    script = [launch("launch_writer", terminal_state="VERIFIED"), launch("launch_writer", terminal_state="DEFERRED"),
-              launch("launch_writer", terminal_state="HUMAN_PUNCH_OUT"), reviewing("writer")]
+    script = [launch("launch_writer", terminal_state="VERIFIED"), reviewing("writer"),
+              launch("launch_writer", terminal_state="DEFERRED"), reviewing("writer")]
     coordinator, llm, audit, _ = build(tmp_path, script, [], max_turns=4)
-    assert coordinator.run(BUG).result == FAILED_TURN_BUDGET
+    assert coordinator.run(BUG).result == FAILED_TURN_BUDGET   # two refused claims are below the coordination limit
     codes = [e["error_code"] for e in audit.dispatches()]
     assert codes == ["PRECONDITION_MISSING"] * 4
 

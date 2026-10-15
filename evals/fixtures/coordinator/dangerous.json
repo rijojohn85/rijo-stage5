@@ -1,0 +1,15 @@
+{
+  "reviewer": {
+    "triage": [
+      {
+        "verdict": "escalate",
+        "findings": [
+          {
+            "category": "dangerous",
+            "detail": "the proposed fix would delete stored customer records"
+          }
+        ]
+      }
+    ]
+  }
+}

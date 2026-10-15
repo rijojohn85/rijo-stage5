@@ -48,7 +48,9 @@ text to finish: a plain-text reply is treated as a premature "done" and rejected
 6. Retry a call that returned `ok: false` once with the same inputs. If it fails again,
    escalate. A `PRECONDITION_MISSING` error means you skipped a step: do that step first.
 7. Only propose a terminal state the evidence supports. The harness validates it and
-   refuses an illegal one with the reason; read that reason and fix the cause.
+   refuses an illegal one with the reason; read that reason and fix the cause. A refused
+   completion claim (an illegal `launch_writer`, or a reply with no tool call) is counted; after
+   three of them the run stops as `FAILED_COORDINATION`.
 8. If you call `launch_writer` and it passes, review the draft with `launch_reviewer`
    and `target` `writer`. If the draft is revised, call `launch_writer` again with the
    findings as `feedback`. If `launch_writer` itself returns an error, call it once more

@@ -1,0 +1,133 @@
+=== 2026-10-15T19:12:56+05:30 suite: workflow ===
+Cache is disabled.
+Starting evaluation eval-M3W-2026-10-15T13:42:58
+Running 12 test cases (up to 1 at a time)...
+
+[90m┌────────────────────────────────────────[39m[90m┬────────────────────────────────────────[39m[90m┬────────────────────────────────────────┐[39m
+[90m│[39m[1m[34m report                                 [39m[22m[90m│[39m[1m[34m expect                                 [39m[22m[90m│[39m[1m[34m [stage5-workflow] {{case}}             [39m[22m[90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134258",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "VERIFIED",                [90m│[39m "result": "VERIFIED", "turns": 8,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 8,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 16                      [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.046639, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m VERIFIED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134356",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "VERIFIED",                [90m│[39m "result": "VERIFIED", "turns": 8,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 8,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 16                      [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.04691, "report_head": "# Result:     [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m VERIFIED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code":...                       [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134449",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "VERIFIED",                [90m│[39m "result": "VERIFIED", "turns": 8,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 8,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 16                      [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.046954, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m VERIFIED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134543",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "VERIFIED",                [90m│[39m "result": "VERIFIED", "turns": 8,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 8,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 16                      [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.045958, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m VERIFIED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134638",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "VERIFIED",                [90m│[39m "result": "VERIFIED", "turns": 8,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 8,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 16                      [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.044667, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m VERIFIED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134734",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "VERIFIED",                [90m│[39m "result": "VERIFIED", "turns": 8,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 8,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 16                      [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.044307, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m VERIFIED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134834",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "DEFERRED",                [90m│[39m "result": "DEFERRED", "turns": 4,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 4,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 8                       [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.020877, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m DEFERRED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134906",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "DEFERRED",                [90m│[39m "result": "DEFERRED", "turns": 4,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 4,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 8                       [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.018181, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m DEFERRED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-134935",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "DEFERRED",                [90m│[39m "result": "DEFERRED", "turns": 4,      [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 4,                      [90m│[39m "human_required": false,               [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 8                       [90m│[39m "human_reasons": [], "cost_usd":       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m 0.017841, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m DEFERRED", "steps": [{"n": 1, "agent": [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "triage", "target": null, "ok": true,  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "error_code"...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-135005",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.038593, "report_head": "# Result:    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tr...                        [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [FAIL] {"run_id": "20261015-135115",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 14, "human_required": true,            [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation", "triage step 8    [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m flagged escalation", "reviewer failed  [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 2 times in a row                       [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m (TOOL_BUDGET_EXCEEDED)"], "...         [90m│[39m
+[90m├────────────────────────────────────────[39m[90m┼────────────────────────────────────────[39m[90m┼────────────────────────────────────────┤[39m
+[90m│[39m file:///home/rijojohn/dev/rijo-stage5… [90m│[39m {                                      [90m│[39m [PASS] {"run_id": "20261015-135804",   [90m│[39m
+[90m│[39m                                        [90m│[39m   "result": "HUMAN_PUNCH_OUT",         [90m│[39m "result": "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_min": 6,                      [90m│[39m 6, "human_required": true,             [90m│[39m
+[90m│[39m                                        [90m│[39m   "steps_max": 12                      [90m│[39m "human_reasons": ["triage step 1       [90m│[39m
+[90m│[39m                                        [90m│[39m }                                      [90m│[39m flagged escalation"], "cost_usd":      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m 0.0422, "report_head": "# Result:      [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m HUMAN_PUNCH_OUT", "steps": [{"n": 1,   [90m│[39m
+[90m│[39m                                        [90m│[39m                                        [90m│[39m "agent": "tria...                      [90m│[39m
+[90m└────────────────────────────────────────[39m[90m┴────────────────────────────────────────[39m[90m┴────────────────────────────────────────┘[39m
+✓ Eval complete (ID: eval-M3W-2026-10-15T13:42:58)
+
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 786,771
+  Provider: 786,771 (711,531 prompt, 75,240 completion)
+
+Results:
+  ✓ 11 passed (91.67%)
+  ✗ 1 failed (8.33%)
+  0 errors (0%)
+Duration: 16m 23s (concurrency: 1)
+
+Writing output to results/workflow.json
+=== 2026-10-15T19:29:21+05:30 done: workflow ===

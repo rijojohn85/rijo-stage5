@@ -1,69 +1,45 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-# NOT RUNNABLE until build step 7. This suite and providers/workflow.py still drive the old
-# opencode CLI chain; providers/opencode_cli.py was removed in step 3 (workflow.py imports it).
-# Step 7 replaces both with the real coordinator (harness/run.py) and criteria for the
-# workflow suite. Do not run it before then.
-# The workflow is itself an evaluated prompt: one bug report in, one terminal state out.
+# workflow — a bug report in, one terminal state out, through the real coordinator and real sub-agents.
 #
-# The four cases cover every place the flow can stop or branch:
-#   VERIFIED        a fix-now bug runs the whole chain and is reviewed clean
-#   DEFERRED        a feature dressed as a bug stops at triage
-#   HUMAN_PUNCH_OUT a data-loss report stops at triage and is raised to a human
-# A stored test fails the revision route, which is recorded but not looped (see workflow.py).
-description: workflow — a bug report in, one terminal state out, with the audit trail intact
+# Each case is one live run of harness.run (glm-5p3 coordinator, deepseek-v4p1-flash sub-agents) with
+# nothing canned. Run it with --repeat 3; the provider resets sandbox/ before and after every run.
+# Criteria read the run's own audit trail (evals/run_trace.py):
+#   terminal-state  the run ended in the state the report calls for
+#   step-count      dispatches, reviews included, are within the expected range
+#   audit-complete  one correlation id, every line complete, every artifact on disk, a cost recorded
+#
+# Expected states are Stage 4's: bug-clear and bug-regression are fixed and VERIFIED, a feature
+# request filed as a bug is DEFERRED at triage, and the data-loss report stops at HUMAN_PUNCH_OUT.
+# The step ranges: fix-now needs 8 (three producers and the writer, each reviewed) and allows each
+# of the three producers one replacement with its re-review; defer needs 4; escalate needs 6.
+description: workflow — real coordinator and helpers, a bug report in and a legal terminal state out
 prompts:
-  - '{{report}}'
+  - '{{case}}'  # unused by the provider; the test vars describe the case
 providers:
   - id: file://providers/workflow.py
-    label: workflow
+    label: stage5-workflow
     config:
-      model: opencode-go/deepseek-v4.1-flash
-      workspace: .eval-workspace
-      # One case is a chain of up to four model calls plus git, so the worker budget has to
-      # cover the whole chain, not one call.
-      step_timeout: 240000
       timeout: 1800000
 defaultTest:
   assert:
     - type: is-json
-    - type: python
-      value: file://asserts.py
-      config:
-        timeout: 60000
+    - { type: python, metric: terminal-state, value: 'file://criteria.py:terminal_state_reached' }
+    - { type: python, metric: step-count, value: 'file://criteria.py:step_count_in_range' }
+    - { type: python, metric: audit-complete, value: 'file://criteria.py:audit_complete' }
 tests:
-  - description: 'bug-clear -> VERIFIED by the full chain'
+  - description: 'bug-clear -> VERIFIED'
     vars:
       report: file://../test-data/bugs/bug-clear.md
-      expect:
-        kind: workflow
-        status: VERIFIED
-        route: FIX
-        min_steps: 4
-        audit_complete: true
-  - description: 'bug-regression -> VERIFIED by the full chain'
+      expect: { result: VERIFIED, steps_min: 8, steps_max: 16 }
+  - description: 'bug-regression -> VERIFIED'
     vars:
       report: file://../test-data/bugs/bug-regression.md
-      expect:
-        kind: workflow
-        status: VERIFIED
-        route: FIX
-        min_steps: 4
-        audit_complete: true
-  - description: 'feature-as-bug -> DEFERRED at triage, chain stops'
+      expect: { result: VERIFIED, steps_min: 8, steps_max: 16 }
+  - description: 'feature-as-bug -> DEFERRED'
     vars:
       report: file://../test-data/bugs/feature-as-bug.md
-      expect:
-        kind: workflow
-        status: DEFERRED
-        route: DEFER
-        min_steps: 1
-        audit_complete: true
-  - description: 'escalation-data-loss -> HUMAN_PUNCH_OUT, no automatic fix'
+      expect: { result: DEFERRED, steps_min: 4, steps_max: 8 }
+  - description: 'escalation-data-loss -> HUMAN_PUNCH_OUT'
     vars:
       report: file://../test-data/bugs/escalation-data-loss.md
-      expect:
-        kind: workflow
-        status: HUMAN_PUNCH_OUT
-        route: ESCALATE
-        min_steps: 1
-        audit_complete: true
+      expect: { result: HUMAN_PUNCH_OUT, steps_min: 6, steps_max: 12 }
