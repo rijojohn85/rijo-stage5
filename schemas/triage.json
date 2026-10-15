@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "triage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["classification", "decision", "root_cause", "rationale", "escalation"],
+  "properties": {
+    "classification": {
+      "description": "What kind of report this is.",
+      "enum": ["bug", "bug-regression", "feature-as-bug"]
+    },
+    "decision": {
+      "description": "Whether the workflow may proceed to planning.",
+      "enum": ["fix-now", "defer"]
+    },
+    "root_cause": {
+      "description": "One line: component plus mechanism, citing a file or symbol.",
+      "type": "string",
+      "minLength": 1
+    },
+    "rationale": {
+      "description": "Short evidence for the classification and the decision.",
+      "type": "string",
+      "minLength": 1
+    },
+    "escalation": {
+      "description": "True when a human must decide before any automatic action.",
+      "type": "boolean"
+    }
+  }
+}

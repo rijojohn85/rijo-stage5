@@ -1,0 +1,7 @@
+{
+  "classification": "bug",
+  "decision": "fix-now",
+  "root_cause": "calc.py:average divides sum(values) by len(values) with no empty-input guard, so an empty list raises ZeroDivisionError instead of the required 0.0.",
+  "rationale": "SPEC.md requires calc.average to return 0.0 for an empty list, and the report shows ZeroDivisionError instead. The cause is localized to calc.py:average and nothing is unactionable.",
+  "escalation": false
+}

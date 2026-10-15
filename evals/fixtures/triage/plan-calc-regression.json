@@ -1,0 +1,7 @@
+{
+  "classification": "bug-regression",
+  "decision": "fix-now",
+  "root_cause": "calc.py:average divides sum(values) by len(values) with no empty-input guard, so an empty list raises ZeroDivisionError instead of the required 0.0.",
+  "rationale": "SPEC.md requires calc.average to return 0.0 for an empty list. The report states that in version 2.3 average([]) returned 0.0 and that after the upgrade to 2.4 it raises ZeroDivisionError, which is concrete prior-working evidence.",
+  "escalation": false
+}

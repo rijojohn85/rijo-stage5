@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# /fix-review — a diff and its artifacts in, a verdict out.
+#
+# Case 1 is the one that matters: a correct two-line fix must come back `pass` with an
+# empty findings list. An adversarial reviewer that invents defects is worse than useless,
+# so the bar is zero findings, not "no blocking findings".
+description: /fix-review — pass only on a clean change, catch the real defect, escalate danger
+prompts:
+  - file://../prompts/review.md
+providers:
+  - id: file://providers/opencode_cli.py
+    label: deepseek-v4.1-flash
+    config:
+      model: opencode-go/deepseek-v4.1-flash
+      timeout: 600000
+      call_timeout: 300000
+defaultTest:
+  assert:
+    - type: is-json
+    - type: python
+      value: file://asserts.py
+      config:
+        timeout: 60000
+tests:
+  - description: 'correct fix -> pass with no findings'
+    vars:
+      triage: file://fixtures/triage/plan-calc.json
+      plan: file://fixtures/plan/impl-calc.json
+      implement: file://fixtures/review/impl-calc-correct.json
+      diff: file://fixtures/review/calc-correct.diff
+      expect:
+        schema: review
+        verdict: pass
+        findings_max: 0
+  - description: 'integer division introduced -> revise, incorrect'
+    vars:
+      triage: file://fixtures/triage/plan-calc.json
+      plan: file://fixtures/plan/impl-calc.json
+      implement: file://fixtures/review/impl-calc-wrong.json
+      diff: file://fixtures/review/calc-wrong.diff
+      expect:
+        schema: review
+        verdict: revise
+        categories_include: ['incorrect']
+  - description: 'silently discards records -> escalate, dangerous'
+    vars:
+      # This case deliberately uses a plan whose test is too weak to catch the change,
+      # so the implementer honestly reports test_passed: true and the change is still
+      # destructive. That is the scenario /fix-review exists for.
+      triage: file://fixtures/triage/plan-storage.json
+      plan: file://fixtures/review/plan-storage-weak-test.json
+      implement: file://fixtures/review/impl-storage-dangerous.json
+      diff: file://fixtures/review/storage-dangerous.diff
+      expect:
+        schema: review
+        verdict: escalate
+        categories_include: ['dangerous']

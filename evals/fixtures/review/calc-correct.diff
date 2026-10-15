@@ -1,0 +1,9 @@
+--- a/sandbox/demo-app/calc.py
++++ b/sandbox/demo-app/calc.py
+@@ -6,4 +6,6 @@ Requirements live in SPEC.md.
+ 
+ def average(values):
+     """Return the arithmetic mean of values."""
++    if not values:
++        return 0.0
+     return sum(values) / len(values)

@@ -1,0 +1,26 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# runtime noise
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.DS_Store
+
+# promptfoo caches
+.promptfoo/
+
+# scratch copy used by the implement eval
+.eval-workspace/
+
+# local tooling state and saved certification page
+.remember/
+Stage 5 Certification.html
+Stage 5 Certification_files/
+
+# per-run derived state
+runs/*/.audit-state.json
+.venv/

@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# /plan — a triage result in, a fix plan out.
+# Inputs are saved triage artifacts, so this eval is deterministic and does not depend on
+# re-running /triage first.
+description: /plan — name the files the fix may touch, the steps, and the test
+prompts:
+  - file://../prompts/plan.md
+providers:
+  - id: file://providers/opencode_cli.py
+    label: deepseek-v4.1-flash
+    config:
+      model: opencode-go/deepseek-v4.1-flash
+      timeout: 600000
+      call_timeout: 300000
+defaultTest:
+  assert:
+    - type: is-json
+    - type: python
+      value: file://asserts.py
+      config:
+        timeout: 60000
+tests:
+  - description: 'empty-list bug -> plan touches only calc.py'
+    vars:
+      triage: file://fixtures/triage/plan-calc.json
+      expect:
+        schema: plan
+        files_include: ['sandbox/demo-app/calc.py']
+        files_exclude: ['sandbox/demo-app/storage.py', 'sandbox/demo-app/SPEC.md']
+        test_mentions: average
+  - description: 'regression -> same single-file plan'
+    vars:
+      triage: file://fixtures/triage/plan-calc-regression.json
+      expect:
+        schema: plan
+        files_include: ['sandbox/demo-app/calc.py']
+        files_exclude: ['sandbox/demo-app/storage.py', 'sandbox/demo-app/SPEC.md']
+        test_mentions: average
+  - description: 'storage write bug -> plan touches only storage.py'
+    vars:
+      triage: file://fixtures/triage/plan-storage.json
+      expect:
+        schema: plan
+        files_include: ['sandbox/demo-app/storage.py']
+        files_exclude: ['sandbox/demo-app/calc.py', 'sandbox/demo-app/SPEC.md']
+        test_mentions: save_records

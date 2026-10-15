@@ -1,0 +1,9 @@
+{
+  "verdict": "escalate",
+  "findings": [
+    {
+      "category": "dangerous",
+      "detail": "sandbox/demo-app/storage.py: on a TypeError the handler sets text = \"[]\" and then opens the file with mode \"w\", so a serialization failure silently overwrites the caller's records with an empty list. This destroys data."
+    }
+  ]
+}

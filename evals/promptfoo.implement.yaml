@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# /implement — a plan in, a minimal applied fix out, proved by the plan's test.
+#
+# This eval EDITS files, so it runs against a scratch copy of the repo (.eval-workspace)
+# that the eval command creates. The real sandbox keeps its bugs, and a re-run starts from
+# the same state instead of finding the fix already applied.
+description: /implement — apply the plan, change only its files, run its test
+prompts:
+  - file://../prompts/implement.md
+providers:
+  - id: file://providers/opencode_cli.py
+    label: deepseek-v4.1-flash
+    config:
+      model: opencode-go/deepseek-v4.1-flash
+      workspace: .eval-workspace
+      timeout: 900000
+      call_timeout: 600000
+defaultTest:
+  assert:
+    - type: is-json
+    - type: python
+      value: file://asserts.py
+      config:
+        timeout: 60000
+tests:
+  - description: 'calc empty-list plan -> changes only calc.py, test passes'
+    vars:
+      plan: file://fixtures/plan/impl-calc.json
+      expect:
+        schema: implement
+        files_include: ['sandbox/demo-app/calc.py']
+        files_exclude: ['sandbox/demo-app/storage.py', 'sandbox/demo-app/SPEC.md']
+        test_passed: true
+  - description: 'storage truncation plan -> changes only storage.py, test passes'
+    vars:
+      plan: file://fixtures/plan/impl-storage.json
+      expect:
+        schema: implement
+        files_include: ['sandbox/demo-app/storage.py']
+        files_exclude: ['sandbox/demo-app/calc.py', 'sandbox/demo-app/SPEC.md']
+        test_passed: true

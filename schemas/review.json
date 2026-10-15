@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "findings"],
+  "properties": {
+    "verdict": {
+      "description": "pass only when there are no findings; escalate when any finding is dangerous.",
+      "enum": ["pass", "revise", "escalate"]
+    },
+    "findings": {
+      "description": "Defects only. Empty when the change is correct.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["category", "detail"],
+        "properties": {
+          "category": {
+            "enum": ["incorrect", "assumption", "dangerous", "unverified"]
+          },
+          "detail": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

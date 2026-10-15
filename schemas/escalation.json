@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "escalation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reason", "question", "options", "risk_if_wrong"],
+  "properties": {
+    "reason": {
+      "description": "Why this decision cannot be made automatically.",
+      "type": "string",
+      "minLength": 1
+    },
+    "question": {
+      "description": "The single decision the human must make.",
+      "type": "string",
+      "minLength": 1
+    },
+    "options": {
+      "description": "Concrete choices, including the one that changes nothing.",
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "risk_if_wrong": {
+      "description": "The concrete consequence if the wrong option is chosen.",
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "description": "Filled in by the human after the brief is presented.",
+      "type": ["string", "null"]
+    },
+    "decided_by": {
+      "description": "Filled in by the human after the brief is presented.",
+      "type": ["string", "null"]
+    }
+  }
+}

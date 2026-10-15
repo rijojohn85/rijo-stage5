@@ -1,0 +1,5 @@
+{
+  "changed": ["sandbox/demo-app/calc.py"],
+  "summary": "Added an empty-input guard to average() returning 0.0, leaving the sum(values)/len(values) path unchanged.",
+  "test_passed": true
+}

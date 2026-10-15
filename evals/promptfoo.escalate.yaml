@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# /escalate — a decision brief for a human.
+#
+# The eval checks the brief only. The human's answer is not simulated: the point of this
+# agent is that the decision is NOT made automatically, so `decision` must be absent from
+# the brief (asserted), and the skill fills it in only after a real person answers.
+description: /escalate — name the trigger, ask one question, offer a safe default, decide nothing
+prompts:
+  - file://../prompts/escalate.md
+providers:
+  - id: file://providers/opencode_cli.py
+    label: deepseek-v4.1-flash
+    config:
+      model: opencode-go/deepseek-v4.1-flash
+      timeout: 600000
+      call_timeout: 300000
+defaultTest:
+  assert:
+    - type: is-json
+    - type: python
+      value: file://asserts.py
+      config:
+        timeout: 60000
+tests:
+  - description: 'triage escalated on data loss -> brief raises it, decides nothing'
+    vars:
+      trigger: >-
+        Triage stopped the workflow: escalation is true. Its rationale is that customer
+        records were lost twice this week in production.
+      artifacts: file://fixtures/escalate/triage-escalated.json
+      expect:
+        schema: escalation
+        options_min: 2
+        absent_keys: ['decision', 'decided_by']
+        mentions:
+          - { field: reason, contains: data }
+  - description: 'review escalated on a destructive change -> brief raises it, decides nothing'
+    vars:
+      trigger: >-
+        Review returned verdict escalate. Its finding is that the change can silently
+        overwrite the caller's records with an empty list.
+      artifacts: file://fixtures/escalate/review-escalated.json
+      expect:
+        schema: escalation
+        options_min: 2
+        absent_keys: ['decision', 'decided_by']
+        mentions:
+          - { field: reason, contains: data }

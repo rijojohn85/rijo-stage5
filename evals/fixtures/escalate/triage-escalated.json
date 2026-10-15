@@ -1,0 +1,7 @@
+{
+  "classification": "bug",
+  "decision": "defer",
+  "root_cause": "storage.py:save_records opens the path with mode \"w\" before json.dumps runs, so a serialization failure truncates the file and the records already stored there are lost.",
+  "rationale": "Customer records were lost twice this week in production, so the data-loss trigger applies. SPEC.md requires that a failed write never destroy the records already stored.",
+  "escalation": true
+}

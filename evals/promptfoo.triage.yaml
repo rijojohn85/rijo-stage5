@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# /triage — one bug report in, one classification + decision out.
+# The prompt under test is prompts/triage.md, the same file the skill reads.
+description: /triage — classify, hypothesize a root cause, decide fix-now or defer
+prompts:
+  - file://../prompts/triage.md
+providers:
+  - id: file://providers/opencode_cli.py
+    label: deepseek-v4.1-flash
+    config:
+      model: opencode-go/deepseek-v4.1-flash
+      timeout: 600000
+      call_timeout: 300000
+defaultTest:
+  assert:
+    - type: is-json
+    - type: python
+      value: file://asserts.py
+      config:
+        timeout: 60000
+tests:
+  - description: 'bug against a documented requirement -> bug / fix-now'
+    vars:
+      report: file://../test-data/bugs/bug-clear.md
+      expect:
+        schema: triage
+        classification: bug
+        decision: fix-now
+        escalation: false
+        root_cause_mentions: calc.py
+  - description: 'documented requirement + prior-working evidence -> bug-regression / fix-now'
+    vars:
+      report: file://../test-data/bugs/bug-regression.md
+      expect:
+        schema: triage
+        classification: bug-regression
+        decision: fix-now
+        escalation: false
+        root_cause_mentions: calc.py
+  - description: 'request with no documented requirement -> feature-as-bug / defer'
+    vars:
+      report: file://../test-data/bugs/feature-as-bug.md
+      expect:
+        schema: triage
+        classification: feature-as-bug
+        decision: defer
+        escalation: false
+  - description: 'data loss -> escalation, no automatic fix'
+    vars:
+      report: file://../test-data/bugs/escalation-data-loss.md
+      expect:
+        schema: triage
+        classification: bug
+        decision: defer
+        escalation: true
+        root_cause_mentions: storage.py

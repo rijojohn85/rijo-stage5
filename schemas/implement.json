@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "implement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["changed", "summary", "test_passed"],
+  "properties": {
+    "changed": {
+      "description": "Repository-relative paths that were actually modified.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "summary": {
+      "description": "What was changed and why.",
+      "type": "string",
+      "minLength": 1
+    },
+    "test_passed": {
+      "description": "True only when the plan's test was actually run and passed.",
+      "type": "boolean"
+    }
+  }
+}

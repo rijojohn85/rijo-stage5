@@ -1,0 +1,27 @@
+# Deterministic escalation triggers.
+#
+# These are the code backstop behind the triage agent's `escalation` flag. Triage's own
+# judgement can be wrong; when the report text matches a trigger below, the gate overrides
+# the artifact and the workflow stops for a human regardless of what triage said.
+#
+# Read by guardrails/escalate_gate.py. Keep patterns coarse on purpose: this is a backstop,
+# not the primary judgement, and a false positive only costs a human a look. A false
+# negative is the expensive direction, so the patterns are deliberately broad.
+triggers:
+  - id: E1_DATA_LOSS
+    note: the report describes data loss or records being destroyed
+    pattern: '(?i)(data ?loss|lost .{0,20}records|records? .{0,20}(lost|destroyed|gone|wiped)|destroy(ed|s) .{0,20}records?|clobber|truncat\w* .{0,25}(file|records)|wiped? out)'
+
+  - id: E2_SECURITY
+    note: the report describes a security exposure
+    pattern: '(?i)(security (exposure|incident|breach|hole)|credential|hard[- ]?coded|leak\w* .{0,20}(secret|key|token|password)|expos\w* .{0,20}(secret|key|token|password|credential)|unauthoris?zed access)'
+
+  - id: E3_OUTAGE
+    note: the report describes a user-facing outage
+    pattern: '(?i)(user[- ]facing outage|production outage|outage|customers? .{0,20}(cannot|can''t|unable to) (use|access)|service (is )?down)'
+
+# Not enforced here, deliberately: "the report is unactionable" (no component, no
+# reproduction, no expected behaviour) is a reading judgement that regexes cannot make
+# honestly. It stays a triage-agent judgement. Say so rather than pretending otherwise.
+model_judgements:
+  - E4_UNACTIONABLE

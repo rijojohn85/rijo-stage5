@@ -1,0 +1,18 @@
+--- a/sandbox/demo-app/storage.py
++++ b/sandbox/demo-app/storage.py
+@@ -8,8 +8,12 @@ Requirements live in SPEC.md.
+ 
+ def save_records(path, records):
+     """Write records to path as JSON."""
+-    with open(path, "w") as handle:
+-        handle.write(json.dumps(records, indent=2))
++    try:
++        text = json.dumps(records, indent=2)
++    except TypeError:
++        # the records could not be serialized, so drop them rather than keep stale data
++        text = "[]"
++    with open(path, "w") as handle:
++        handle.write(text)
+ 
+ 
+ def load_records(path):

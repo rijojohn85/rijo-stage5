@@ -1,0 +1,8 @@
+{
+  "files": ["sandbox/demo-app/storage.py"],
+  "steps": [
+    "In sandbox/demo-app/storage.py, serialize the records to JSON text before opening the target path.",
+    "Write the serialized text in a single write, so that a serialization failure leaves any existing file untouched."
+  ],
+  "test": "python3 -c \"import sys, tempfile; sys.path.insert(0, 'sandbox/demo-app'); import storage; p = tempfile.mktemp(); open(p, 'w').write('[]')\ntry:\n    storage.save_records(p, {1, 2})\nexcept Exception:\n    pass\nassert open(p).read() == '[]', 'existing file was clobbered'\""
+}
