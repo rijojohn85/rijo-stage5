@@ -1,41 +1,42 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-# /implement — a plan in, a minimal applied fix out, proved by the plan's test.
+# implement — a plan in, a minimal applied fix out, proved by the plan's test.
 #
-# This eval EDITS files, so it runs against a scratch copy of the repo (.eval-workspace)
-# that the eval command creates. The real sandbox keeps its bugs, and a re-run starts from
-# the same state instead of finding the fix already applied.
-description: /implement — apply the plan, change only its files, run its test
+# This eval EDITS files. The provider copies sandbox/ into a throwaway git repository for every
+# case (providers/scratch_workspace.py), so the real sandbox keeps its bugs and each case starts
+# from the same baseline. The provider also measures, outside the model, what git says changed and
+# whether the plan's test really went red to green (criteria.py reads that from the metadata).
+description: implement — apply the plan, change only its files, run its test
 prompts:
-  - file://../prompts/implement.md
+  - '{{agent}}'  # unused by the provider; the test vars describe the case
 providers:
-  - id: file://providers/opencode_cli.py
-    label: deepseek-v4.1-flash
+  - id: file://providers/fireworks.py
+    label: deepseek-v4p1-flash
     config:
-      model: opencode-go/deepseek-v4.1-flash
-      workspace: .eval-workspace
       timeout: 900000
-      call_timeout: 600000
 defaultTest:
+  vars:
+    agent: implement
   assert:
     - type: is-json
-    - type: python
-      value: file://asserts.py
-      config:
-        timeout: 60000
 tests:
   - description: 'calc empty-list plan -> changes only calc.py, test passes'
     vars:
+      report: file://../test-data/bugs/bug-clear.md
+      triage: file://fixtures/triage/plan-calc.json
       plan: file://fixtures/plan/impl-calc.json
       expect:
-        schema: implement
         files_include: ['sandbox/demo-app/calc.py']
-        files_exclude: ['sandbox/demo-app/storage.py', 'sandbox/demo-app/SPEC.md']
-        test_passed: true
+    assert:
+      - &plan-files { type: python, metric: changes-only-plan-files, value: 'file://criteria.py:changes_only_plan_files' }
+      - &red-green { type: python, metric: test-red-to-green, value: 'file://criteria.py:red_to_green' }
+      - &unreported { type: python, metric: no-unreported-edits, value: 'file://criteria.py:no_unreported_edits' }
   - description: 'storage truncation plan -> changes only storage.py, test passes'
     vars:
+      triage: file://fixtures/triage/plan-storage.json
       plan: file://fixtures/plan/impl-storage.json
       expect:
-        schema: implement
         files_include: ['sandbox/demo-app/storage.py']
-        files_exclude: ['sandbox/demo-app/calc.py', 'sandbox/demo-app/SPEC.md']
-        test_passed: true
+    assert:
+      - *plan-files
+      - *red-green
+      - *unreported

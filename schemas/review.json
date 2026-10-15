@@ -4,22 +4,35 @@
   "type": "object",
   "additionalProperties": false,
   "required": ["verdict", "findings"],
+  "allOf": [
+    {
+      "if": { "required": ["target"], "properties": { "target": { "const": "implement" } } },
+      "then": { "required": ["diff_sha256"] }
+    },
+    {
+      "if": { "required": ["target"], "properties": { "target": { "const": "writer" } } },
+      "then": { "required": ["draft_sha256"] }
+    }
+  ],
   "properties": {
     "target": {
       "description": "Echo of the requested review target; the dispatcher enforces it (REVIEW_BINDING_MISMATCH).",
       "enum": ["triage", "plan", "implement", "escalate", "writer"]
     },
     "reviewed_sha256": {
-      "description": "Echo of the hash of the artifact under review; enforced by the dispatcher.",
-      "type": "string"
+      "description": "Echo of the hash of the artifact under review; the dispatcher requires it (missing is REVIEW_BINDING_MISMATCH).",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
     },
     "diff_sha256": {
-      "description": "Echo of the implementation diff hash; required by the dispatcher for target implement.",
-      "type": "string"
+      "description": "Echo of the implementation diff hash; required whenever target is implement.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
     },
     "draft_sha256": {
-      "description": "Echo of the writer draft hash; enforced once writer drafts exist (step 5).",
-      "type": "string"
+      "description": "Echo of the writer draft hash; required whenever target is writer (writer drafts arrive in step 5).",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
     },
     "verdict": {
       "description": "pass only when there are no findings; escalate when any finding is dangerous.",

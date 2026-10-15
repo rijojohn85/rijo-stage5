@@ -1,48 +1,53 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-# /escalate — a decision brief for a human.
+# escalate — a decision brief for a human.
 #
-# The eval checks the brief only. The human's answer is not simulated: the point of this
-# agent is that the decision is NOT made automatically, so `decision` must be absent from
-# the brief (asserted), and the skill fills it in only after a real person answers.
-description: /escalate — name the trigger, ask one question, offer a safe default, decide nothing
+# The eval checks the brief only. The human's answer is not simulated: the point of this agent is
+# that the decision is NOT made automatically, so `decision` must be absent from the brief. The
+# reason the workflow stopped is handed over as `feedback` (the dispatcher's reviewer_feedback
+# slot); the coordinator will do the same in step 4.
+description: escalate — name the trigger, ask one question, offer a safe default, decide nothing
 prompts:
-  - file://../prompts/escalate.md
+  - '{{agent}}'  # unused by the provider; the test vars describe the case
 providers:
-  - id: file://providers/opencode_cli.py
-    label: deepseek-v4.1-flash
+  - id: file://providers/fireworks.py
+    label: deepseek-v4p1-flash
     config:
-      model: opencode-go/deepseek-v4.1-flash
       timeout: 600000
-      call_timeout: 300000
 defaultTest:
+  vars:
+    agent: escalate
   assert:
     - type: is-json
-    - type: python
-      value: file://asserts.py
-      config:
-        timeout: 60000
 tests:
   - description: 'triage escalated on data loss -> brief raises it, decides nothing'
     vars:
-      trigger: >-
+      report: file://../test-data/bugs/escalation-data-loss.md
+      triage: file://fixtures/escalate/triage-escalated.json
+      feedback: >-
         Triage stopped the workflow: escalation is true. Its rationale is that customer
         records were lost twice this week in production.
-      artifacts: file://fixtures/escalate/triage-escalated.json
       expect:
-        schema: escalation
         options_min: 2
         absent_keys: ['decision', 'decided_by']
         mentions:
           - { field: reason, contains: data }
+    assert:
+      - &names-trigger { type: python, metric: names-trigger, value: 'file://criteria.py:names_trigger' }
+      - &safe-default { type: python, metric: offers-safe-default, value: 'file://criteria.py:offers_safe_default' }
+      - &no-decision { type: python, metric: no-decision-made, value: 'file://criteria.py:no_decision_made' }
   - description: 'review escalated on a destructive change -> brief raises it, decides nothing'
     vars:
-      trigger: >-
+      report: file://../test-data/bugs/escalation-data-loss.md
+      triage: file://fixtures/triage/plan-storage.json
+      feedback: >-
         Review returned verdict escalate. Its finding is that the change can silently
         overwrite the caller's records with an empty list.
-      artifacts: file://fixtures/escalate/review-escalated.json
       expect:
-        schema: escalation
         options_min: 2
         absent_keys: ['decision', 'decided_by']
         mentions:
           - { field: reason, contains: data }
+    assert:
+      - *names-trigger
+      - *safe-default
+      - *no-decision

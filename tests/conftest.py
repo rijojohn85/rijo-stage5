@@ -5,17 +5,9 @@ from datetime import datetime, timezone
 import pytest
 
 from harness.audit import AuditLog
-from harness.dispatcher import Dispatcher
-from harness.freshness import Freshness
-from harness.agents import PROFILES
 from harness.llm import LlmReply, ToolCall, Usage
-from harness.manifest import load_agent_specs
-from harness.pricing import PriceTable
-from harness.prompts import PromptLibrary
-from harness.rejected import RejectedWriter
 from harness.store import ArtifactStore
-from harness.tool_loop import ToolLoop
-from harness.tool_runner import ToolRunner
+from harness.wiring import build_dispatcher
 
 FIXED_TIME = datetime(2026, 10, 15, 11, 15, tzinfo=timezone.utc)
 CORRELATION_ID = "20261015-111500"
@@ -95,12 +87,8 @@ class Env:
         self.llm._script.extend(replies)
 
     def dispatcher(self):
-        return Dispatcher(
-            specs=load_agent_specs(), profiles=PROFILES,
-            tool_loop=ToolLoop(self.llm, ToolRunner(root=self.root)),
-            prompts=PromptLibrary(), prices=PriceTable.from_file(),
-            store=self.store, freshness=Freshness(self.store, self.sandbox), sandbox=self.sandbox,
-            audit=self.audit, rejected=RejectedWriter(self.run_dir),
+        return build_dispatcher(
+            llm=self.llm, run_dir=self.run_dir, tool_root=self.root, sandbox=self.sandbox,
             bug_report_path=self.bug_report_path, correlation_id=CORRELATION_ID, clock=lambda: FIXED_TIME,
         )
 

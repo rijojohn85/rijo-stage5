@@ -1,57 +1,107 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-# /fix-review — a diff and its artifacts in, a verdict out.
+# reviewer — one artifact (and what it was built from) in, a bound verdict out.
 #
-# Case 1 is the one that matters: a correct two-line fix must come back `pass` with an
-# empty findings list. An adversarial reviewer that invents defects is worse than useless,
-# so the bar is zero findings, not "no blocking findings".
-description: /fix-review — pass only on a clean change, catch the real defect, escalate danger
+# One reviewer covers five artifact types (`target`). The provider seeds the fixtures as the run's
+# artifacts and calls the real dispatcher, which hands the reviewer the same inputs and echo
+# fields (`target`, `reviewed_sha256`, `diff_sha256`) a real run does and rejects a reply whose
+# binding is wrong. Case 1 is the bar that matters: a correct artifact must come back `pass`
+# with an empty findings list; a reviewer that invents defects is worse than useless.
+#
+# Cases 7 and 8 review a writer draft. The writer, its schema and the draft binding arrive in
+# build step 5, so the provider reports them as pending (a provider error, not a pass). Until
+# then run the suite without them:
+#   promptfoo eval -c evals/promptfoo.review.yaml --filter-pattern '^(?!\[pending step 5\])'
+description: reviewer — pass only on a correct artifact, catch the real defect, escalate danger
 prompts:
-  - file://../prompts/review.md
+  - '{{agent}}'  # unused by the provider; the test vars describe the case
 providers:
-  - id: file://providers/opencode_cli.py
-    label: deepseek-v4.1-flash
+  - id: file://providers/fireworks.py
+    label: deepseek-v4p1-flash
     config:
-      model: opencode-go/deepseek-v4.1-flash
       timeout: 600000
-      call_timeout: 300000
 defaultTest:
+  vars:
+    agent: reviewer
   assert:
     - type: is-json
-    - type: python
-      value: file://asserts.py
-      config:
-        timeout: 60000
+    - &targets { type: python, metric: targets-correct-artifact, value: 'file://criteria.py:targets_correct_artifact' }
 tests:
-  - description: 'correct fix -> pass with no findings'
+  - description: 'implement: correct fix -> pass with no findings'
     vars:
+      target: implement
+      report: file://../test-data/bugs/bug-clear.md
       triage: file://fixtures/triage/plan-calc.json
       plan: file://fixtures/plan/impl-calc.json
       implement: file://fixtures/review/impl-calc-correct.json
       diff: file://fixtures/review/calc-correct.diff
-      expect:
-        schema: review
-        verdict: pass
-        findings_max: 0
-  - description: 'integer division introduced -> revise, incorrect'
+    assert:
+      - { type: python, metric: zero-findings-on-clean, value: 'file://criteria.py:zero_findings_on_clean' }
+  - description: 'implement: integer division introduced -> revise, incorrect'
     vars:
+      target: implement
+      report: file://../test-data/bugs/bug-clear.md
       triage: file://fixtures/triage/plan-calc.json
       plan: file://fixtures/plan/impl-calc.json
       implement: file://fixtures/review/impl-calc-wrong.json
       diff: file://fixtures/review/calc-wrong.diff
       expect:
-        schema: review
-        verdict: revise
         categories_include: ['incorrect']
-  - description: 'silently discards records -> escalate, dangerous'
+    assert:
+      - &catches { type: python, metric: catches-real-defect, value: 'file://criteria.py:catches_real_defect' }
+  - description: 'implement: silently discards records -> escalate, dangerous'
     vars:
-      # This case deliberately uses a plan whose test is too weak to catch the change,
-      # so the implementer honestly reports test_passed: true and the change is still
-      # destructive. That is the scenario /fix-review exists for.
+      # This case deliberately uses a plan whose test is too weak to catch the change, so the
+      # implementer honestly reports test_passed: true and the change is still destructive.
+      # That is the scenario the reviewer exists for.
+      target: implement
       triage: file://fixtures/triage/plan-storage.json
       plan: file://fixtures/review/plan-storage-weak-test.json
       implement: file://fixtures/review/impl-storage-dangerous.json
       diff: file://fixtures/review/storage-dangerous.diff
+    assert:
+      - &danger { type: python, metric: escalates-danger, value: 'file://criteria.py:escalates_danger' }
+  - description: 'triage: missed the data-loss escalation -> escalate, dangerous'
+    vars:
+      target: triage
+      report: file://../test-data/bugs/escalation-data-loss.md
+      triage: file://fixtures/review/triage-missed-data-loss.json
+    assert:
+      - *danger
+  - description: 'plan: names the wrong file -> revise, incorrect'
+    vars:
+      target: plan
+      report: file://../test-data/bugs/bug-clear.md
+      triage: file://fixtures/triage/plan-calc.json
+      plan: file://fixtures/review/plan-wrong-file.json
       expect:
-        schema: review
-        verdict: escalate
-        categories_include: ['dangerous']
+        categories_include: ['incorrect']
+    assert:
+      - *catches
+  - description: 'escalate: no safe default offered -> revise, incorrect'
+    vars:
+      target: escalate
+      report: file://../test-data/bugs/escalation-data-loss.md
+      triage: file://fixtures/escalate/triage-escalated.json
+      escalate: file://fixtures/review/escalate-no-safe-default.json
+      expect:
+        categories_include: ['incorrect']
+    assert:
+      - *catches
+  - description: '[pending step 5] writer draft: faithful to its sources -> pass with no findings'
+    vars:
+      target: writer
+      report: file://../test-data/bugs/bug-clear.md
+      sources: file://fixtures/review/writer-sources.json
+      draft: file://fixtures/review/writer-draft-clean.md
+    assert:
+      - { type: python, metric: zero-findings-on-clean, value: 'file://criteria.py:zero_findings_on_clean' }
+  - description: '[pending step 5] writer draft: invents a finding -> revise, incorrect'
+    vars:
+      target: writer
+      report: file://../test-data/bugs/bug-clear.md
+      sources: file://fixtures/review/writer-sources.json
+      draft: file://fixtures/review/writer-draft-invented.md
+      expect:
+        categories_include: ['incorrect']
+    assert:
+      - *catches

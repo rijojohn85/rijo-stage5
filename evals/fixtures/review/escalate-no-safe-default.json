@@ -1,0 +1,9 @@
+{
+  "reason": "Data loss: customer records were lost twice this week because save_records truncates the file before serializing.",
+  "question": "How should the data-loss defect in storage.py be fixed?",
+  "options": [
+    "Serialize first, then write the file in a single step.",
+    "Replace the storage module with a database-backed store."
+  ],
+  "risk_if_wrong": "Further customer records could be lost in production."
+}

@@ -1,4 +1,8 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# NOT RUNNABLE until build step 7. This suite and providers/workflow.py still drive the old
+# opencode CLI chain; providers/opencode_cli.py was removed in step 3 (workflow.py imports it).
+# Step 7 replaces both with the real coordinator (harness/run.py) and criteria for the
+# workflow suite. Do not run it before then.
 # The workflow is itself an evaluated prompt: one bug report in, one terminal state out.
 #
 # The four cases cover every place the flow can stop or branch:

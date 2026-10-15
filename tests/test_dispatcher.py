@@ -231,7 +231,7 @@ def test_every_dispatch_is_a_fresh_conversation(env):
     first_call, _, second_dispatch_call = env.llm.calls
     assert [m["role"] for m in first_call["messages"]] == ["system", "user"]
     assert [m["role"] for m in second_dispatch_call["messages"]] == ["system", "user"]
-    assert "read_file" not in json.dumps(second_dispatch_call["messages"])
+    assert "sandbox/x" not in json.dumps(second_dispatch_call["messages"])  # first dispatch's tool call
 
 
 def test_reviewer_prompt_contains_artifact_chain_and_diff(env):

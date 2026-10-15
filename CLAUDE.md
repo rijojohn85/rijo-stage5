@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Stage 5 certification build: a dispatch-only LLM coordinator that launches scoped sub-agents (triage, plan, implement, reviewer, escalate, writer) over the Stage 4 bug-fix workflow. It is a learning and certification project, not production software.
 
 - **Authoritative plan:** `~/claude-plans/stage5-coordinator.md`. Build proceeds one numbered step at a time (Section 9), with a human review between steps. Do not start the next step until the user says so.
-- **Build status:** steps 0 to 2 done (setup, `harness/tools.py`, `manifest.yaml`, LLM client and dispatcher: `harness/llm.py`, `harness/dispatcher.py` plus small single-purpose modules). Not built yet: coordinator, `run_state` and `human_required`, writer/report, decisions gate. `schemas/review.json` has optional binding echo fields (step 3 finishes the `target` change in `review.md`).
+- **Build status:** steps 0 to 2 done (setup, `harness/tools.py`, `manifest.yaml`, LLM client and dispatcher: `harness/llm.py`, `harness/dispatcher.py` plus small single-purpose modules). Step 3 parts A and B done (reviewer `target` change in `review.md`/`review.json`, optional `reviewer_feedback` section in the four producer prompts, new reviewer fixtures, `evals/providers/fireworks.py`, named criteria in `evals/criteria.py`, five helper yamls repointed). Step 3 part C (the paid helper-suite runs and `results/<suite>.json`) has NOT been run. Reviewer cases 7 and 8 (writer drafts) are defined but pending step 5. Not built yet: coordinator, `run_state` and `human_required`, writer/report, decisions gate, and the workflow eval (`promptfoo.workflow.yaml` and `providers/workflow.py` still use the removed CLI provider; step 7 replaces them).
 - **Stage 4 base** lives at `~/dev/rijo-stage4-2`. It is read-only reference. Copy from it, never edit it.
 
 ## Commands
@@ -19,10 +19,10 @@ Use the project venv (`.venv/`, git-ignored). Secrets are in `.env` (git-ignored
 .venv/bin/python -m pytest -q tests/test_tools.py::<name> # one test
 python3 guardrails/validate.py <schema-name> <artifact.json|->   # schema check (--list shows names)
 .venv/bin/python scripts/smoke_tool_call.py               # tool-call smoke test, both models (needs .env)
-promptfoo eval -c evals/promptfoo.<suite>.yaml --max-concurrency 1 --no-cache   # suites: triage plan implement review escalate workflow
+PROMPTFOO_PYTHON=$PWD/.venv/bin/python promptfoo eval -c evals/promptfoo.<suite>.yaml --max-concurrency 1 --no-cache -o results/<suite>.json   # suites: triage plan implement review escalate (workflow is step 7)
 ```
 
-The promptfoo providers in `evals/providers/` still call the opencode CLI (carried over from Stage 4). The plan repoints them to Fireworks in step 3.
+The promptfoo helper suites use `evals/providers/fireworks.py`, which runs the real dispatcher (`harness/wiring.py`) with the Fireworks client and makes paid calls (load `.env` first; `PROMPTFOO_PYTHON` must point at the venv or the worker never starts). Each assertion carries a `metric:` label implemented in `evals/criteria.py`. Run the review suite without the pending writer cases using `--filter-pattern '^(?!\[pending step 5\])'`. Pytest never calls the network: `tests/test_eval_plumbing.py` drives the provider with a fake LLM.
 
 ## Architecture
 
@@ -39,7 +39,7 @@ The point of the design is separation of powers. Read the plan for details; thes
 ## Known accepted limits
 
 - `run_test` accepts a free-form command and is not jailed. A model-chosen `python3 -c` can touch files outside `sandbox/`. The user chose to keep it simple. A bubblewrap jail (commit `ddac208`) was built and then reverted in `f4a5e11`. The backstops are the plan-scope check and `git status`.
-- `evals/providers/opencode_cli.py` passes `--auto` and the full parent environment. It is eval-only and exempt. Revisit in step 7.
+- `evals/providers/workflow.py` still imports the removed `opencode_cli.py` and is broken until step 7 replaces it. The helper suites no longer use any CLI.
 
 ## Conventions
 

@@ -1,23 +1,21 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-# /triage — one bug report in, one classification + decision out.
-# The prompt under test is prompts/triage.md, the same file the skill reads.
-description: /triage — classify, hypothesize a root cause, decide fix-now or defer
+# triage — one bug report in, one classification + decision out.
+# The provider runs the real dispatcher (harness/dispatcher.py): the system prompt is
+# prompts/triage.md, the input message is built by harness/prompt_builder.py. Each assertion's
+# `metric:` is a named criterion (plan section 8); the function lives in criteria.py.
+description: triage — classify, hypothesize a root cause, decide fix-now or defer
 prompts:
-  - file://../prompts/triage.md
+  - '{{agent}}'  # unused by the provider; the test vars describe the case
 providers:
-  - id: file://providers/opencode_cli.py
-    label: deepseek-v4.1-flash
+  - id: file://providers/fireworks.py
+    label: deepseek-v4p1-flash
     config:
-      model: opencode-go/deepseek-v4.1-flash
       timeout: 600000
-      call_timeout: 300000
 defaultTest:
+  vars:
+    agent: triage
   assert:
     - type: is-json
-    - type: python
-      value: file://asserts.py
-      config:
-        timeout: 60000
 tests:
   - description: 'bug against a documented requirement -> bug / fix-now'
     vars:
@@ -28,6 +26,10 @@ tests:
         decision: fix-now
         escalation: false
         root_cause_mentions: calc.py
+    assert:
+      - &valid-enums { type: python, metric: valid-enums, value: 'file://criteria.py:valid_enums' }
+      - &root-cause { type: python, metric: root-cause-cites-real-file, value: 'file://criteria.py:root_cause_cites_real_file' }
+      - &escalation { type: python, metric: escalation-flagged, value: 'file://criteria.py:escalation_flagged' }
   - description: 'documented requirement + prior-working evidence -> bug-regression / fix-now'
     vars:
       report: file://../test-data/bugs/bug-regression.md
@@ -37,6 +39,10 @@ tests:
         decision: fix-now
         escalation: false
         root_cause_mentions: calc.py
+    assert:
+      - *valid-enums
+      - *root-cause
+      - *escalation
   - description: 'request with no documented requirement -> feature-as-bug / defer'
     vars:
       report: file://../test-data/bugs/feature-as-bug.md
@@ -45,6 +51,9 @@ tests:
         classification: feature-as-bug
         decision: defer
         escalation: false
+    assert:
+      - *valid-enums
+      - *escalation
   - description: 'data loss -> escalation, no automatic fix'
     vars:
       report: file://../test-data/bugs/escalation-data-loss.md
@@ -54,3 +63,7 @@ tests:
         decision: defer
         escalation: true
         root_cause_mentions: storage.py
+    assert:
+      - *valid-enums
+      - *root-cause
+      - *escalation
