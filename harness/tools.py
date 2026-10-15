@@ -4,9 +4,16 @@ Paths are project-root-relative (e.g. "sandbox/demo-app/calc.py", matching the p
 file list). Every path is resolved to its real location (symlinks followed) and must lie
 inside <project root>/sandbox. Every tool returns a dict and never raises:
     {"ok": True, ...}  or  {"ok": False, "error_code": "...", "detail": "..."}
+
+run_test only accepts `python3 -c <snippet>` or `python3 -m pytest <sandbox paths>` and runs
+it inside bubblewrap (sandbox/ read-only, tmpfs /tmp, no network, no home, no .env, cleared
+env); it refuses to run at all if bwrap is missing. Remaining limit: kernel-level isolation
+covers the filesystem and network only. Edits made through edit_file are still bounded just
+by the path resolver, so the plan-scope check and git status remain the backstop for them.
 """
 import os
 import shlex
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -80,12 +87,35 @@ def edit_file(path, old_text, new_text, root=PROJECT_ROOT):
         return _err("TOOL_ERROR", f"{type(exc).__name__}: {exc}")
 
 
-def run_test(command, root=PROJECT_ROOT, timeout=TEST_TIMEOUT_SECONDS):
-    """Run the plan's test command (no shell) with a timeout.
+def _build_inner_argv(argv, root):
+    """Validate argv against the allowlist. Returns (inner argv for the jail, None) or (None, err)."""
+    if argv[:2] == ["python3", "-c"]:
+        if len(argv) != 3:
+            return None, _err("COMMAND_NOT_ALLOWED", "python3 -c takes exactly one snippet and no other arguments")
+        return list(argv), None
+    if argv[:3] == ["python3", "-m", "pytest"]:
+        paths = argv[3:]
+        if not paths:
+            return None, _err("COMMAND_NOT_ALLOWED", "python3 -m pytest requires at least one path")
+        inner = ["python3", "-m", "pytest", "-p", "no:cacheprovider"]
+        sandbox = (Path(root) / SANDBOX_DIRNAME).resolve()
+        for arg in paths:
+            if arg.startswith("-"):
+                return None, _err("COMMAND_NOT_ALLOWED", "pytest flags are not allowed")
+            real, err = _resolve(arg, root)
+            if err:
+                return None, err
+            inner.append(f"{SANDBOX_DIRNAME}/" + str(real.relative_to(sandbox)) if real != sandbox else SANDBOX_DIRNAME)
+        return inner, None
+    return None, _err("COMMAND_NOT_ALLOWED",
+                      "only `python3 -c <snippet>` and `python3 -m pytest <paths>` are allowed")
 
-    The working directory is the project root so plan commands that name
-    "sandbox/demo-app/..." work verbatim; any path-like argument that resolves outside
-    sandbox/ is refused before running.
+
+def run_test(command, root=PROJECT_ROOT, timeout=TEST_TIMEOUT_SECONDS):
+    """Run an allowlisted test command (no shell) inside a bubblewrap jail with a timeout.
+
+    Allowed shapes: `python3 -c <snippet>` and `python3 -m pytest <sandbox paths>`.
+    Fails closed with BWRAP_UNAVAILABLE if bwrap is missing.
     """
     try:
         if not isinstance(command, str) or not command.strip():
@@ -96,24 +126,31 @@ def run_test(command, root=PROJECT_ROOT, timeout=TEST_TIMEOUT_SECONDS):
             return _err("BAD_ARGUMENT", f"cannot parse command: {exc}")
         if not argv:
             return _err("BAD_ARGUMENT", "empty command")
-        # Refuse obvious path arguments that point outside the sandbox.
-        for arg in argv[1:]:
-            if arg.startswith("-") or "\n" in arg or " " in arg or arg.startswith("import"):
-                continue
-            if arg.startswith("/") or ".." in Path(arg).parts:
-                _, err = _resolve(arg, root)
-                if err:
-                    return err
+        inner, err = _build_inner_argv(argv, root)
+        if err:
+            return err
+        bwrap = shutil.which("bwrap")
+        if not bwrap:
+            return _err("BWRAP_UNAVAILABLE", "bubblewrap (bwrap) not found; refusing to run tests unsandboxed")
+        sandbox = (Path(root) / SANDBOX_DIRNAME).resolve()
+        jail = [
+            bwrap, "--die-with-parent", "--clearenv",
+            "--setenv", "PATH", "/usr/bin:/bin", "--setenv", "HOME", "/tmp",
+            "--setenv", "PYTHONDONTWRITEBYTECODE", "1",
+            "--ro-bind", "/usr", "/usr", "--symlink", "usr/bin", "/bin",
+            "--symlink", "usr/lib", "/lib", "--symlink", "usr/lib64", "/lib64",
+            "--ro-bind", str(sandbox), "/work/sandbox",
+            "--tmpfs", "/tmp", "--proc", "/proc", "--dev", "/dev",
+            "--unshare-all", "--chdir", "/work",
+        ] + inner
         try:
             proc = subprocess.run(
-                argv, cwd=str(root), capture_output=True, text=True,
+                jail, capture_output=True, text=True,
                 timeout=timeout, stdin=subprocess.DEVNULL,
-                env={"PATH": os.environ.get("PATH", ""), "PYTHONDONTWRITEBYTECODE": "1"},
+                env={"PATH": os.environ.get("PATH", "")},
             )
         except subprocess.TimeoutExpired:
             return _err("TIMEOUT", f"test exceeded {timeout}s")
-        except FileNotFoundError:
-            return _err("COMMAND_NOT_FOUND", f"not found: {argv[0]}")
         except OSError as exc:
             return _err("TOOL_ERROR", str(exc))
         return {
