@@ -14,6 +14,17 @@ def upstream_records(ctx, agent):
     return {a: r for a, r in found.items() if r is not None}
 
 
+def previous_artifact(ctx):
+    """The producer's own latest artifact, shown only on a revision (reviewer feedback present).
+
+    Data for the model to revise; it never feeds the binding, freshness or allowance checks.
+    """
+    if ctx.feedback is None:
+        return None
+    record = ctx.store.latest(ctx.spec.name)
+    return record.artifact if record else None
+
+
 def build_user_message(ctx, profile, bug_report_text):
     if ctx.spec.name == REVIEWER:
         body = _review_inputs(ctx, bug_report_text)
@@ -27,6 +38,7 @@ def _producer_inputs(ctx, profile, bug_report_text):
         "bug_report": bug_report_text,
         "artifacts": {a: r.artifact for a, r in upstream_records(ctx, ctx.spec.name).items()},
         "reviewer_feedback": ctx.feedback,
+        "previous_artifact": previous_artifact(ctx),
     }
     if profile.shows_audit_failures:
         body["earlier_errors"] = ctx.audit.failures()

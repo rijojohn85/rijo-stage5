@@ -204,3 +204,25 @@ def offers_safe_default(artifact, expect, context):
 @criterion
 def no_decision_made(artifact, expect, context):
     return [f"{key} must be absent: a human fills it in" for key in expect["absent_keys"] if key in artifact]
+
+
+# --- revision (a producer re-run with reviewer feedback) ----------------------------------
+
+def _defect_check(name):
+    """The unwrapped check of an existing criterion, so 'fixed' means exactly what that criterion means."""
+    return globals()[name].__wrapped__  # not sys.modules: promptfoo loads this file under its own module name
+
+
+def _unchanged_problems(artifact, context):
+    first_pass = _var_object(context, "first_pass")
+    return ["output is identical to the first-pass artifact: the feedback was ignored"] \
+        if sha256_json(artifact) == sha256_json(first_pass) else []
+
+
+@criterion
+def addresses_feedback(artifact, expect, context):
+    """Revision cases only: the output differs from `first_pass` AND every criterion in `expect.fixes` holds."""
+    problems = _unchanged_problems(artifact, context)
+    for name in expect["fixes"]:
+        problems += _defect_check(name)(artifact, expect, context)
+    return problems

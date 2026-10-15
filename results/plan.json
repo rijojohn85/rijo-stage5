@@ -1,0 +1,1008 @@
+{
+  "evalId": "eval-zDw-2026-10-15T12:21:18",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T12:21:18.112Z",
+    "prompts": [
+      {
+        "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "raw": "{{agent}}",
+        "label": "{{agent}}",
+        "provider": "deepseek-v4p1-flash",
+        "metrics": {
+          "score": 3,
+          "testPassCount": 3,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 12,
+          "assertFailCount": 0,
+          "totalLatencyMs": 31951,
+          "tokenUsage": {
+            "prompt": 13759,
+            "completion": 3064,
+            "cached": 0,
+            "total": 16823,
+            "numRequests": 3,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "excludes-wrong-files": 3,
+            "test-targets-function": 3,
+            "names-right-file": 3
+          },
+          "namedScoresCount": {
+            "excludes-wrong-files": 3,
+            "test-targets-function": 3,
+            "names-right-file": 3
+          },
+          "namedScoreWeights": {
+            "excludes-wrong-files": 3,
+            "test-targets-function": 3,
+            "names-right-file": 3
+          },
+          "cost": 0.007804
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.001218,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1
+          },
+          "namedScoreWeights": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "names-right-file",
+                "value": "file://criteria.py:names_right_file"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "excludes-wrong-files",
+                "value": "file://criteria.py:excludes_wrong_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-targets-function",
+                "value": "file://criteria.py:targets_function"
+              }
+            }
+          ]
+        },
+        "id": "f32e0156-40d3-4cb1-b3db-a35bf79bcfde",
+        "latencyMs": 4601,
+        "namedScores": {
+          "excludes-wrong-files": 1,
+          "test-targets-function": 1,
+          "names-right-file": 1
+        },
+        "prompt": {
+          "raw": "plan",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"files\": [\"sandbox/demo-app/calc.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values, return 0.0 (matching SPEC.md's requirement that average([]) returns 0.0).\", \"Leave the existing return sum(values) / len(values) as the non-empty path, so the mean for non-empty input is unchanged.\"], \"test\": \"python -c \\\"import sys; sys.path.insert(0, 'sandbox/demo-app'); from calc import average; assert average([]) == 0.0; assert average([1, 2, 3]) == 2.0\\\"\"}",
+          "cost": 0.001218,
+          "tokenUsage": {
+            "prompt": 2685,
+            "completion": 344,
+            "cached": 0,
+            "total": 3029,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "plan",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 2685,
+                "output_tokens": 344,
+                "cost_usd": 0.001218,
+                "ok": true,
+                "artifact": "01-plan.json",
+                "sha256": "1bd68c7bb013c84f4f1f7bdcf5a338ce08139e6ada89b0c1310479836bf879af",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:21:22.730015+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "empty-list bug -> plan touches only calc.py",
+          "vars": {
+            "agent": "plan",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/calc.py"
+              ],
+              "files_exclude": [
+                "sandbox/demo-app/storage.py",
+                "sandbox/demo-app/SPEC.md"
+              ],
+              "test_mentions": "average"
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "names-right-file",
+              "value": "file://criteria.py:names_right_file"
+            },
+            {
+              "type": "python",
+              "metric": "excludes-wrong-files",
+              "value": "file://criteria.py:excludes_wrong_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-targets-function",
+              "value": "file://criteria.py:targets_function"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 2685,
+          "completion": 344,
+          "cached": 0,
+          "total": 3029,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "plan",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average"
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "plan",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 2685,
+              "output_tokens": 344,
+              "cost_usd": 0.001218,
+              "ok": true,
+              "artifact": "01-plan.json",
+              "sha256": "1bd68c7bb013c84f4f1f7bdcf5a338ce08139e6ada89b0c1310479836bf879af",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:21:22.730015+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.001272,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1
+          },
+          "namedScoreWeights": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "names-right-file",
+                "value": "file://criteria.py:names_right_file"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "excludes-wrong-files",
+                "value": "file://criteria.py:excludes_wrong_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-targets-function",
+                "value": "file://criteria.py:targets_function"
+              }
+            }
+          ]
+        },
+        "id": "b8235619-9b9f-4108-a562-35feb182e192",
+        "latencyMs": 5106,
+        "namedScores": {
+          "excludes-wrong-files": 1,
+          "test-targets-function": 1,
+          "names-right-file": 1
+        },
+        "prompt": {
+          "raw": "plan",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"files\": [\"sandbox/demo-app/calc.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values: return 0.0, so an empty list returns 0.0 as SPEC.md requires instead of dividing by zero.\", \"Leave the existing return sum(values) / len(values) line unchanged for non-empty input.\"], \"test\": \"python -c \\\"import sys; sys.path.insert(0, 'sandbox/demo-app'); from calc import average; assert average([]) == 0.0\\\"\"}",
+          "cost": 0.001272,
+          "tokenUsage": {
+            "prompt": 2773,
+            "completion": 367,
+            "cached": 0,
+            "total": 3140,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "plan",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 2773,
+                "output_tokens": 367,
+                "cost_usd": 0.001272,
+                "ok": true,
+                "artifact": "01-plan.json",
+                "sha256": "2b491794a852a1a6401c7622b0ac0b8d4e8ac4b164655315dad2d523b351e188",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:21:28.031946+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "regression -> same single-file plan",
+          "vars": {
+            "agent": "plan",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-regression.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc-regression.json",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/calc.py"
+              ],
+              "files_exclude": [
+                "sandbox/demo-app/storage.py",
+                "sandbox/demo-app/SPEC.md"
+              ],
+              "test_mentions": "average"
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "names-right-file",
+              "value": "file://criteria.py:names_right_file"
+            },
+            {
+              "type": "python",
+              "metric": "excludes-wrong-files",
+              "value": "file://criteria.py:excludes_wrong_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-targets-function",
+              "value": "file://criteria.py:targets_function"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 2773,
+          "completion": 367,
+          "cached": 0,
+          "total": 3140,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "plan",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-regression.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc-regression.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average"
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "plan",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 2773,
+              "output_tokens": 367,
+              "cost_usd": 0.001272,
+              "ok": true,
+              "artifact": "01-plan.json",
+              "sha256": "2b491794a852a1a6401c7622b0ac0b8d4e8ac4b164655315dad2d523b351e188",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:21:28.031946+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.005314,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1
+          },
+          "namedScoreWeights": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "names-right-file",
+                "value": "file://criteria.py:names_right_file"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "excludes-wrong-files",
+                "value": "file://criteria.py:excludes_wrong_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-targets-function",
+                "value": "file://criteria.py:targets_function"
+              }
+            }
+          ]
+        },
+        "id": "a5dc31b4-613d-4971-83bb-0fd15795a3ff",
+        "latencyMs": 22244,
+        "namedScores": {
+          "excludes-wrong-files": 1,
+          "test-targets-function": 1,
+          "names-right-file": 1
+        },
+        "prompt": {
+          "raw": "plan",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"files\": [\"sandbox/demo-app/storage.py\"], \"steps\": [\"In sandbox/demo-app/storage.py, add `import os` and `import tempfile` to the module imports (json is already imported).\", \"In save_records, serialize before touching the destination: compute `payload = json.dumps(records, indent=2)` as the first statement, so a serialization failure raises before any file is opened or truncated.\", \"In save_records, write `payload` to a temporary file created in the same directory as `path` (e.g. `tempfile.NamedTemporaryFile(mode=\\\"w\\\", dir=os.path.dirname(os.path.abspath(path)), delete=False)`), flush and close it, then call `os.replace(tmp_path, path)` so the existing file is replaced only after the new content is fully written.\", \"In save_records, wrap the temp-file write and replace in a try/except that removes the temporary file and re-raises on failure, leaving the original file at `path` untouched.\"], \"test\": \"python -c \\\"import sys; sys.path.insert(0, 'sandbox/demo-app'); import storage; p = '/tmp/recs.json'; open(p, 'w').write('[1]');\\ntry:\\n    storage.save_records(p, {1, 2})\\nexcept TypeError:\\n    pass\\nassert open(p).read() == '[1]', 'existing records were destroyed'\\\"\"}",
+          "cost": 0.005314,
+          "tokenUsage": {
+            "prompt": 8301,
+            "completion": 2353,
+            "cached": 0,
+            "total": 10654,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "plan",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 8301,
+                "output_tokens": 2353,
+                "cost_usd": 0.005314,
+                "ok": true,
+                "artifact": "01-plan.json",
+                "sha256": "0e47ec88785dbc077d2673dc14b91c870be99c8b031b19234e0fb040e515574e",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:21:50.433878+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "storage write bug -> plan touches only storage.py",
+          "vars": {
+            "agent": "plan",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/storage.py"
+              ],
+              "files_exclude": [
+                "sandbox/demo-app/calc.py",
+                "sandbox/demo-app/SPEC.md"
+              ],
+              "test_mentions": "save_records"
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "names-right-file",
+              "value": "file://criteria.py:names_right_file"
+            },
+            {
+              "type": "python",
+              "metric": "excludes-wrong-files",
+              "value": "file://criteria.py:excludes_wrong_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-targets-function",
+              "value": "file://criteria.py:targets_function"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 8301,
+          "completion": 2353,
+          "cached": 0,
+          "total": 10654,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "plan",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/storage.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/calc.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "save_records"
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "plan",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 8301,
+              "output_tokens": 2353,
+              "cost_usd": 0.005314,
+              "ok": true,
+              "artifact": "01-plan.json",
+              "sha256": "0e47ec88785dbc077d2673dc14b91c870be99c8b031b19234e0fb040e515574e",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:21:50.433878+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 3,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 13759,
+        "completion": 3064,
+        "cached": 0,
+        "total": 16823,
+        "numRequests": 3,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 32488,
+      "evaluationDurationMs": 32488
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "plan — name the files the fix may touch, the steps, and the test",
+    "prompts": [
+      "{{agent}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/fireworks.py",
+        "label": "deepseek-v4p1-flash",
+        "config": {
+          "timeout": 600000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "empty-list bug -> plan touches only calc.py",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          }
+        ]
+      },
+      {
+        "description": "regression -> same single-file plan",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-regression.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc-regression.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          }
+        ]
+      },
+      {
+        "description": "storage write bug -> plan touches only storage.py",
+        "vars": {
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/storage.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/calc.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "save_records"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          }
+        ]
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/plan.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "vars": {
+        "agent": "plan"
+      },
+      "assert": [
+        {
+          "type": "is-json"
+        }
+      ],
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T12:21:50.779Z",
+    "evaluationCreatedAt": "2026-10-15T12:21:18.112Z"
+  },
+  "vars": [
+    "agent",
+    "report",
+    "triage",
+    "expect"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

@@ -1,0 +1,594 @@
+{
+  "evalId": "eval-LE4-2026-10-15T12:33:43",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T12:33:43.903Z",
+    "prompts": [
+      {
+        "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "raw": "{{agent}}",
+        "label": "{{agent}}",
+        "provider": "deepseek-v4p1-flash",
+        "metrics": {
+          "score": 1,
+          "testPassCount": 1,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 5,
+          "assertFailCount": 0,
+          "totalLatencyMs": 6793,
+          "tokenUsage": {
+            "prompt": 3100,
+            "completion": 302,
+            "cached": 0,
+            "total": 3402,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "test-targets-function": 1,
+            "names-right-file": 1,
+            "excludes-wrong-files": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoresCount": {
+            "test-targets-function": 1,
+            "names-right-file": 1,
+            "excludes-wrong-files": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoreWeights": {
+            "test-targets-function": 1,
+            "names-right-file": 1,
+            "excludes-wrong-files": 1,
+            "addresses-feedback": 1
+          },
+          "cost": 0.001292
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.001292,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "test-targets-function": 1,
+            "names-right-file": 1,
+            "excludes-wrong-files": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoreWeights": {
+            "test-targets-function": 1,
+            "names-right-file": 1,
+            "excludes-wrong-files": 1,
+            "addresses-feedback": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "names-right-file",
+                "value": "file://criteria.py:names_right_file"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "excludes-wrong-files",
+                "value": "file://criteria.py:excludes_wrong_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-targets-function",
+                "value": "file://criteria.py:targets_function"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "addresses-feedback",
+                "value": "file://criteria.py:addresses_feedback"
+              }
+            }
+          ]
+        },
+        "id": "59a1b505-9a4d-4783-85ef-62954c62b7d1",
+        "latencyMs": 6793,
+        "namedScores": {
+          "test-targets-function": 1,
+          "names-right-file": 1,
+          "excludes-wrong-files": 1,
+          "addresses-feedback": 1
+        },
+        "prompt": {
+          "raw": "plan",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"files\": [\"sandbox/demo-app/calc.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values, return 0.0.\", \"Leave the existing sum(values) / len(values) computation as the return value for non-empty input, and change nothing else in the file.\"], \"test\": \"python3 -c \\\"import sys; sys.path.insert(0, 'sandbox/demo-app'); import calc; assert calc.average([]) == 0.0\\\"\"}",
+          "cost": 0.001292,
+          "tokenUsage": {
+            "prompt": 3100,
+            "completion": 302,
+            "cached": 0,
+            "total": 3402,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "plan",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 3100,
+                "output_tokens": 302,
+                "cost_usd": 0.001292,
+                "ok": true,
+                "artifact": "01-plan.json",
+                "sha256": "7c1d0b4a06b75c6d5511d8aacd083c0f8e82431d64b87da21fe9f87e7dcf2425",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:33:50.716874+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "[revision] wrong file, reviewer feedback -> plan moves to calc.py",
+          "vars": {
+            "agent": "plan",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+            "feedback": "Finding (category: incorrect): the previous plan names sandbox/demo-app/storage.py, but the defect is average() in sandbox/demo-app/calc.py, so the plan edits the wrong file. Name sandbox/demo-app/calc.py and do not list storage.py.",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/calc.py"
+              ],
+              "files_exclude": [
+                "sandbox/demo-app/storage.py",
+                "sandbox/demo-app/SPEC.md"
+              ],
+              "test_mentions": "average",
+              "fixes": [
+                "names_right_file",
+                "excludes_wrong_files"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "names-right-file",
+              "value": "file://criteria.py:names_right_file"
+            },
+            {
+              "type": "python",
+              "metric": "excludes-wrong-files",
+              "value": "file://criteria.py:excludes_wrong_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-targets-function",
+              "value": "file://criteria.py:targets_function"
+            },
+            {
+              "type": "python",
+              "metric": "addresses-feedback",
+              "value": "file://criteria.py:addresses_feedback"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 3100,
+          "completion": 302,
+          "cached": 0,
+          "total": 3402,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "plan",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+          "feedback": "Finding (category: incorrect): the previous plan names sandbox/demo-app/storage.py, but the defect is average() in sandbox/demo-app/calc.py, so the plan edits the wrong file. Name sandbox/demo-app/calc.py and do not list storage.py.",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average",
+            "fixes": [
+              "names_right_file",
+              "excludes_wrong_files"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "plan",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 3100,
+              "output_tokens": 302,
+              "cost_usd": 0.001292,
+              "ok": true,
+              "artifact": "01-plan.json",
+              "sha256": "7c1d0b4a06b75c6d5511d8aacd083c0f8e82431d64b87da21fe9f87e7dcf2425",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:33:50.716874+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 1,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 3100,
+        "completion": 302,
+        "cached": 0,
+        "total": 3402,
+        "numRequests": 1,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 7201,
+      "evaluationDurationMs": 7201
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "plan — name the files the fix may touch, the steps, and the test",
+    "prompts": [
+      "{{agent}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/fireworks.py",
+        "label": "deepseek-v4p1-flash",
+        "config": {
+          "timeout": 600000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "empty-list bug -> plan touches only calc.py",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          }
+        ]
+      },
+      {
+        "description": "regression -> same single-file plan",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-regression.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc-regression.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          }
+        ]
+      },
+      {
+        "description": "storage write bug -> plan touches only storage.py",
+        "vars": {
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/storage.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/calc.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "save_records"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          }
+        ]
+      },
+      {
+        "description": "[revision] wrong file, reviewer feedback -> plan moves to calc.py",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+          "feedback": "Finding (category: incorrect): the previous plan names sandbox/demo-app/storage.py, but the defect is average() in sandbox/demo-app/calc.py, so the plan edits the wrong file. Name sandbox/demo-app/calc.py and do not list storage.py.",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average",
+            "fixes": [
+              "names_right_file",
+              "excludes_wrong_files"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          },
+          {
+            "type": "python",
+            "metric": "addresses-feedback",
+            "value": "file://criteria.py:addresses_feedback"
+          }
+        ]
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/plan-revision.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "vars": {
+        "agent": "plan"
+      },
+      "assert": [
+        {
+          "type": "is-json"
+        }
+      ],
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T12:33:51.468Z",
+    "evaluationCreatedAt": "2026-10-15T12:33:43.903Z"
+  },
+  "vars": [
+    "agent",
+    "report",
+    "triage",
+    "first_pass",
+    "feedback",
+    "expect"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

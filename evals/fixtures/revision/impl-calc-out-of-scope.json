@@ -1,0 +1,5 @@
+{
+  "changed": ["sandbox/demo-app/calc.py", "sandbox/demo-app/storage.py"],
+  "summary": "Guarded average() and also reformatted storage.py; the plan's test still fails.",
+  "test_passed": false
+}

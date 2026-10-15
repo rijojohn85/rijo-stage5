@@ -1,0 +1,591 @@
+{
+  "evalId": "eval-8CA-2026-10-15T12:33:35",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T12:33:35.284Z",
+    "prompts": [
+      {
+        "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "raw": "{{agent}}",
+        "label": "{{agent}}",
+        "provider": "deepseek-v4p1-flash",
+        "metrics": {
+          "score": 1,
+          "testPassCount": 1,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 5,
+          "assertFailCount": 0,
+          "totalLatencyMs": 5716,
+          "tokenUsage": {
+            "prompt": 3333,
+            "completion": 338,
+            "cached": 0,
+            "total": 3671,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1,
+            "escalation-flagged": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoresCount": {
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1,
+            "escalation-flagged": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoreWeights": {
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1,
+            "escalation-flagged": 1,
+            "addresses-feedback": 1
+          },
+          "cost": 0.001406
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.001406,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1,
+            "escalation-flagged": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoreWeights": {
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1,
+            "escalation-flagged": 1,
+            "addresses-feedback": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "valid-enums",
+                "value": "file://criteria.py:valid_enums"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "root-cause-cites-real-file",
+                "value": "file://criteria.py:root_cause_cites_real_file"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "escalation-flagged",
+                "value": "file://criteria.py:escalation_flagged"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "addresses-feedback",
+                "value": "file://criteria.py:addresses_feedback"
+              }
+            }
+          ]
+        },
+        "id": "f109238e-c9d6-4e99-92c1-8523d2cf4b4e",
+        "latencyMs": 5716,
+        "namedScores": {
+          "root-cause-cites-real-file": 1,
+          "valid-enums": 1,
+          "escalation-flagged": 1,
+          "addresses-feedback": 1
+        },
+        "prompt": {
+          "raw": "triage",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"classification\": \"bug\", \"decision\": \"defer\", \"root_cause\": \"storage.py:save_records opens the path with mode \\\"w\\\" before json.dumps runs, so a serialization failure truncates the file and the records already stored there are lost.\", \"rationale\": \"SPEC.md requires that \\\"a failed write must never destroy the records already stored there\\\", and the report states the file is truncated before serialization, so this is a bug. The report also states \\\"We have lost customer records twice this week in production\\\", which is data loss, so escalation is true and a human must decide before any automatic action.\", \"escalation\": true}",
+          "cost": 0.001406,
+          "tokenUsage": {
+            "prompt": 3333,
+            "completion": 338,
+            "cached": 0,
+            "total": 3671,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "triage",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 3333,
+                "output_tokens": 338,
+                "cost_usd": 0.001406,
+                "ok": true,
+                "artifact": "01-triage.json",
+                "sha256": "97dab00cf10cd14bdcf7f1453e0152927a20ccf701d28b0ceb34ea4e4f266d0a",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:33:41.034253+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "[revision] missed data loss, reviewer feedback -> escalation raised",
+          "vars": {
+            "agent": "triage",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json",
+            "feedback": "Finding (category: dangerous): the report says customer records were lost twice in production and save_records truncates the existing file, so this is data loss. The previous triage set escalation to false and decided fix-now. A human must decide before any automatic action: set escalation to true and defer.",
+            "expect": {
+              "schema": "triage",
+              "classification": "bug",
+              "decision": "defer",
+              "escalation": true,
+              "root_cause_mentions": "storage.py",
+              "fixes": [
+                "escalation_flagged"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "valid-enums",
+              "value": "file://criteria.py:valid_enums"
+            },
+            {
+              "type": "python",
+              "metric": "root-cause-cites-real-file",
+              "value": "file://criteria.py:root_cause_cites_real_file"
+            },
+            {
+              "type": "python",
+              "metric": "escalation-flagged",
+              "value": "file://criteria.py:escalation_flagged"
+            },
+            {
+              "type": "python",
+              "metric": "addresses-feedback",
+              "value": "file://criteria.py:addresses_feedback"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 3333,
+          "completion": 338,
+          "cached": 0,
+          "total": 3671,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "triage",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json",
+          "feedback": "Finding (category: dangerous): the report says customer records were lost twice in production and save_records truncates the existing file, so this is data loss. The previous triage set escalation to false and decided fix-now. A human must decide before any automatic action: set escalation to true and defer.",
+          "expect": {
+            "schema": "triage",
+            "classification": "bug",
+            "decision": "defer",
+            "escalation": true,
+            "root_cause_mentions": "storage.py",
+            "fixes": [
+              "escalation_flagged"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "triage",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 3333,
+              "output_tokens": 338,
+              "cost_usd": 0.001406,
+              "ok": true,
+              "artifact": "01-triage.json",
+              "sha256": "97dab00cf10cd14bdcf7f1453e0152927a20ccf701d28b0ceb34ea4e4f266d0a",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:33:41.034253+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 1,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 3333,
+        "completion": 338,
+        "cached": 0,
+        "total": 3671,
+        "numRequests": 1,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 6144,
+      "evaluationDurationMs": 6144
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "triage — classify, hypothesize a root cause, decide fix-now or defer",
+    "prompts": [
+      "{{agent}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/fireworks.py",
+        "label": "deepseek-v4p1-flash",
+        "config": {
+          "timeout": 600000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "bug against a documented requirement -> bug / fix-now",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "expect": {
+            "schema": "triage",
+            "classification": "bug",
+            "decision": "fix-now",
+            "escalation": false,
+            "root_cause_mentions": "calc.py"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "valid-enums",
+            "value": "file://criteria.py:valid_enums"
+          },
+          {
+            "type": "python",
+            "metric": "root-cause-cites-real-file",
+            "value": "file://criteria.py:root_cause_cites_real_file"
+          },
+          {
+            "type": "python",
+            "metric": "escalation-flagged",
+            "value": "file://criteria.py:escalation_flagged"
+          }
+        ]
+      },
+      {
+        "description": "documented requirement + prior-working evidence -> bug-regression / fix-now",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-regression.md",
+          "expect": {
+            "schema": "triage",
+            "classification": "bug-regression",
+            "decision": "fix-now",
+            "escalation": false,
+            "root_cause_mentions": "calc.py"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "valid-enums",
+            "value": "file://criteria.py:valid_enums"
+          },
+          {
+            "type": "python",
+            "metric": "root-cause-cites-real-file",
+            "value": "file://criteria.py:root_cause_cites_real_file"
+          },
+          {
+            "type": "python",
+            "metric": "escalation-flagged",
+            "value": "file://criteria.py:escalation_flagged"
+          }
+        ]
+      },
+      {
+        "description": "request with no documented requirement -> feature-as-bug / defer",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/feature-as-bug.md",
+          "expect": {
+            "schema": "triage",
+            "classification": "feature-as-bug",
+            "decision": "defer",
+            "escalation": false
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "valid-enums",
+            "value": "file://criteria.py:valid_enums"
+          },
+          {
+            "type": "python",
+            "metric": "escalation-flagged",
+            "value": "file://criteria.py:escalation_flagged"
+          }
+        ]
+      },
+      {
+        "description": "data loss -> escalation, no automatic fix",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "expect": {
+            "schema": "triage",
+            "classification": "bug",
+            "decision": "defer",
+            "escalation": true,
+            "root_cause_mentions": "storage.py"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "valid-enums",
+            "value": "file://criteria.py:valid_enums"
+          },
+          {
+            "type": "python",
+            "metric": "root-cause-cites-real-file",
+            "value": "file://criteria.py:root_cause_cites_real_file"
+          },
+          {
+            "type": "python",
+            "metric": "escalation-flagged",
+            "value": "file://criteria.py:escalation_flagged"
+          }
+        ]
+      },
+      {
+        "description": "[revision] missed data loss, reviewer feedback -> escalation raised",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json",
+          "feedback": "Finding (category: dangerous): the report says customer records were lost twice in production and save_records truncates the existing file, so this is data loss. The previous triage set escalation to false and decided fix-now. A human must decide before any automatic action: set escalation to true and defer.",
+          "expect": {
+            "schema": "triage",
+            "classification": "bug",
+            "decision": "defer",
+            "escalation": true,
+            "root_cause_mentions": "storage.py",
+            "fixes": [
+              "escalation_flagged"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "valid-enums",
+            "value": "file://criteria.py:valid_enums"
+          },
+          {
+            "type": "python",
+            "metric": "root-cause-cites-real-file",
+            "value": "file://criteria.py:root_cause_cites_real_file"
+          },
+          {
+            "type": "python",
+            "metric": "escalation-flagged",
+            "value": "file://criteria.py:escalation_flagged"
+          },
+          {
+            "type": "python",
+            "metric": "addresses-feedback",
+            "value": "file://criteria.py:addresses_feedback"
+          }
+        ]
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/triage-revision.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "vars": {
+        "agent": "triage"
+      },
+      "assert": [
+        {
+          "type": "is-json"
+        }
+      ],
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T12:33:41.769Z",
+    "evaluationCreatedAt": "2026-10-15T12:33:35.284Z"
+  },
+  "vars": [
+    "agent",
+    "report",
+    "first_pass",
+    "feedback",
+    "expect"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

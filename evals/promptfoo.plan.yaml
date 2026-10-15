@@ -52,3 +52,22 @@ tests:
       - *right-file
       - *wrong-files
       - *test-target
+  - description: '[revision] wrong file, reviewer feedback -> plan moves to calc.py'
+    vars:
+      report: file://../test-data/bugs/bug-clear.md
+      triage: file://fixtures/triage/plan-calc.json
+      first_pass: file://fixtures/review/plan-wrong-file.json
+      feedback: >-
+        Finding (category: incorrect): the previous plan names sandbox/demo-app/storage.py, but the
+        defect is average() in sandbox/demo-app/calc.py, so the plan edits the wrong file. Name
+        sandbox/demo-app/calc.py and do not list storage.py.
+      expect:
+        files_include: ['sandbox/demo-app/calc.py']
+        files_exclude: ['sandbox/demo-app/storage.py', 'sandbox/demo-app/SPEC.md']
+        test_mentions: average
+        fixes: [names_right_file, excludes_wrong_files]
+    assert:
+      - *right-file
+      - *wrong-files
+      - *test-target
+      - &addresses-feedback { type: python, metric: addresses-feedback, value: 'file://criteria.py:addresses_feedback' }

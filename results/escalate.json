@@ -1,0 +1,754 @@
+{
+  "evalId": "eval-7c7-2026-10-15T12:24:43",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T12:24:43.477Z",
+    "prompts": [
+      {
+        "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "raw": "{{agent}}",
+        "label": "{{agent}}",
+        "provider": "deepseek-v4p1-flash",
+        "metrics": {
+          "score": 2,
+          "testPassCount": 2,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 8,
+          "assertFailCount": 0,
+          "totalLatencyMs": 15543,
+          "tokenUsage": {
+            "prompt": 1778,
+            "completion": 1705,
+            "cached": 0,
+            "total": 3483,
+            "numRequests": 2,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "no-decision-made": 2,
+            "offers-safe-default": 2,
+            "names-trigger": 2
+          },
+          "namedScoresCount": {
+            "no-decision-made": 2,
+            "offers-safe-default": 2,
+            "names-trigger": 2
+          },
+          "namedScoreWeights": {
+            "no-decision-made": 2,
+            "offers-safe-default": 2,
+            "names-trigger": 2
+          },
+          "cost": 0.0025789999999999997
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.000995,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "no-decision-made": 1,
+            "offers-safe-default": 1,
+            "names-trigger": 1
+          },
+          "namedScoreWeights": {
+            "no-decision-made": 1,
+            "offers-safe-default": 1,
+            "names-trigger": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "names-trigger",
+                "value": "file://criteria.py:names_trigger"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "offers-safe-default",
+                "value": "file://criteria.py:offers_safe_default"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-decision-made",
+                "value": "file://criteria.py:no_decision_made"
+              }
+            }
+          ]
+        },
+        "id": "679b9f42-8c70-4ffe-9ba0-99b575e4527f",
+        "latencyMs": 6588,
+        "namedScores": {
+          "no-decision-made": 1,
+          "offers-safe-default": 1,
+          "names-trigger": 1
+        },
+        "prompt": {
+          "raw": "escalate",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"reason\": \"Data-loss trigger: triage escalated because \\\"a serialization failure truncates the file and the records already stored there are lost\\\", and the report states \\\"We have lost customer records twice this week in production\\\" \\u2014 an irreversible destruction of stored records that no agent may authorize fixing or leaving as is.\", \"question\": \"Should save_records() in sandbox/demo-app/storage.py be changed now so a failed serialization can no longer truncate the existing file, or should the current behavior be left in place?\", \"options\": [\"Change save_records() to serialize the records first and write atomically (write to a temporary file, then replace the target), so a failed write leaves the stored records intact.\", \"Leave storage.py unchanged and keep the current behavior, accepting that a serialization failure truncates the file and destroys the stored records.\", \"Leave the code unchanged for now and handle it operationally only (for example, more frequent backups or a restore procedure) until a scheduled fix.\"], \"risk_if_wrong\": \"If the fix is skipped or deferred, the next record that fails to serialize truncates the target file again and permanently destroys the customer records stored there, with no in-place recovery; if a fix is applied that is not atomic (for example, truncating and rewriting in place), a failure mid-write can still leave the file empty or partially written and lose the same records.\"}",
+          "cost": 0.000995,
+          "tokenUsage": {
+            "prompt": 885,
+            "completion": 608,
+            "cached": 0,
+            "total": 1493,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "escalate",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 885,
+                "output_tokens": 608,
+                "cost_usd": 0.000995,
+                "ok": true,
+                "artifact": "01-escalate.json",
+                "sha256": "f81032598234b18902a0163773f11818cfba38b589a402db610df04dcc16b01a",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:24:50.087074+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "triage escalated on data loss -> brief raises it, decides nothing",
+          "vars": {
+            "agent": "escalate",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/escalate/triage-escalated.json",
+            "feedback": "Triage stopped the workflow: escalation is true. Its rationale is that customer records were lost twice this week in production.",
+            "expect": {
+              "options_min": 2,
+              "absent_keys": [
+                "decision",
+                "decided_by"
+              ],
+              "mentions": [
+                {
+                  "field": "reason",
+                  "contains": "data"
+                }
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "names-trigger",
+              "value": "file://criteria.py:names_trigger"
+            },
+            {
+              "type": "python",
+              "metric": "offers-safe-default",
+              "value": "file://criteria.py:offers_safe_default"
+            },
+            {
+              "type": "python",
+              "metric": "no-decision-made",
+              "value": "file://criteria.py:no_decision_made"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 885,
+          "completion": 608,
+          "cached": 0,
+          "total": 1493,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "escalate",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/escalate/triage-escalated.json",
+          "feedback": "Triage stopped the workflow: escalation is true. Its rationale is that customer records were lost twice this week in production.",
+          "expect": {
+            "options_min": 2,
+            "absent_keys": [
+              "decision",
+              "decided_by"
+            ],
+            "mentions": [
+              {
+                "field": "reason",
+                "contains": "data"
+              }
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "escalate",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 885,
+              "output_tokens": 608,
+              "cost_usd": 0.000995,
+              "ok": true,
+              "artifact": "01-escalate.json",
+              "sha256": "f81032598234b18902a0163773f11818cfba38b589a402db610df04dcc16b01a",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:24:50.087074+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.001584,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "no-decision-made": 1,
+            "names-trigger": 1,
+            "offers-safe-default": 1
+          },
+          "namedScoreWeights": {
+            "no-decision-made": 1,
+            "names-trigger": 1,
+            "offers-safe-default": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "names-trigger",
+                "value": "file://criteria.py:names_trigger"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "offers-safe-default",
+                "value": "file://criteria.py:offers_safe_default"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-decision-made",
+                "value": "file://criteria.py:no_decision_made"
+              }
+            }
+          ]
+        },
+        "id": "2ca13779-e8b8-4d87-b8c1-1cf7ad2183bb",
+        "latencyMs": 8955,
+        "namedScores": {
+          "no-decision-made": 1,
+          "names-trigger": 1,
+          "offers-safe-default": 1
+        },
+        "prompt": {
+          "raw": "escalate",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"reason\": \"Data loss: review's finding that the change \\\"can silently overwrite the caller's records with an empty list\\\" contradicts triage's \\\"escalation\\\": false, and the report states \\\"We have lost customer records twice this week in production.\\\"\", \"question\": \"Which change, if any, should be made to save_records() in sandbox/demo-app/storage.py?\", \"options\": [\"Apply the fix as triaged (fix-now) and accept that a failed serialization can leave the caller's records replaced by an empty list.\", \"Require an atomic write instead: serialize the records first, write to a temporary file, then rename it over the target so a failure leaves the existing file intact.\", \"Change nothing: leave save_records() exactly as it is and take no action.\"], \"risk_if_wrong\": \"Choosing the empty-list overwrite path means the next serialization failure replaces the stored records with an empty list, permanently destroying the customer records the report says were already lost twice this week; choosing to change nothing leaves the truncate-before-serialize bug in place, so every failed write keeps destroying the records already stored at the path.\"}",
+          "cost": 0.001584,
+          "tokenUsage": {
+            "prompt": 893,
+            "completion": 1097,
+            "cached": 0,
+            "total": 1990,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "escalate",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 893,
+                "output_tokens": 1097,
+                "cost_usd": 0.001584,
+                "ok": true,
+                "artifact": "01-escalate.json",
+                "sha256": "99a99bb5ca79cc0a732bf03e2cb94609c4bc3ebe3675157679bf6e7029052f2a",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:24:59.298779+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "review escalated on a destructive change -> brief raises it, decides nothing",
+          "vars": {
+            "agent": "escalate",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+            "feedback": "Review returned verdict escalate. Its finding is that the change can silently overwrite the caller's records with an empty list.",
+            "expect": {
+              "options_min": 2,
+              "absent_keys": [
+                "decision",
+                "decided_by"
+              ],
+              "mentions": [
+                {
+                  "field": "reason",
+                  "contains": "data"
+                }
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "names-trigger",
+              "value": "file://criteria.py:names_trigger"
+            },
+            {
+              "type": "python",
+              "metric": "offers-safe-default",
+              "value": "file://criteria.py:offers_safe_default"
+            },
+            {
+              "type": "python",
+              "metric": "no-decision-made",
+              "value": "file://criteria.py:no_decision_made"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 893,
+          "completion": 1097,
+          "cached": 0,
+          "total": 1990,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "escalate",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "feedback": "Review returned verdict escalate. Its finding is that the change can silently overwrite the caller's records with an empty list.",
+          "expect": {
+            "options_min": 2,
+            "absent_keys": [
+              "decision",
+              "decided_by"
+            ],
+            "mentions": [
+              {
+                "field": "reason",
+                "contains": "data"
+              }
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "escalate",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 893,
+              "output_tokens": 1097,
+              "cost_usd": 0.001584,
+              "ok": true,
+              "artifact": "01-escalate.json",
+              "sha256": "99a99bb5ca79cc0a732bf03e2cb94609c4bc3ebe3675157679bf6e7029052f2a",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:24:59.298779+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 2,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 1778,
+        "completion": 1705,
+        "cached": 0,
+        "total": 3483,
+        "numRequests": 2,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 15994,
+      "evaluationDurationMs": 15994
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "escalate — name the trigger, ask one question, offer a safe default, decide nothing",
+    "prompts": [
+      "{{agent}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/fireworks.py",
+        "label": "deepseek-v4p1-flash",
+        "config": {
+          "timeout": 600000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "triage escalated on data loss -> brief raises it, decides nothing",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/escalate/triage-escalated.json",
+          "feedback": "Triage stopped the workflow: escalation is true. Its rationale is that customer records were lost twice this week in production.",
+          "expect": {
+            "options_min": 2,
+            "absent_keys": [
+              "decision",
+              "decided_by"
+            ],
+            "mentions": [
+              {
+                "field": "reason",
+                "contains": "data"
+              }
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-trigger",
+            "value": "file://criteria.py:names_trigger"
+          },
+          {
+            "type": "python",
+            "metric": "offers-safe-default",
+            "value": "file://criteria.py:offers_safe_default"
+          },
+          {
+            "type": "python",
+            "metric": "no-decision-made",
+            "value": "file://criteria.py:no_decision_made"
+          }
+        ]
+      },
+      {
+        "description": "review escalated on a destructive change -> brief raises it, decides nothing",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "feedback": "Review returned verdict escalate. Its finding is that the change can silently overwrite the caller's records with an empty list.",
+          "expect": {
+            "options_min": 2,
+            "absent_keys": [
+              "decision",
+              "decided_by"
+            ],
+            "mentions": [
+              {
+                "field": "reason",
+                "contains": "data"
+              }
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-trigger",
+            "value": "file://criteria.py:names_trigger"
+          },
+          {
+            "type": "python",
+            "metric": "offers-safe-default",
+            "value": "file://criteria.py:offers_safe_default"
+          },
+          {
+            "type": "python",
+            "metric": "no-decision-made",
+            "value": "file://criteria.py:no_decision_made"
+          }
+        ]
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/escalate.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "vars": {
+        "agent": "escalate"
+      },
+      "assert": [
+        {
+          "type": "is-json"
+        }
+      ],
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T12:24:59.659Z",
+    "evaluationCreatedAt": "2026-10-15T12:24:43.477Z"
+  },
+  "vars": [
+    "agent",
+    "report",
+    "triage",
+    "feedback",
+    "expect"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

@@ -25,9 +25,9 @@ import fireworks  # noqa: E402
 SUITES = ("triage", "plan", "implement", "review", "escalate")
 # plan section 8: the named criteria each suite reports, as promptfoo `metric:` labels
 EXPECTED_METRICS = {
-    "triage": {"valid-enums", "root-cause-cites-real-file", "escalation-flagged"},
-    "plan": {"names-right-file", "excludes-wrong-files", "test-targets-function"},
-    "implement": {"changes-only-plan-files", "test-red-to-green", "no-unreported-edits"},
+    "triage": {"valid-enums", "root-cause-cites-real-file", "escalation-flagged", "addresses-feedback"},
+    "plan": {"names-right-file", "excludes-wrong-files", "test-targets-function", "addresses-feedback"},
+    "implement": {"changes-only-plan-files", "test-red-to-green", "no-unreported-edits", "addresses-feedback"},
     "review": {"zero-findings-on-clean", "catches-real-defect", "escalates-danger", "targets-correct-artifact"},
     "escalate": {"names-trigger", "offers-safe-default", "no-decision-made"},
 }
@@ -381,7 +381,7 @@ def test_every_metric_assertion_points_at_a_real_criterion(suite):
             assert callable(getattr(criteria, function)), assertion
 
 
-@pytest.mark.parametrize("suite,cases", [("triage", 4), ("plan", 3), ("implement", 2), ("review", 8), ("escalate", 2)])
+@pytest.mark.parametrize("suite,cases", [("triage", 5), ("plan", 4), ("implement", 3), ("review", 8), ("escalate", 2)])
 def test_case_counts_match_the_plan(suite, cases):
     assert len(load_suite(suite)["tests"]) == cases
 

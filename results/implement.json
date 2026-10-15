@@ -1,0 +1,723 @@
+{
+  "evalId": "eval-tPh-2026-10-15T12:21:53",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T12:21:53.069Z",
+    "prompts": [
+      {
+        "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "raw": "{{agent}}",
+        "label": "{{agent}}",
+        "provider": "deepseek-v4p1-flash",
+        "metrics": {
+          "score": 2,
+          "testPassCount": 2,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 8,
+          "assertFailCount": 0,
+          "totalLatencyMs": 15335,
+          "tokenUsage": {
+            "prompt": 13188,
+            "completion": 725,
+            "cached": 0,
+            "total": 13913,
+            "numRequests": 2,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "changes-only-plan-files": 2,
+            "test-red-to-green": 2,
+            "no-unreported-edits": 2
+          },
+          "namedScoresCount": {
+            "changes-only-plan-files": 2,
+            "test-red-to-green": 2,
+            "no-unreported-edits": 2
+          },
+          "namedScoreWeights": {
+            "changes-only-plan-files": 2,
+            "test-red-to-green": 2,
+            "no-unreported-edits": 2
+          },
+          "cost": 0.004826
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.00236,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "changes-only-plan-files": 1,
+            "test-red-to-green": 1,
+            "no-unreported-edits": 1
+          },
+          "namedScoreWeights": {
+            "changes-only-plan-files": 1,
+            "test-red-to-green": 1,
+            "no-unreported-edits": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "changes-only-plan-files",
+                "value": "file://criteria.py:changes_only_plan_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-red-to-green",
+                "value": "file://criteria.py:red_to_green"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-unreported-edits",
+                "value": "file://criteria.py:no_unreported_edits"
+              }
+            }
+          ]
+        },
+        "id": "3082ef51-30bb-40fa-84f7-b4673909b1e4",
+        "latencyMs": 7004,
+        "namedScores": {
+          "changes-only-plan-files": 1,
+          "test-red-to-green": 1,
+          "no-unreported-edits": 1
+        },
+        "prompt": {
+          "raw": "implement",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"changed\": [\"sandbox/demo-app/calc.py\"], \"summary\": \"Added an empty-input guard to average() in calc.py so it returns 0.0 for an empty list, leaving the non-empty arithmetic mean path unchanged. The plan's test passed.\", \"test_passed\": true}",
+          "cost": 0.00236,
+          "tokenUsage": {
+            "prompt": 6540,
+            "completion": 332,
+            "cached": 0,
+            "total": 6872,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "implement",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 6540,
+                "output_tokens": 332,
+                "cost_usd": 0.00236,
+                "ok": true,
+                "artifact": "01-implement.json",
+                "sha256": "de066bf3b2b3f4a8685620fe2a3d2666ca5f775ac9d4ce4b3fdf8bf72c910c50",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:21:59.970438+00:00"
+              }
+            ],
+            "actual_changed": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "test_failed_before": true,
+            "test_passed_after": true
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "calc empty-list plan -> changes only calc.py, test passes",
+          "vars": {
+            "agent": "implement",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/calc.py"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "changes-only-plan-files",
+              "value": "file://criteria.py:changes_only_plan_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-red-to-green",
+              "value": "file://criteria.py:red_to_green"
+            },
+            {
+              "type": "python",
+              "metric": "no-unreported-edits",
+              "value": "file://criteria.py:no_unreported_edits"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 6540,
+          "completion": 332,
+          "cached": 0,
+          "total": 6872,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "implement",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "implement",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 6540,
+              "output_tokens": 332,
+              "cost_usd": 0.00236,
+              "ok": true,
+              "artifact": "01-implement.json",
+              "sha256": "de066bf3b2b3f4a8685620fe2a3d2666ca5f775ac9d4ce4b3fdf8bf72c910c50",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:21:59.970438+00:00"
+            }
+          ],
+          "actual_changed": [
+            "sandbox/demo-app/calc.py"
+          ],
+          "test_failed_before": true,
+          "test_passed_after": true,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.002466,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "changes-only-plan-files": 1,
+            "test-red-to-green": 1,
+            "no-unreported-edits": 1
+          },
+          "namedScoreWeights": {
+            "changes-only-plan-files": 1,
+            "test-red-to-green": 1,
+            "no-unreported-edits": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "changes-only-plan-files",
+                "value": "file://criteria.py:changes_only_plan_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-red-to-green",
+                "value": "file://criteria.py:red_to_green"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-unreported-edits",
+                "value": "file://criteria.py:no_unreported_edits"
+              }
+            }
+          ]
+        },
+        "id": "d299d01a-771b-49cf-a604-f123f7b481fb",
+        "latencyMs": 8331,
+        "namedScores": {
+          "changes-only-plan-files": 1,
+          "test-red-to-green": 1,
+          "no-unreported-edits": 1
+        },
+        "prompt": {
+          "raw": "implement",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"changed\": [\"sandbox/demo-app/storage.py\"], \"summary\": \"Serialized the records with json.dumps into a local variable before opening the target path, so a serialization failure (e.g. a set) raises before the file is truncated and existing contents are preserved. The plan's test passes.\", \"test_passed\": true}",
+          "cost": 0.002466,
+          "tokenUsage": {
+            "prompt": 6648,
+            "completion": 393,
+            "cached": 0,
+            "total": 7041,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "implement",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 6648,
+                "output_tokens": 393,
+                "cost_usd": 0.002466,
+                "ok": true,
+                "artifact": "01-implement.json",
+                "sha256": "529505caec5460dcc2ee78f139c321c4e5298b764e6f2fce2f707808edd219f4",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:22:08.468395+00:00"
+              }
+            ],
+            "actual_changed": [
+              "sandbox/demo-app/storage.py"
+            ],
+            "test_failed_before": true,
+            "test_passed_after": true
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "storage truncation plan -> changes only storage.py, test passes",
+          "vars": {
+            "agent": "implement",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+            "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-storage.json",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/storage.py"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "changes-only-plan-files",
+              "value": "file://criteria.py:changes_only_plan_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-red-to-green",
+              "value": "file://criteria.py:red_to_green"
+            },
+            {
+              "type": "python",
+              "metric": "no-unreported-edits",
+              "value": "file://criteria.py:no_unreported_edits"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 6648,
+          "completion": 393,
+          "cached": 0,
+          "total": 7041,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "implement",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-storage.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/storage.py"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "implement",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 6648,
+              "output_tokens": 393,
+              "cost_usd": 0.002466,
+              "ok": true,
+              "artifact": "01-implement.json",
+              "sha256": "529505caec5460dcc2ee78f139c321c4e5298b764e6f2fce2f707808edd219f4",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:22:08.468395+00:00"
+            }
+          ],
+          "actual_changed": [
+            "sandbox/demo-app/storage.py"
+          ],
+          "test_failed_before": true,
+          "test_passed_after": true,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 2,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 13188,
+        "completion": 725,
+        "cached": 0,
+        "total": 13913,
+        "numRequests": 2,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 15694,
+      "evaluationDurationMs": 15694
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "implement — apply the plan, change only its files, run its test",
+    "prompts": [
+      "{{agent}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/fireworks.py",
+        "label": "deepseek-v4p1-flash",
+        "config": {
+          "timeout": 900000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "calc empty-list plan -> changes only calc.py, test passes",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "changes-only-plan-files",
+            "value": "file://criteria.py:changes_only_plan_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-red-to-green",
+            "value": "file://criteria.py:red_to_green"
+          },
+          {
+            "type": "python",
+            "metric": "no-unreported-edits",
+            "value": "file://criteria.py:no_unreported_edits"
+          }
+        ]
+      },
+      {
+        "description": "storage truncation plan -> changes only storage.py, test passes",
+        "vars": {
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-storage.json",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/storage.py"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "changes-only-plan-files",
+            "value": "file://criteria.py:changes_only_plan_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-red-to-green",
+            "value": "file://criteria.py:red_to_green"
+          },
+          {
+            "type": "python",
+            "metric": "no-unreported-edits",
+            "value": "file://criteria.py:no_unreported_edits"
+          }
+        ]
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/implement.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "vars": {
+        "agent": "implement"
+      },
+      "assert": [
+        {
+          "type": "is-json"
+        }
+      ],
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T12:22:08.908Z",
+    "evaluationCreatedAt": "2026-10-15T12:21:53.069Z"
+  },
+  "vars": [
+    "agent",
+    "report",
+    "triage",
+    "plan",
+    "expect"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

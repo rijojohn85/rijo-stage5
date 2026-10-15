@@ -49,6 +49,13 @@ def seed_upstream(store, sandbox, case):
             store.save(next(steps), REVIEWER, name, PASSING_REVIEW, {}, binding)
 
 
+def seed_previous(store, case):
+    """A revision case: the producer's own first-pass artifact is already in the store."""
+    if case.previous is not None and case.agent != REVIEWER:
+        inputs = {up: store.latest(up).sha256 for up in ARTIFACT_CHAIN[case.agent][:-1] if store.latest(up)}
+        store.save(len(store.records()) + 1, case.agent, None, case.previous, inputs, {})
+
+
 def _plan_test(case):
     return case.artifacts["plan"]["test"]
 
@@ -74,7 +81,9 @@ def run_case(case, llm):
             sandbox = FixedDiffSandbox(case.artifacts.get(IMPLEMENT, {}).get("changed", ()), case.diff)
         else:
             sandbox = GitSandbox(workspace)
-        seed_upstream(ArtifactStore(run_dir), sandbox, case)
+        store = ArtifactStore(run_dir)
+        seed_upstream(store, sandbox, case)
+        seed_previous(store, case)
         dispatcher = build_dispatcher(
             llm=llm, run_dir=run_dir, tool_root=workspace, sandbox=sandbox, bug_report_path=bug_report_path,
             correlation_id="eval", clock=lambda: datetime.now(timezone.utc),

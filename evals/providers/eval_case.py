@@ -9,6 +9,7 @@ The var names are the contract between the promptfoo yamls and the provider:
     draft      for reviewer on writer: the report draft markdown
     sources    for reviewer on writer: the artifacts the draft summarises
     feedback   reviewer findings or stop reason handed to the agent
+    first_pass revision cases: the producer's own earlier artifact, seeded so it sees it as previous_artifact
 """
 import json
 from dataclasses import dataclass, field
@@ -45,6 +46,7 @@ class EvalCase:
     diff: str = ""
     draft: str | None = None
     feedback: str | None = None
+    previous: dict | None = None  # the producer's own earlier artifact (revision cases)
 
     @classmethod
     def from_vars(cls, case_vars):
@@ -57,6 +59,7 @@ class EvalCase:
             bug_report=case_vars.get("report") or NO_REPORT,
             artifacts=artifacts, diff=case_vars.get("diff") or "",
             draft=case_vars.get("draft"), feedback=case_vars.get("feedback"),
+            previous=_as_object(case_vars["first_pass"], "first_pass") if case_vars.get("first_pass") else None,
         )
 
     @staticmethod

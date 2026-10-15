@@ -40,3 +40,21 @@ tests:
       - *plan-files
       - *red-green
       - *unreported
+  - description: '[revision] edit outside the plan and failing test, reviewer feedback -> in scope and green'
+    vars:
+      report: file://../test-data/bugs/bug-clear.md
+      triage: file://fixtures/triage/plan-calc.json
+      plan: file://fixtures/plan/impl-calc.json
+      first_pass: file://fixtures/revision/impl-calc-out-of-scope.json
+      feedback: >-
+        Findings (category: incorrect): the previous change edited sandbox/demo-app/storage.py,
+        which the plan does not name, and the plan's test still fails. Change only the files the
+        plan names and make the plan's test pass.
+      expect:
+        files_include: ['sandbox/demo-app/calc.py']
+        fixes: [changes_only_plan_files, red_to_green]
+    assert:
+      - *plan-files
+      - *red-green
+      - *unreported
+      - &addresses-feedback { type: python, metric: addresses-feedback, value: 'file://criteria.py:addresses_feedback' }

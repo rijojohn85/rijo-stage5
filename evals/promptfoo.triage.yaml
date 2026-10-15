@@ -67,3 +67,24 @@ tests:
       - *valid-enums
       - *root-cause
       - *escalation
+  - description: '[revision] missed data loss, reviewer feedback -> escalation raised'
+    vars:
+      report: file://../test-data/bugs/escalation-data-loss.md
+      first_pass: file://fixtures/review/triage-missed-data-loss.json
+      feedback: >-
+        Finding (category: dangerous): the report says customer records were lost twice in
+        production and save_records truncates the existing file, so this is data loss. The previous
+        triage set escalation to false and decided fix-now. A human must decide before any
+        automatic action: set escalation to true and defer.
+      expect:
+        schema: triage
+        classification: bug
+        decision: defer
+        escalation: true
+        root_cause_mentions: storage.py
+        fixes: [escalation_flagged]
+    assert:
+      - *valid-enums
+      - *root-cause
+      - *escalation
+      - &addresses-feedback { type: python, metric: addresses-feedback, value: 'file://criteria.py:addresses_feedback' }

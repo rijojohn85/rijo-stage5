@@ -9,6 +9,7 @@ Your input is one JSON message with these keys:
 
 - `bug_report`: the original bug report text.
 - `artifacts`: holds the triage result under `triage`.
+- `previous_artifact`: your own earlier artifact on a revision, `null` otherwise.
 - `reviewer_feedback`: see `## Reviewer findings (optional)` below.
 
 You can also call `read_file` on the repository under `sandbox/demo-app/` (read-only,
@@ -53,3 +54,6 @@ any level:
 challenged your previous plan. Treat each finding as a claim to check against the
 triage result and the code, not as an order. Fix what holds and say nothing about what you rejected. The
 output format does not change.
+
+`previous_artifact` is the artifact being challenged. Change only what the findings show
+is wrong and keep the rest as it was.

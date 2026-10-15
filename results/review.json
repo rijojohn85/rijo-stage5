@@ -1,0 +1,1652 @@
+{
+  "evalId": "eval-1TD-2026-10-15T12:25:01",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-15T12:25:01.506Z",
+    "prompts": [
+      {
+        "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "raw": "{{agent}}",
+        "label": "{{agent}}",
+        "provider": "deepseek-v4p1-flash",
+        "metrics": {
+          "score": 6,
+          "testPassCount": 6,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 18,
+          "assertFailCount": 0,
+          "totalLatencyMs": 43392,
+          "tokenUsage": {
+            "prompt": 26489,
+            "completion": 4109,
+            "cached": 0,
+            "total": 30598,
+            "numRequests": 6,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "targets-correct-artifact": 6,
+            "zero-findings-on-clean": 1,
+            "catches-real-defect": 3,
+            "escalates-danger": 2
+          },
+          "namedScoresCount": {
+            "targets-correct-artifact": 6,
+            "zero-findings-on-clean": 1,
+            "catches-real-defect": 3,
+            "escalates-danger": 2
+          },
+          "namedScoreWeights": {
+            "targets-correct-artifact": 6,
+            "zero-findings-on-clean": 1,
+            "catches-real-defect": 3,
+            "escalates-danger": 2
+          },
+          "cost": 0.012877
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.00172,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "targets-correct-artifact": 1,
+            "zero-findings-on-clean": 1
+          },
+          "namedScoreWeights": {
+            "targets-correct-artifact": 1,
+            "zero-findings-on-clean": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "targets-correct-artifact",
+                "value": "file://criteria.py:targets_correct_artifact"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "zero-findings-on-clean",
+                "value": "file://criteria.py:zero_findings_on_clean"
+              }
+            }
+          ]
+        },
+        "id": "38cbd423-d460-463c-bf1f-c5e23cc7c1b3",
+        "latencyMs": 4850,
+        "namedScores": {
+          "targets-correct-artifact": 1,
+          "zero-findings-on-clean": 1
+        },
+        "prompt": {
+          "raw": "reviewer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"target\": \"implement\", \"reviewed_sha256\": \"e1cefb2daf721c47b4ccfbda4a938fce52153badf888427522238797823b460c\", \"diff_sha256\": \"2033c459a164a915aab5543c6a386aebd12ece939ad67c35d4a638fd9c1f5d14\", \"verdict\": \"pass\", \"findings\": []}",
+          "cost": 0.00172,
+          "tokenUsage": {
+            "prompt": 4613,
+            "completion": 280,
+            "cached": 0,
+            "total": 4893,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "reviewer",
+                "target": "implement",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 4613,
+                "output_tokens": 280,
+                "cost_usd": 0.00172,
+                "ok": true,
+                "artifact": "01-reviewer-implement.json",
+                "sha256": "281f88373f2ad8aa78fd3ae2222a9d28ce17e4252487c727cec93a74a70c9c8b",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:25:06.384117+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "implement: correct fix -> pass with no findings",
+          "vars": {
+            "agent": "reviewer",
+            "target": "implement",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+            "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-calc-correct.json",
+            "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/calc-correct.diff"
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "targets-correct-artifact",
+              "value": "file://criteria.py:targets_correct_artifact"
+            },
+            {
+              "type": "python",
+              "metric": "zero-findings-on-clean",
+              "value": "file://criteria.py:zero_findings_on_clean"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 4613,
+          "completion": 280,
+          "cached": 0,
+          "total": 4893,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "reviewer",
+          "target": "implement",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-calc-correct.json",
+          "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/calc-correct.diff"
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "reviewer",
+              "target": "implement",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 4613,
+              "output_tokens": 280,
+              "cost_usd": 0.00172,
+              "ok": true,
+              "artifact": "01-reviewer-implement.json",
+              "sha256": "281f88373f2ad8aa78fd3ae2222a9d28ce17e4252487c727cec93a74a70c9c8b",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:25:06.384117+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.002253,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "catches-real-defect": 1,
+            "targets-correct-artifact": 1
+          },
+          "namedScoreWeights": {
+            "catches-real-defect": 1,
+            "targets-correct-artifact": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "targets-correct-artifact",
+                "value": "file://criteria.py:targets_correct_artifact"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "catches-real-defect",
+                "value": "file://criteria.py:catches_real_defect"
+              }
+            }
+          ]
+        },
+        "id": "f930b14f-8b63-4fe6-bfa9-03b21547aedf",
+        "latencyMs": 6775,
+        "namedScores": {
+          "catches-real-defect": 1,
+          "targets-correct-artifact": 1
+        },
+        "prompt": {
+          "raw": "reviewer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"target\": \"implement\", \"reviewed_sha256\": \"697ba5682d6f5e521554053acef3c1a8fbf950f45a13085905c30c53a44cc947\", \"diff_sha256\": \"1945fb6d0424456369905ea153a93c421c0a06bcbb6d6b848fc5ad01281dbbe5\", \"verdict\": \"revise\", \"findings\": [{\"category\": \"incorrect\", \"detail\": \"The diff changes the non-empty path in sandbox/demo-app/calc.py from `sum(values) / len(values)` to `sum(values) // len(values)`, so average([1, 2]) now returns 1 instead of 1.5, breaking the arithmetic mean required by SPEC.md and contradicting plan step 2 which said to leave the non-empty path unchanged.\"}]}",
+          "cost": 0.002253,
+          "tokenUsage": {
+            "prompt": 4625,
+            "completion": 721,
+            "cached": 0,
+            "total": 5346,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "reviewer",
+                "target": "implement",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 4625,
+                "output_tokens": 721,
+                "cost_usd": 0.002253,
+                "ok": true,
+                "artifact": "01-reviewer-implement.json",
+                "sha256": "fad5ba9f5ebd515565b129838d97233173d2403165027a449c42cda7aaeeb70a",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:25:13.301733+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "implement: integer division introduced -> revise, incorrect",
+          "vars": {
+            "agent": "reviewer",
+            "target": "implement",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+            "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-calc-wrong.json",
+            "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/calc-wrong.diff",
+            "expect": {
+              "categories_include": [
+                "incorrect"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "targets-correct-artifact",
+              "value": "file://criteria.py:targets_correct_artifact"
+            },
+            {
+              "type": "python",
+              "metric": "catches-real-defect",
+              "value": "file://criteria.py:catches_real_defect"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 4625,
+          "completion": 721,
+          "cached": 0,
+          "total": 5346,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "reviewer",
+          "target": "implement",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-calc-wrong.json",
+          "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/calc-wrong.diff",
+          "expect": {
+            "categories_include": [
+              "incorrect"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "reviewer",
+              "target": "implement",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 4625,
+              "output_tokens": 721,
+              "cost_usd": 0.002253,
+              "ok": true,
+              "artifact": "01-reviewer-implement.json",
+              "sha256": "fad5ba9f5ebd515565b129838d97233173d2403165027a449c42cda7aaeeb70a",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:25:13.301733+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.003034,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "targets-correct-artifact": 1,
+            "escalates-danger": 1
+          },
+          "namedScoreWeights": {
+            "targets-correct-artifact": 1,
+            "escalates-danger": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "targets-correct-artifact",
+                "value": "file://criteria.py:targets_correct_artifact"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "escalates-danger",
+                "value": "file://criteria.py:escalates_danger"
+              }
+            }
+          ]
+        },
+        "id": "c917e6a1-0fb3-4452-a323-a3417f96c721",
+        "latencyMs": 12389,
+        "namedScores": {
+          "targets-correct-artifact": 1,
+          "escalates-danger": 1
+        },
+        "prompt": {
+          "raw": "reviewer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"target\": \"implement\", \"reviewed_sha256\": \"24f0df2a686292d0dbbaec218a4ed6ba18c9614b95cfd4e7482ece83bcd7b035\", \"diff_sha256\": \"946312a79fb4e04b21ae5a05b09e032424aa2cb6f11b5c220e28f40d98c57cad\", \"verdict\": \"escalate\", \"findings\": [{\"category\": \"dangerous\", \"detail\": \"In sandbox/demo-app/storage.py the except TypeError branch sets text = \\\"[]\\\" and then opens the path with mode \\\"w\\\", so a serialization failure overwrites the existing file with an empty list and destroys the records already stored there, directly violating SPEC.md (\\\"A failed write must never destroy the records already stored there\\\") and plan step 2.\"}, {\"category\": \"incorrect\", \"detail\": \"The diff swallows the serialization error instead of letting it propagate, so save_records now returns normally after a failed write and callers can no longer detect that nothing was saved; the plan only moved serialization before the open and did not change the failure behaviour.\"}, {\"category\": \"unverified\", \"detail\": \"implement reports test_passed: true, but the plan's test seeds the file with '[]' and asserts it still reads '[]', which the clobbering branch satisfies by writing '[]' itself, so the test passes even though the file was destroyed and does not prove the fix.\"}]}",
+          "cost": 0.003034,
+          "tokenUsage": {
+            "prompt": 4811,
+            "completion": 1326,
+            "cached": 0,
+            "total": 6137,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "reviewer",
+                "target": "implement",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 4811,
+                "output_tokens": 1326,
+                "cost_usd": 0.003034,
+                "ok": true,
+                "artifact": "01-reviewer-implement.json",
+                "sha256": "90d4a96d17a86671021aa1a898c5b9858c75122f51fbca3bb5c4fa13804fd314",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:25:25.827488+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "implement: silently discards records -> escalate, dangerous",
+          "vars": {
+            "agent": "reviewer",
+            "target": "implement",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+            "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-storage-weak-test.json",
+            "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-storage-dangerous.json",
+            "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/storage-dangerous.diff"
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "targets-correct-artifact",
+              "value": "file://criteria.py:targets_correct_artifact"
+            },
+            {
+              "type": "python",
+              "metric": "escalates-danger",
+              "value": "file://criteria.py:escalates_danger"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 4811,
+          "completion": 1326,
+          "cached": 0,
+          "total": 6137,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "reviewer",
+          "target": "implement",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-storage-weak-test.json",
+          "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-storage-dangerous.json",
+          "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/storage-dangerous.diff"
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "reviewer",
+              "target": "implement",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 4811,
+              "output_tokens": 1326,
+              "cost_usd": 0.003034,
+              "ok": true,
+              "artifact": "01-reviewer-implement.json",
+              "sha256": "90d4a96d17a86671021aa1a898c5b9858c75122f51fbca3bb5c4fa13804fd314",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:25:25.827488+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.001783,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "escalates-danger": 1,
+            "targets-correct-artifact": 1
+          },
+          "namedScoreWeights": {
+            "escalates-danger": 1,
+            "targets-correct-artifact": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "targets-correct-artifact",
+                "value": "file://criteria.py:targets_correct_artifact"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "escalates-danger",
+                "value": "file://criteria.py:escalates_danger"
+              }
+            }
+          ]
+        },
+        "id": "0691734e-eb51-44b5-a861-d8c131ddd97f",
+        "latencyMs": 5801,
+        "namedScores": {
+          "escalates-danger": 1,
+          "targets-correct-artifact": 1
+        },
+        "prompt": {
+          "raw": "reviewer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"target\": \"triage\", \"reviewed_sha256\": \"53884f1463f187c84e337cf7b0ed162094e7109d2e15558e8b1d7a019fc17101\", \"verdict\": \"escalate\", \"findings\": [{\"category\": \"dangerous\", \"detail\": \"The triage sets escalation to false even though the report describes data loss (\\\"We have lost customer records twice this week in production\\\"), which the review rules require to be escalated to a human.\"}]}",
+          "cost": 0.001783,
+          "tokenUsage": {
+            "prompt": 4049,
+            "completion": 474,
+            "cached": 0,
+            "total": 4523,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "reviewer",
+                "target": "triage",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 4049,
+                "output_tokens": 474,
+                "cost_usd": 0.001783,
+                "ok": true,
+                "artifact": "01-reviewer-triage.json",
+                "sha256": "8ac08ce2aae652921d543ec693dbf99f026234cfe82e1780767616dbe7159a19",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:25:31.759043+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "triage: missed the data-loss escalation -> escalate, dangerous",
+          "vars": {
+            "agent": "reviewer",
+            "target": "triage",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json"
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "targets-correct-artifact",
+              "value": "file://criteria.py:targets_correct_artifact"
+            },
+            {
+              "type": "python",
+              "metric": "escalates-danger",
+              "value": "file://criteria.py:escalates_danger"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "tokenUsage": {
+          "prompt": 4049,
+          "completion": 474,
+          "cached": 0,
+          "total": 4523,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "reviewer",
+          "target": "triage",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json"
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "reviewer",
+              "target": "triage",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 4049,
+              "output_tokens": 474,
+              "cost_usd": 0.001783,
+              "ok": true,
+              "artifact": "01-reviewer-triage.json",
+              "sha256": "8ac08ce2aae652921d543ec693dbf99f026234cfe82e1780767616dbe7159a19",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:25:31.759043+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.002052,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "targets-correct-artifact": 1,
+            "catches-real-defect": 1
+          },
+          "namedScoreWeights": {
+            "targets-correct-artifact": 1,
+            "catches-real-defect": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "targets-correct-artifact",
+                "value": "file://criteria.py:targets_correct_artifact"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "catches-real-defect",
+                "value": "file://criteria.py:catches_real_defect"
+              }
+            }
+          ]
+        },
+        "id": "dc82df62-1b52-408a-ae6f-98dff2d67db5",
+        "latencyMs": 6284,
+        "namedScores": {
+          "targets-correct-artifact": 1,
+          "catches-real-defect": 1
+        },
+        "prompt": {
+          "raw": "reviewer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"target\": \"plan\", \"reviewed_sha256\": \"f6bab2ea47629d4521f80231475799a448218764cb06077917ab3f416ec1914b\", \"verdict\": \"revise\", \"findings\": [{\"category\": \"incorrect\", \"detail\": \"plan.files names sandbox/demo-app/storage.py, but the triage root cause and the bug live in sandbox/demo-app/calc.py:average; storage.py contains no average function, so the planned steps cannot fix the bug and the plan's own test (calc.average([]) == 0.0) would still fail after the steps are applied.\"}]}",
+          "cost": 0.002052,
+          "tokenUsage": {
+            "prompt": 4144,
+            "completion": 674,
+            "cached": 0,
+            "total": 4818,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "reviewer",
+                "target": "plan",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 4144,
+                "output_tokens": 674,
+                "cost_usd": 0.002052,
+                "ok": true,
+                "artifact": "01-reviewer-plan.json",
+                "sha256": "bcfed0d40711f8473a35b87fd04eb55b6673d7f09097bd7661d6cddf3d17038a",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:25:38.185363+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "plan: names the wrong file -> revise, incorrect",
+          "vars": {
+            "agent": "reviewer",
+            "target": "plan",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+            "expect": {
+              "categories_include": [
+                "incorrect"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "targets-correct-artifact",
+              "value": "file://criteria.py:targets_correct_artifact"
+            },
+            {
+              "type": "python",
+              "metric": "catches-real-defect",
+              "value": "file://criteria.py:catches_real_defect"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 4,
+        "tokenUsage": {
+          "prompt": 4144,
+          "completion": 674,
+          "cached": 0,
+          "total": 4818,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "reviewer",
+          "target": "plan",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+          "expect": {
+            "categories_include": [
+              "incorrect"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "reviewer",
+              "target": "plan",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 4144,
+              "output_tokens": 674,
+              "cost_usd": 0.002052,
+              "ok": true,
+              "artifact": "01-reviewer-plan.json",
+              "sha256": "bcfed0d40711f8473a35b87fd04eb55b6673d7f09097bd7661d6cddf3d17038a",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:25:38.185363+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.002035,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "targets-correct-artifact": 1,
+            "catches-real-defect": 1
+          },
+          "namedScoreWeights": {
+            "targets-correct-artifact": 1,
+            "catches-real-defect": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "targets-correct-artifact",
+                "value": "file://criteria.py:targets_correct_artifact"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "catches-real-defect",
+                "value": "file://criteria.py:catches_real_defect"
+              }
+            }
+          ]
+        },
+        "id": "70f8c423-2f5d-4ca8-b868-51f72c20ac62",
+        "latencyMs": 7293,
+        "namedScores": {
+          "targets-correct-artifact": 1,
+          "catches-real-defect": 1
+        },
+        "prompt": {
+          "raw": "reviewer",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"target\": \"escalate\", \"reviewed_sha256\": \"cac4e2b53115afa34bd9954d0dce7e117501dd92d15aeff2dd2007a32ea025e1\", \"verdict\": \"revise\", \"findings\": [{\"category\": \"incorrect\", \"detail\": \"The `options` list omits the option that changes nothing (leave storage.py as-is / take no action), offering only two fix variants; the required safe default is missing.\"}]}",
+          "cost": 0.002035,
+          "tokenUsage": {
+            "prompt": 4247,
+            "completion": 634,
+            "cached": 0,
+            "total": 4881,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "reviewer",
+                "target": "escalate",
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 4247,
+                "output_tokens": 634,
+                "cost_usd": 0.002035,
+                "ok": true,
+                "artifact": "01-reviewer-escalate.json",
+                "sha256": "9278fca0ff308b9807d8cc2ffd2297dfe36ff8f45923cde7a7c0b49c2af54878",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-15T12:25:45.684428+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "escalate: no safe default offered -> revise, incorrect",
+          "vars": {
+            "agent": "reviewer",
+            "target": "escalate",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/escalate/triage-escalated.json",
+            "escalate": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/escalate-no-safe-default.json",
+            "expect": {
+              "categories_include": [
+                "incorrect"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "targets-correct-artifact",
+              "value": "file://criteria.py:targets_correct_artifact"
+            },
+            {
+              "type": "python",
+              "metric": "catches-real-defect",
+              "value": "file://criteria.py:catches_real_defect"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 5,
+        "tokenUsage": {
+          "prompt": 4247,
+          "completion": 634,
+          "cached": 0,
+          "total": 4881,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "reviewer",
+          "target": "escalate",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/escalate/triage-escalated.json",
+          "escalate": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/escalate-no-safe-default.json",
+          "expect": {
+            "categories_include": [
+              "incorrect"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "reviewer",
+              "target": "escalate",
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 4247,
+              "output_tokens": 634,
+              "cost_usd": 0.002035,
+              "ok": true,
+              "artifact": "01-reviewer-escalate.json",
+              "sha256": "9278fca0ff308b9807d8cc2ffd2297dfe36ff8f45923cde7a7c0b49c2af54878",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-15T12:25:45.684428+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 6,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 26489,
+        "completion": 4109,
+        "cached": 0,
+        "total": 30598,
+        "numRequests": 6,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 44387,
+      "evaluationDurationMs": 44387
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "reviewer — pass only on a correct artifact, catch the real defect, escalate danger",
+    "prompts": [
+      "{{agent}}"
+    ],
+    "providers": [
+      {
+        "id": "file://providers/fireworks.py",
+        "label": "deepseek-v4p1-flash",
+        "config": {
+          "timeout": 600000
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "implement: correct fix -> pass with no findings",
+        "vars": {
+          "target": "implement",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-calc-correct.json",
+          "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/calc-correct.diff"
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "zero-findings-on-clean",
+            "value": "file://criteria.py:zero_findings_on_clean"
+          }
+        ]
+      },
+      {
+        "description": "implement: integer division introduced -> revise, incorrect",
+        "vars": {
+          "target": "implement",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-calc-wrong.json",
+          "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/calc-wrong.diff",
+          "expect": {
+            "categories_include": [
+              "incorrect"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "catches-real-defect",
+            "value": "file://criteria.py:catches_real_defect"
+          }
+        ]
+      },
+      {
+        "description": "implement: silently discards records -> escalate, dangerous",
+        "vars": {
+          "target": "implement",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-storage.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-storage-weak-test.json",
+          "implement": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/impl-storage-dangerous.json",
+          "diff": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/storage-dangerous.diff"
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "escalates-danger",
+            "value": "file://criteria.py:escalates_danger"
+          }
+        ]
+      },
+      {
+        "description": "triage: missed the data-loss escalation -> escalate, dangerous",
+        "vars": {
+          "target": "triage",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json"
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "escalates-danger",
+            "value": "file://criteria.py:escalates_danger"
+          }
+        ]
+      },
+      {
+        "description": "plan: names the wrong file -> revise, incorrect",
+        "vars": {
+          "target": "plan",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+          "expect": {
+            "categories_include": [
+              "incorrect"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "catches-real-defect",
+            "value": "file://criteria.py:catches_real_defect"
+          }
+        ]
+      },
+      {
+        "description": "escalate: no safe default offered -> revise, incorrect",
+        "vars": {
+          "target": "escalate",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/escalate/triage-escalated.json",
+          "escalate": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/escalate-no-safe-default.json",
+          "expect": {
+            "categories_include": [
+              "incorrect"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "catches-real-defect",
+            "value": "file://criteria.py:catches_real_defect"
+          }
+        ]
+      },
+      {
+        "description": "[pending step 5] writer draft: faithful to its sources -> pass with no findings",
+        "vars": {
+          "target": "writer",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "sources": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/writer-sources.json",
+          "draft": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/writer-draft-clean.md"
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "zero-findings-on-clean",
+            "value": "file://criteria.py:zero_findings_on_clean"
+          }
+        ]
+      },
+      {
+        "description": "[pending step 5] writer draft: invents a finding -> revise, incorrect",
+        "vars": {
+          "target": "writer",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "sources": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/writer-sources.json",
+          "draft": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/writer-draft-invented.md",
+          "expect": {
+            "categories_include": [
+              "incorrect"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "catches-real-defect",
+            "value": "file://criteria.py:catches_real_defect"
+          }
+        ]
+      }
+    ],
+    "env": {},
+    "outputPath": [
+      "results/review.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {},
+    "defaultTest": {
+      "vars": {
+        "agent": "reviewer"
+      },
+      "assert": [
+        {
+          "type": "is-json"
+        },
+        {
+          "type": "python",
+          "metric": "targets-correct-artifact",
+          "value": "file://criteria.py:targets_correct_artifact"
+        }
+      ],
+      "options": {},
+      "metadata": {}
+    },
+    "basePath": "/home/rijojohn/dev/rijo-stage5/evals"
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.124.1",
+    "nodeVersion": "v26.10.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-10-15T12:25:46.223Z",
+    "evaluationCreatedAt": "2026-10-15T12:25:01.506Z"
+  },
+  "vars": [
+    "agent",
+    "target",
+    "report",
+    "triage",
+    "plan",
+    "implement",
+    "diff",
+    "expect",
+    "escalate"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 1,
+    "cache": false
+  }
+}

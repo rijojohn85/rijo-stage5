@@ -276,3 +276,43 @@ def test_audit_lines_for_rejected_dispatches_and_step_numbers_increment(env):
 def test_review_artifact_is_named_after_its_target(env):
     env.reviewed("triage", TRIAGE)
     assert (env.run_dir / "02-reviewer-triage.json").exists()
+
+
+# --- previous_artifact: the producer sees the artifact it is revising ---------------------
+
+def last_body(env):
+    return json.loads(env.llm.calls[-1]["messages"][1]["content"])
+
+
+def test_previous_artifact_is_null_on_a_first_pass(env):
+    env.run("triage", json_reply(TRIAGE))
+    assert last_body(env)["previous_artifact"] is None
+
+
+def test_previous_artifact_is_null_when_feedback_has_nothing_to_revise(env):
+    env.run("escalate", json_reply(ESCALATION), feedback="data loss reported")
+    assert last_body(env)["previous_artifact"] is None
+
+
+def test_previous_artifact_is_the_producers_own_latest_on_a_revision(env):
+    env.run("triage", json_reply(TRIAGE))
+    env.run("triage", json_reply(TRIAGE), feedback="missed data loss")
+    assert last_body(env)["previous_artifact"] == TRIAGE
+
+
+def test_previous_artifact_is_not_that_of_another_agent(env):
+    env.reviewed("triage", TRIAGE)
+    env.run("plan", text_reply("not json"), feedback="wrong file")
+    assert last_body(env)["previous_artifact"] is None  # no plan yet; the triage is upstream data only
+
+
+def test_reviewer_does_not_get_previous_artifact(env):
+    env.run("triage", json_reply(TRIAGE))
+    env.run("reviewer", review_reply(), target="triage", feedback="ignored")
+    assert "previous_artifact" not in last_body(env)
+
+
+def test_previous_artifact_does_not_extend_the_revision_allowance(env):
+    env.run("triage", json_reply(TRIAGE))
+    env.run("triage", json_reply(TRIAGE), feedback="again")
+    assert error_code(env.run("triage", feedback="a third time")) == ErrorCode.REVISION_CAP_REACHED
