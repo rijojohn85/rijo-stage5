@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Stage 5 certification build: a dispatch-only LLM coordinator that launches scoped sub-agents (triage, plan, implement, reviewer, escalate, writer) over the Stage 4 bug-fix workflow. It is a learning and certification project, not production software.
 
 - **Authoritative plan:** `~/claude-plans/stage5-coordinator.md`. Build proceeds one numbered step at a time (Section 9), with a human review between steps. Do not start the next step until the user says so.
-- **Build status:** steps 0 and 1 done (setup, `harness/tools.py`, `manifest.yaml`). `harness/` has only `tools.py` so far. The dispatcher, coordinator, writer and decisions gate are planned and not built yet.
+- **Build status:** steps 0 to 2 done (setup, `harness/tools.py`, `manifest.yaml`, LLM client and dispatcher: `harness/llm.py`, `harness/dispatcher.py` plus small single-purpose modules). Not built yet: coordinator, `run_state` and `human_required`, writer/report, decisions gate. `schemas/review.json` has optional binding echo fields (step 3 finishes the `target` change in `review.md`).
 - **Stage 4 base** lives at `~/dev/rijo-stage4-2`. It is read-only reference. Copy from it, never edit it.
 
 ## Commands
