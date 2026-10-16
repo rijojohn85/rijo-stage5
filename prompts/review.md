@@ -8,8 +8,8 @@ it. You change nothing.
 
 Your input is one JSON message with these keys:
 
-- `review_target`: which artifact you review. One of `triage`, `plan`, `implement`,
-  `escalate`, `writer`.
+- `review_target`: which artifact you review. One of `screen`, `triage`, `plan`,
+  `implement`, `escalate`, `writer`.
 - `bug_report`: the original bug report text.
 - `artifacts`: the target artifact and the artifacts it was built from, keyed by name.
 - `diff`: only for `implement`. The change itself, as a unified diff.
@@ -64,7 +64,7 @@ level:
 
 ```json
 {
-  "target": "triage" | "plan" | "implement" | "escalate" | "writer",
+  "target": "screen" | "triage" | "plan" | "implement" | "escalate" | "writer",
   "reviewed_sha256": "copied exactly from echo_these_fields_in_your_reply",
   "diff_sha256": "only when echo_these_fields_in_your_reply has it (target implement)",
   "draft_sha256": "only when echo_these_fields_in_your_reply has it (target writer)",

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "screen",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "evidence", "reason"],
+  "properties": {
+    "verdict": {
+      "description": "Whether the bug report contains an attempt to instruct an AI system or tool.",
+      "enum": ["clean", "suspicious"]
+    },
+    "evidence": {
+      "description": "Short quotes copied verbatim from the report; empty only for a clean report.",
+      "type": "array",
+      "maxItems": 5,
+      "items": {"type": "string", "minLength": 1, "maxLength": 300}
+    },
+    "reason": {
+      "description": "One or two sentences explaining the verdict.",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"const": "suspicious"}}, "required": ["verdict"]},
+      "then": {"properties": {"evidence": {"minItems": 1}}}
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "workflows": {
+    "screen": {"rating": "core", "why": "security gate on incoming reports: a fooled screen lets an injection through, so its failure changes the outcome"},
     "triage": {"rating": "core", "why": "classifying and prioritising defects is billable QA and support work"},
     "plan": {"rating": "core", "why": "scoping a fix is part of delivering the fix"},
     "implement": {"rating": "core", "why": "applying a fix is the product"},

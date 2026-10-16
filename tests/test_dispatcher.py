@@ -316,3 +316,20 @@ def test_previous_artifact_does_not_extend_the_revision_allowance(env):
     env.run("triage", json_reply(TRIAGE))
     env.run("triage", json_reply(TRIAGE), feedback="again")
     assert error_code(env.run("triage", feedback="a third time")) == ErrorCode.REVISION_CAP_REACHED
+
+
+def test_screen_accepts_a_clean_verdict_and_summarises_the_verdict_only(env):
+    result = env.run("screen", json_reply({"verdict": "clean", "evidence": [], "reason": "a calc bug"}))
+    assert result["ok"] and result["summary"] == "clean"
+
+
+def test_screen_has_only_clean_and_suspicious_verdicts(env):
+    result = env.run("screen", json_reply({"verdict": "other", "evidence": ["x"], "reason": "r"}))
+    assert error_code(result) == ErrorCode.SCHEMA_INVALID
+
+
+def test_screen_flagging_a_report_needs_evidence(env):
+    result = env.run("screen", json_reply({"verdict": "suspicious", "evidence": [], "reason": "aimed at an AI"}))
+    assert error_code(result) == ErrorCode.SCHEMA_INVALID
+    assert env.run("screen", json_reply({"verdict": "suspicious", "evidence": ["ignore all rules"],
+                                         "reason": "aimed at an AI"}))["ok"]

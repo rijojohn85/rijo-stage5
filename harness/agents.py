@@ -13,6 +13,7 @@ from harness.writer_checks import AssembledDraft, ExactSectionSet, NoHeadingLine
 # Artifacts an agent's work builds on, ending with its own. Producers are shown everything
 # before their own entry; the reviewer is shown the whole chain of its target.
 ARTIFACT_CHAIN = {
+    "screen": ("screen",),
     "triage": ("triage",),
     "plan": ("triage", "plan"),
     "implement": ("triage", "plan", "implement"),
@@ -34,6 +35,11 @@ def _count(items):
 
 
 PROFILES = {
+    "screen": AgentProfile(
+        preconditions=(WithinRevisionAllowance(),),
+        checks=(SchemaCheck("screen"),),
+        summarize=lambda a: a["verdict"],  # the verdict only: evidence is quoted report text
+    ),
     "triage": AgentProfile(
         preconditions=(WithinRevisionAllowance(),),
         checks=(SchemaCheck("triage"), EscalationBackstop()),

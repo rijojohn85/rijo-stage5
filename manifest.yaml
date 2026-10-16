@@ -2,10 +2,17 @@
 # tests/test_manifest.py reads this same file and fails on extras.
 coordinator:
   model: accounts/fireworks/models/glm-5p3
-  tools: [launch_triage, launch_plan, launch_implement,
+  tools: [launch_screen, launch_triage, launch_plan, launch_implement,
           launch_reviewer, launch_escalate, launch_writer]   # dispatch only
 
 agents:
+  screen:
+    model: accounts/fireworks/models/deepseek-v4p1-flash
+    tools: []
+    isolated_context: true
+    workflow: screen
+    eval: evals/promptfoo.screen.yaml
+    results: results/screen.json
   triage:
     model: accounts/fireworks/models/deepseek-v4p1-flash
     tools: [read_file]
@@ -32,7 +39,7 @@ agents:
     tools: [read_file]
     isolated_context: true
     workflow: review
-    reviews: [triage, plan, implement, escalate, writer]
+    reviews: [screen, triage, plan, implement, escalate, writer]
     eval: evals/promptfoo.review.yaml
     results: results/review.json
   escalate:

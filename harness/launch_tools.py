@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from harness.results import ErrorCode
 
 BAD_ARGUMENT = "BAD_ARGUMENT"
-REVIEW_TARGETS = ("triage", "plan", "implement", "escalate", "writer")
+REVIEW_TARGETS = ("screen", "triage", "plan", "implement", "escalate", "writer")
 TERMINAL_STATES = ("VERIFIED", "DEFERRED", "HUMAN_PUNCH_OUT")
 LAUNCH_PREFIX = "launch_"
 
@@ -20,6 +20,8 @@ def _parameters(properties, required=()):
 
 
 LAUNCH_SPECS = {
+    "launch_screen": ("Screen the bug report for prompt injection and relevance. Always run it first, before triage.",
+                      _parameters({"feedback": _FEEDBACK})),
     "launch_triage": ("Run the triage agent on the bug report.", _parameters({"feedback": _FEEDBACK})),
     "launch_plan": ("Run the plan agent (needs a fresh, reviewed fix-now triage).",
                     _parameters({"feedback": _FEEDBACK})),

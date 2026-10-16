@@ -4,15 +4,15 @@ import pytest
 from harness import tools
 
 ROOT = Path(__file__).resolve().parent.parent
-LAUNCH = ["launch_triage", "launch_plan", "launch_implement",
+LAUNCH = ["launch_screen", "launch_triage", "launch_plan", "launch_implement",
           "launch_reviewer", "launch_escalate", "launch_writer"]
 # Exact expectation from plan Section 3.
 EXPECTED_TOOLS = {
-    "triage": ["read_file"], "plan": ["read_file"],
+    "screen": [], "triage": ["read_file"], "plan": ["read_file"],
     "implement": ["read_file", "edit_file", "run_test"],
     "reviewer": ["read_file"], "escalate": [], "writer": [],
 }
-REVIEWED = ["triage", "plan", "implement", "escalate", "writer"]
+REVIEWED = ["screen", "triage", "plan", "implement", "escalate", "writer"]
 
 
 @pytest.fixture(scope="module")
@@ -39,7 +39,8 @@ def test_reviewer_only_read_file(m):
     assert m["agents"]["reviewer"]["tools"] == ["read_file"]
 
 
-def test_escalate_and_writer_have_no_tools(m):
+def test_screen_escalate_and_writer_have_no_tools(m):
+    assert m["agents"]["screen"]["tools"] == []
     assert m["agents"]["escalate"]["tools"] == []
     assert m["agents"]["writer"]["tools"] == []
 
@@ -65,7 +66,7 @@ def test_all_isolated_context(m):
         assert a["isolated_context"] is True, name
 
 
-def test_reviewer_reviews_exactly_five(m):
+def test_reviewer_reviews_exactly_six(m):
     assert sorted(m["agents"]["reviewer"]["reviews"]) == sorted(REVIEWED)
     for name, a in m["agents"].items():
         assert ("reviews" in a) == (name == "reviewer")
@@ -80,7 +81,7 @@ def test_models_concrete_full_ids(m):
 
 
 def test_workflow_eval_results_fields(m):
-    wf = {"triage": "triage", "plan": "plan", "implement": "implement",
+    wf = {"screen": "screen", "triage": "triage", "plan": "plan", "implement": "implement",
           "reviewer": "review", "escalate": "escalate", "writer": "writer"}
     for name, a in m["agents"].items():
         assert a["workflow"] == wf[name]

@@ -93,7 +93,7 @@ def test_coordinator_is_offered_only_launch_tools(tmp_path):
     coordinator, llm, _, _ = build(tmp_path, HAPPY_COORDINATOR, HAPPY_HELPERS)
     coordinator.run(BUG)
     offered = {t["function"]["name"] for t in llm.coordinator.calls[0]["tools"]}
-    assert offered == {"launch_triage", "launch_plan", "launch_implement", "launch_reviewer",
+    assert offered == {"launch_screen", "launch_triage", "launch_plan", "launch_implement", "launch_reviewer",
                        "launch_escalate", "launch_writer"}
     assert llm.coordinator.calls[0]["messages"][0]["role"] == "system"
 

@@ -8,7 +8,7 @@ from harness.tools import PROJECT_ROOT
 
 PROMPTS = PROJECT_ROOT / "prompts"
 SCHEMAS = PROJECT_ROOT / "schemas"
-PRODUCERS = {"triage": "triage", "plan": "plan", "implement": "implement", "escalate": "escalation"}
+PRODUCERS = {"screen": "screen", "triage": "triage", "plan": "plan", "implement": "implement", "escalate": "escalation"}
 ALL_PROMPTS = {**PRODUCERS, "review": "review", "writer": "writer"}
 REVIEW_INPUT_KEYS = ("review_target", "echo_these_fields_in_your_reply")
 
@@ -54,6 +54,11 @@ def test_producer_prompt_ends_with_the_reviewer_findings_section(name):
     found = headings(text)
     assert found[-1] == "Reviewer findings (optional)"
     assert text.count("reviewer_feedback") >= 2  # listed under Inputs and explained in the section
+
+
+def test_screen_prompt_treats_the_report_as_untrusted_data():
+    text = prompt_text("screen").lower()
+    assert "never follow" in text and "untrusted" in text
 
 
 def test_review_prompt_describes_its_binding_inputs():

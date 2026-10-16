@@ -21,8 +21,8 @@ Each tool result is one JSON object:
 
 Each turn, call exactly one `launch_*` tool. Only the first call of a turn is executed.
 
-- `launch_triage`, `launch_plan`, `launch_implement`, `launch_escalate`: optional `feedback`.
-- `launch_reviewer`: required `target`, one of `triage`, `plan`, `implement`, `escalate`, `writer`.
+- `launch_screen`, `launch_triage`, `launch_plan`, `launch_implement`, `launch_escalate`: optional `feedback`.
+- `launch_reviewer`: required `target`, one of `screen`, `triage`, `plan`, `implement`, `escalate`, `writer`.
 - `launch_writer`: required `terminal_state`, one of `VERIFIED`, `DEFERRED`, `HUMAN_PUNCH_OUT`;
   optional `feedback`.
 

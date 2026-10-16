@@ -17,7 +17,7 @@
   "properties": {
     "target": {
       "description": "Echo of the requested review target; the dispatcher enforces it (REVIEW_BINDING_MISMATCH).",
-      "enum": ["triage", "plan", "implement", "escalate", "writer"]
+      "enum": ["screen", "triage", "plan", "implement", "escalate", "writer"]
     },
     "reviewed_sha256": {
       "description": "Echo of the hash of the artifact under review; the dispatcher requires it (missing is REVIEW_BINDING_MISMATCH).",

@@ -67,7 +67,7 @@ def log_lines(paths):
 def test_shipped_substance_matches_the_manifest_and_elevates():
     assessment = load_assessment()
     assert set(assessment.workflows) == {a.workflow for a in load_agent_specs().values()}
-    assert {w for w, e in assessment.workflows.items() if e["rating"] == "core"} == {"triage", "plan", "implement", "review"}
+    assert {w for w, e in assessment.workflows.items() if e["rating"] == "core"} == {"screen", "triage", "plan", "implement", "review"}
     assert assessment.elevated is True
 
 
