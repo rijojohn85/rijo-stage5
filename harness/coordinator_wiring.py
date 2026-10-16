@@ -3,7 +3,10 @@
 Everything that varies (LLM client, directories, sandbox, clock, log) is a parameter, so tests
 inject a fake LLM and temp directories and exercise the real parts.
 """
+from pathlib import Path
+
 from harness.coordinator import MAX_TURNS, Coordinator
+from harness.coordinator_view import CoordinatorView
 from harness.launch_router import LaunchRouter
 from harness.manifest import load_coordinator_spec
 from harness.pricing import PriceTable
@@ -19,9 +22,10 @@ def build_coordinator(*, llm, run_dir, tool_root, sandbox, bug_report_path, corr
     dispatcher = build_dispatcher(llm=llm, run_dir=run_dir, tool_root=tool_root, sandbox=sandbox,
                                   bug_report_path=bug_report_path, correlation_id=correlation_id, clock=clock,
                                   views=views)
+    view = CoordinatorView(Path(bug_report_path).read_text(encoding="utf-8"), views.store)
     return Coordinator(
         llm=llm, spec=load_coordinator_spec(), system_prompt=PromptLibrary().system_prompt("coordinator"),
-        router=LaunchRouter(dispatcher), run_state=views.state, publisher=ReportPublisher(run_dir, views),
+        router=LaunchRouter(dispatcher, view), run_state=views.state, publisher=ReportPublisher(run_dir, views),
         terminal_check=views.terminal_check, audit=views.audit, prices=PriceTable.from_file(),
         correlation_id=correlation_id, clock=clock, log=log, max_turns=max_turns,
     )

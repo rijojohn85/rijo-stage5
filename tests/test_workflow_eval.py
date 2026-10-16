@@ -9,7 +9,7 @@ import yaml
 
 from conftest import IMPLEMENT, PLAN_FILE, json_reply, tool_reply
 from harness.tools import PROJECT_ROOT
-from test_coordinator import BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, SCREEN_COORDINATOR, SCREEN_HELPERS, SplitLlm
+from test_coordinator import BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, SplitLlm
 
 EVALS = PROJECT_ROOT / "evals"
 sys.path[:0] = [str(EVALS), str(EVALS / "providers")]
@@ -21,7 +21,7 @@ import workflow  # noqa: E402
 CONFIG = yaml.safe_load((EVALS / "promptfoo.workflow.yaml").read_text(encoding="utf-8"))
 EDIT = tool_reply("edit_file", {"path": PLAN_FILE, "old_text": "    return sum(values) / len(values)",
                                 "new_text": "    if not values:\n        return 0.0\n    return sum(values) / len(values)"})
-HELPERS_WITH_EDIT = SCREEN_HELPERS + HAPPY_HELPERS[:4] + [EDIT, json_reply(IMPLEMENT)] + HAPPY_HELPERS[5:]
+HELPERS_WITH_EDIT = HAPPY_HELPERS[:6] + [EDIT, json_reply(IMPLEMENT)] + HAPPY_HELPERS[7:]
 
 
 def porcelain(root):
@@ -36,7 +36,7 @@ def workspace():
 
 
 def test_a_live_style_run_ends_verified_with_a_complete_audit_and_leaves_the_sandbox_clean(workspace, tmp_path):
-    llm = SplitLlm(SCREEN_COORDINATOR + HAPPY_COORDINATOR, HELPERS_WITH_EDIT)
+    llm = SplitLlm(HAPPY_COORDINATOR, HELPERS_WITH_EDIT)
     response = workflow.call_api("x", {}, {"vars": {"report": BUG}}, llm=llm, root=workspace, runs_dir=tmp_path / "runs")
     summary = json.loads(response["output"])
     assert summary["result"] == "VERIFIED" and summary["dispatches"] == 10 and summary["reviews"] == 5

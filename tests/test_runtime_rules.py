@@ -9,7 +9,7 @@ import pytest
 from conftest import FIXED_TIME
 from harness import report
 from harness.tools import PROJECT_ROOT
-from test_coordinator import BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, build, launch, reviewing
+from test_coordinator import HANDLE, HAPPY_COORDINATOR, HAPPY_HELPERS, build, launch, reviewing
 
 EVALS = PROJECT_ROOT / "evals"
 sys.path.insert(0, str(EVALS))
@@ -65,7 +65,7 @@ def test_harness_does_not_import_a_cli_wrapper_or_agent_sdk():
 
 def finished_run(tmp_path):
     coordinator, _, audit, run_dir = build(tmp_path, HAPPY_COORDINATOR, HAPPY_HELPERS)
-    outcome = coordinator.run(BUG)
+    outcome = coordinator.run(HANDLE)
     assert outcome.result == "VERIFIED"
     return run_dir, outcome.turns
 
@@ -87,21 +87,21 @@ def test_a_finished_run_has_one_correlation_id_complete_lines_and_the_file_on_di
     run_dir, turns = finished_run(tmp_path)
     assert (run_dir / "audit.jsonl").is_file() and run_trace.audit_problems(run_dir, turns) == []
     lines = [json.loads(line) for line in (run_dir / "audit.jsonl").read_text().splitlines()]
-    assert len(lines) == 16 and {line["correlation_id"] for line in lines} == {run_dir.name}
+    assert len(lines) == 20 and {line["correlation_id"] for line in lines} == {run_dir.name}
     assert all(key in line for line in lines for key in run_trace.REQUIRED_AUDIT_KEYS)
     assert all(line["ts"].startswith(FIXED_TIME.isoformat()[:16]) for line in lines)
 
 
 def test_audit_check_reports_a_missing_artifact_a_second_correlation_id_and_an_incomplete_line(tmp_path):
     run_dir, turns = finished_run(tmp_path)
-    (run_dir / "03-plan.json").unlink()
+    (run_dir / "05-plan.json").unlink()
     path = run_dir / "audit.jsonl"
     lines = [json.loads(line) for line in path.read_text().splitlines()]
     lines[0]["correlation_id"] = "other"
     del lines[1]["cost_usd"]
     path.write_text("".join(json.dumps(line) + "\n" for line in lines))
     problems = " | ".join(run_trace.audit_problems(run_dir, turns))
-    assert "03-plan.json is not on disk" in problems and "'other'" in problems and "lacks ['cost_usd']" in problems
+    assert "05-plan.json is not on disk" in problems and "'other'" in problems and "lacks ['cost_usd']" in problems
 
 
 def test_audit_check_fails_when_there_is_no_audit_file(tmp_path):

@@ -10,7 +10,7 @@ from conftest import ESCALATION, IMPLEMENT, TRIAGE, json_reply, review_reply, te
 from harness.coordinator import FAILED_COORDINATION, FAILED_TURN_BUDGET, MAX_REFUSED_CLAIMS
 from harness.freshness import Freshness
 from harness.run_state import RunState
-from test_coordinator import BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, REVISE, build, launch, reviewing
+from test_coordinator import HANDLE, HAPPY_COORDINATOR, HAPPY_HELPERS, REVISE, build, launch, reviewing
 
 DANGEROUS = [{"category": "dangerous", "detail": "the fix deletes customer records"}]
 DEFER = {**TRIAGE, "decision": "defer"}
@@ -27,7 +27,7 @@ def claims(*states):
 
 def run_to_failure(tmp_path, coordinator_script, helpers, *, max_turns=12):
     coordinator, llm, audit, run_dir = build(tmp_path, coordinator_script, helpers, max_turns=max_turns)
-    outcome = coordinator.run(BUG)
+    outcome = coordinator.run(HANDLE)
     return outcome, audit, run_dir, llm
 
 
@@ -57,8 +57,8 @@ def test_verified_after_a_data_loss_report_without_escalating(tmp_path):
 
 def test_verified_on_a_review_that_predates_a_rerun_implement(tmp_path):
     rerun = [launch("launch_implement", feedback="once more"), *claims("VERIFIED", "VERIFIED", "VERIFIED")]
-    script = HAPPY_COORDINATOR[:6] + rerun
-    helpers = HAPPY_HELPERS[:6] + [json_reply({**IMPLEMENT, "summary": "fixed add, differently"})]
+    script = HAPPY_COORDINATOR[:8] + rerun
+    helpers = HAPPY_HELPERS[:8] + [json_reply({**IMPLEMENT, "summary": "fixed add, differently"})]
     outcome, audit, run_dir, _ = run_to_failure(tmp_path, script, helpers)
     assert_failed_coordination(outcome, run_dir)
     refused = [e for e in audit.dispatches() if e["agent"] == "writer"]
@@ -108,24 +108,24 @@ def test_human_punch_out_with_no_passing_brief_review(tmp_path, brief_review):
 
 @pytest.mark.parametrize("draft_review", [None, "revise"])
 def test_finalizing_a_normal_report_without_a_passing_review_of_the_exact_draft(tmp_path, draft_review):
-    script = HAPPY_COORDINATOR[:7]
-    helpers = HAPPY_HELPERS[:7]
+    script = HAPPY_COORDINATOR[:9]
+    helpers = HAPPY_HELPERS[:9]
     if draft_review:
         script.append(reviewing("writer"))
         helpers.append(review_reply(draft_review, REVISE))
     script += [text_reply("The report is complete, VERIFIED.")] * 3
-    outcome, audit, run_dir, llm = run_to_failure(tmp_path, script, helpers)
+    outcome, audit, run_dir, llm = run_to_failure(tmp_path, script, helpers, max_turns=14)
     report = assert_failed_coordination(outcome, run_dir)
-    assert "07-writer-draft.md" in report                       # the unreviewed draft is listed, never published
-    assert report != (run_dir / "07-writer-draft.md").read_text()
+    assert "09-writer-draft.md" in report                       # the unreviewed draft is listed, never published
+    assert report != (run_dir / "09-writer-draft.md").read_text()
     not_finished = [m for m in llm.coordinator.calls[-1]["messages"] if m["role"] == "user" and "Not finished" in m["content"]]
     assert len(not_finished) == 2                                # the third refusal ends the run instead of another nudge
 
 
 def test_a_writer_draft_for_a_state_the_evidence_no_longer_supports_ends_in_failed_coordination(tmp_path):
-    script = HAPPY_COORDINATOR[:7] + [launch("launch_implement", feedback="again")] + [text_reply("done")] * 3
-    helpers = HAPPY_HELPERS[:7] + [json_reply({**IMPLEMENT, "summary": "changed after the draft"})]
-    outcome, _, run_dir, _ = run_to_failure(tmp_path, script, helpers)
+    script = HAPPY_COORDINATOR[:9] + [launch("launch_implement", feedback="again")] + [text_reply("done")] * 3
+    helpers = HAPPY_HELPERS[:9] + [json_reply({**IMPLEMENT, "summary": "changed after the draft"})]
+    outcome, _, run_dir, _ = run_to_failure(tmp_path, script, helpers, max_turns=14)
     assert_failed_coordination(outcome, run_dir)
 
 

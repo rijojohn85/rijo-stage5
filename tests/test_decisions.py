@@ -356,14 +356,13 @@ def test_only_the_cli_and_run_entry_point_use_the_decision_desk():
 # --- run.py writes the initial disposition ---------------------------------------------------
 
 def run_clean(tmp_path, paths):
-    from test_coordinator import (BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, SCREEN_COORDINATOR, SCREEN_HELPERS,
-                                  SplitLlm)
+    from test_coordinator import BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, SplitLlm
     from conftest import PLAN_FILE
     from harness.run import run_bug
     bug = tmp_path / "bug.md"
     bug.write_text(BUG, encoding="utf-8")
     (tmp_path / "project" / "sandbox").mkdir(parents=True)
-    return run_bug(bug, llm=SplitLlm(SCREEN_COORDINATOR + HAPPY_COORDINATOR, SCREEN_HELPERS + HAPPY_HELPERS), runs_dir=paths.runs_dir,
+    return run_bug(bug, llm=SplitLlm(HAPPY_COORDINATOR, HAPPY_HELPERS), runs_dir=paths.runs_dir,
                    tool_root=tmp_path / "project", sandbox=FakeSandbox(changed=[PLAN_FILE]),
                    clock=lambda: FIXED_TIME, stderr=io.StringIO(), paths=paths)
 

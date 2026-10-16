@@ -47,9 +47,10 @@ class Coordinator:
         self._attempts, self._seen = {}, {"human_required": False, "stale": ()}
         self._refused_claims = 0
 
-    def run(self, bug_report_text):
+    def run(self, report_handle):
+        """`report_handle` is facts about the bug report (harness/report_handle.py), never its text."""
         messages = [{"role": "system", "content": self._system_prompt},
-                    {"role": "user", "content": json.dumps({"bug_report": bug_report_text}, indent=2)}]
+                    {"role": "user", "content": json.dumps({"bug_report": report_handle}, indent=2)}]
         for turn in range(1, self._max_turns + 1):
             try:
                 reply = self._llm.chat(self._spec.model, list(messages), self._tools)

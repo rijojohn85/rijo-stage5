@@ -18,6 +18,7 @@ from harness.decision_log import DecisionLog
 from harness.decisions import Paths
 from harness.disposition import describe, read_disposition, refresh_disposition
 from harness.llm import FireworksClient
+from harness.report_handle import report_handle
 from harness.run_log import RUN_LOG_FILENAME, RunLog
 from harness.sandbox_git import GitSandbox
 from harness.substance import load_assessment
@@ -56,7 +57,7 @@ def run_bug(bug_path, *, llm, runs_dir=PROJECT_ROOT / RUNS_DIRNAME, tool_root=PR
             llm=llm, run_dir=run_dir, tool_root=tool_root, sandbox=sandbox,
             bug_report_path=bug_copy, correlation_id=correlation_id, clock=clock, log=log,
             max_turns=max_turns)
-        outcome = coordinator.run(bug_copy.read_text(encoding="utf-8"))
+        outcome = coordinator.run(report_handle(bug_copy, correlation_id))
         refresh_disposition(run_dir, sandbox, DecisionLog(paths.decisions_path), assessment)  # initial disposition
         return run_dir, outcome
     finally:
