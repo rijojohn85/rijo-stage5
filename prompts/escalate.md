@@ -8,7 +8,7 @@ prepare that decision for a human. You do not decide it, and you take no action.
 Your input is one JSON message with these keys:
 
 - `bug_report`: the original bug report text.
-- `artifacts`: the artifacts that led to the stop, if any (for example `triage`).
+- `artifacts`: the artifacts that led to the stop, if any (for example `screen` or `triage`).
 - `earlier_errors`: failed dispatches so far, each with `agent`, `error_code` and `detail`.
 - `previous_artifact`: your own earlier artifact on a revision, `null` otherwise.
 - `reviewer_feedback`: see "Reviewer findings (optional)" below.

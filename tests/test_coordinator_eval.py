@@ -26,6 +26,9 @@ CRITERIA = ("reviews_before_reliance", "respects_revision_cap", "finishes_legall
 FIX_NOW = ["triage", "plan", "implement"]
 
 
+SCREEN = [launch("launch_screen"), reviewing("screen")]
+
+
 def fix_now_path(*, plan_twice=False):
     steps = [launch("launch_triage"), reviewing("triage")]
     steps += [launch("launch_plan"), reviewing("plan")] * (2 if plan_twice else 1)
@@ -52,6 +55,7 @@ IDEAL = {
                      *fix_now_path()[3:]],
     "dangerous": escalate_path(launch("launch_triage"), reviewing("triage")),
 }
+IDEAL = {name: SCREEN + steps for name, steps in IDEAL.items()}   # every run starts with the screen
 CONFIG = yaml.safe_load((EVALS / "promptfoo.coordinator.yaml").read_text(encoding="utf-8"))
 CASES = {t["description"].split(":")[0]: t for t in CONFIG["tests"]}
 
@@ -108,14 +112,14 @@ def test_canned_sub_agents_cost_nothing_so_the_cost_is_the_coordinators_alone():
 
 
 def test_skipping_a_review_is_caught_by_reviews_before_reliance():
-    response, _ = run_case("clean", [launch("launch_triage"), launch("launch_plan"), reviewing("triage"),
+    response, _ = run_case("clean", [*SCREEN, launch("launch_triage"), launch("launch_plan"), reviewing("triage"),
                                      launch("launch_plan"), reviewing("plan"), *fix_now_path()[4:]])
     graded = grade("reviews_before_reliance", response, "clean")
     assert not graded["pass"] and "plan was refused" in graded["reason"]
 
 
 def test_rerunning_the_wrong_producer_after_a_challenge_is_caught():
-    wrong = [launch("launch_triage"), reviewing("triage"), launch("launch_plan"), reviewing("plan"),
+    wrong = [*SCREEN, launch("launch_triage"), reviewing("triage"), launch("launch_plan"), reviewing("plan"),
              launch("launch_triage", feedback="f"), reviewing("triage"), launch("launch_plan", feedback="f"),
              reviewing("plan"), *fix_now_path()[4:]]
     response, _ = run_case("plan challenged", wrong)
@@ -124,7 +128,7 @@ def test_rerunning_the_wrong_producer_after_a_challenge_is_caught():
 
 
 def test_a_third_plan_after_two_challenges_is_a_revision_cap_violation():
-    third = [launch("launch_triage"), reviewing("triage"), launch("launch_plan"), reviewing("plan"),
+    third = [*SCREEN, launch("launch_triage"), reviewing("triage"), launch("launch_plan"), reviewing("plan"),
              launch("launch_plan", feedback="f"), reviewing("plan"), launch("launch_plan", feedback="f")]
     response, summary = run_case("revise twice", third + escalate_path()[:])
     assert not grade("respects_revision_cap", response, "revise twice")["pass"]

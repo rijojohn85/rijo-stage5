@@ -124,12 +124,12 @@ def test_audit_check_reports_the_last_coordinator_lines_dropped(tmp_path):
 
 @pytest.mark.parametrize("result", ["FAILED_COORDINATION", "FAILED_TURN_BUDGET", "FAILED_COORDINATOR_API"])
 def test_every_failure_reason_uses_the_same_report_format_and_keeps_the_human_requirement(result):
-    labels = {a: report.Label(report.NOT_RUN) for a in ("triage", "plan", "implement", "escalate")}
+    labels = {a: report.Label(report.NOT_RUN) for a in ("screen", "triage", "plan", "implement", "escalate")}
     text = report.render_failure(result, True, ["triage step 1 flagged escalation"], labels,
                                  [{"step": 3, "agent": "writer", "error_code": "PRECONDITION_MISSING", "detail": "x"}], [])
     assert text.startswith(f"# Result: {result}\n\n**Human decision required**")
     assert report.result_of(text) == result
     assert [line for line in report.all_heading_lines(text) if line.startswith("## ")] == [
-        "## Triage: NOT RUN", "## Plan: NOT RUN", "## Implement: NOT RUN", "## Escalation: NOT RUN", "## What failed",
+        "## Screen: NOT RUN", "## Triage: NOT RUN", "## Plan: NOT RUN", "## Implement: NOT RUN", "## Escalation: NOT RUN", "## What failed",
         "## Why a human is required", "## Writer drafts (not accepted)"]
     assert "triage step 1 flagged escalation" in text and "step 3 writer: PRECONDITION_MISSING" in text

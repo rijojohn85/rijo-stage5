@@ -7,7 +7,7 @@ from harness.preconditions import MAX_ARTIFACTS_PER_PRODUCER
 from harness.results import ErrorCode
 from harness.store import REVIEWER
 
-PRODUCERS = ("triage", "plan", "implement", "escalate")
+PRODUCERS = ("screen", "triage", "plan", "implement", "escalate")
 UNRECOVERED_FAILURES = 2  # an errored call is retried once; a second consecutive failure is unrecoverable
 NO_REVIEW, STALE_REVIEW = "none", "stale"
 
@@ -52,11 +52,16 @@ class RunState:
     # --- human_required ------------------------------------------------------------------------
 
     def human_reasons(self):
-        return (self._triage_escalations() + self._review_escalations()
+        return (self._screen_flags() + self._triage_escalations() + self._review_escalations()
                 + self._exhausted_allowances() + self._unrecovered_errors())
 
     def human_required(self):
         return bool(self.human_reasons())
+
+    def _screen_flags(self):
+        """Any non-clean screen, stale or not; the reason never repeats the quoted evidence."""
+        return [f"screen step {r.step} rated the report {r.artifact['verdict']}" for r in self._store.records("screen")
+                if r.artifact["verdict"] != "clean"]
 
     def _triage_escalations(self):
         return [f"triage step {r.step} flagged escalation" for r in self._store.records("triage")

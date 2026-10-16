@@ -4,9 +4,9 @@ Adding an agent or a check means editing this table, not the dispatcher.
 """
 from dataclasses import dataclass
 
-from harness.checks import EscalationBackstop, PlanScopeCheck, ReviewBindingCheck, SchemaCheck
-from harness.preconditions import (FreshPassingReviewOf, NoHumanCheckpoint, ReviewableTarget, TerminalStateIsLegal,
-                                   TriageIsFixNow, WithinRevisionAllowance)
+from harness.checks import EscalationBackstop, PlanScopeCheck, ReviewBindingCheck, SchemaCheck, ScreenBackstop
+from harness.preconditions import (FreshPassingReviewOf, NoHumanCheckpoint, ReviewableTarget, ScreenIsClean,
+                                   TerminalStateIsLegal, TriageIsFixNow, WithinRevisionAllowance)
 from harness.store import REVIEWER, WRITER
 from harness.writer_checks import AssembledDraft, ExactSectionSet, NoHeadingLines, NonEmptySections
 
@@ -17,8 +17,8 @@ ARTIFACT_CHAIN = {
     "triage": ("triage",),
     "plan": ("triage", "plan"),
     "implement": ("triage", "plan", "implement"),
-    "escalate": ("triage", "escalate"),
-    "writer": ("triage", "plan", "implement", "escalate", "writer"),
+    "escalate": ("screen", "triage", "escalate"),
+    "writer": ("screen", "triage", "plan", "implement", "escalate", "writer"),
 }
 
 
@@ -37,11 +37,11 @@ def _count(items):
 PROFILES = {
     "screen": AgentProfile(
         preconditions=(WithinRevisionAllowance(),),
-        checks=(SchemaCheck("screen"),),
+        checks=(SchemaCheck("screen"), ScreenBackstop()),
         summarize=lambda a: a["verdict"],  # the verdict only: evidence is quoted report text
     ),
     "triage": AgentProfile(
-        preconditions=(WithinRevisionAllowance(),),
+        preconditions=(ScreenIsClean(), FreshPassingReviewOf("screen"), WithinRevisionAllowance()),
         checks=(SchemaCheck("triage"), EscalationBackstop()),
         summarize=lambda a: f"{a['classification']}, {a['decision']}, escalation={a['escalation']}",
     ),

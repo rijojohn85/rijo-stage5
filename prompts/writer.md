@@ -38,6 +38,7 @@ level:
 {
   "sections": {
     "overview": "what the report is about and how the run ended",
+    "screen": "whether the screen found the bug report clean or suspicious, and why",
     "triage": "what triage decided and why",
     "plan": "what the plan said to change and how it would be tested",
     "implement": "what was changed and what the test showed",
@@ -54,7 +55,8 @@ markdown string of one to four sentences, or a short list, with visible text.
 
 1. Return a section for every name in `required_sections` and for no other name. Include
    `overview` and `review` always. A section for a step that ran but did not produce a valid
-   result says so plainly, using the facts in the input.
+   result says so plainly, using the facts in the input. Do not copy the screen's evidence;
+   the report shows it already.
 2. Never write a heading. No line of any value may start with `#`. Never write a line made
    only of `=` or `-`, and never write HTML heading tags such as `<h2>`. Do not write the words
    PASS or FAIL, and do not state a result line: code adds those.

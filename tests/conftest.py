@@ -1,13 +1,18 @@
 """Shared fakes for dispatcher tests. Nothing here touches the network or costs money."""
 import json
+import sys
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 
-from harness.audit import AuditLog
-from harness.llm import LlmReply, ToolCall, Usage
-from harness.store import ArtifactStore
-from harness.wiring import build_dispatcher
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "evals" / "providers"))
+
+from clean_screen import seed_clean_screen  # noqa: E402
+from harness.audit import AuditLog  # noqa: E402
+from harness.llm import LlmReply, ToolCall, Usage  # noqa: E402
+from harness.store import ArtifactStore  # noqa: E402
+from harness.wiring import build_dispatcher  # noqa: E402
 
 FIXED_TIME = datetime(2026, 10, 15, 11, 15, tzinfo=timezone.utc)
 CORRELATION_ID = "20261015-111500"
@@ -81,7 +86,8 @@ class FakeSandbox:
 class Env:
     """A dispatcher wired to temp dirs and a fake LLM; script replies with env.llm."""
 
-    def __init__(self, tmp_path, bug_report="calc.add returns the wrong sum"):
+    def __init__(self, tmp_path, bug_report="calc.add returns the wrong sum", screened=True):
+        """`screened` seeds a clean, passing-reviewed screen as step 0 (triage is refused without one)."""
         self.run_dir = tmp_path / "runs" / CORRELATION_ID
         self.root = tmp_path / "project"
         (self.root / "sandbox").mkdir(parents=True)
@@ -91,6 +97,8 @@ class Env:
         self.store = ArtifactStore(self.run_dir)
         self.audit = AuditLog(self.run_dir / "audit.jsonl")
         self.llm = FakeLlm()
+        if screened:
+            seed_clean_screen(self.store, self.sandbox)
 
     def script(self, *replies):
         self.llm._script.extend(replies)

@@ -11,7 +11,7 @@ from harness.run_views import RunViews
 from harness.writer_checks import sections_with_heading_lines
 
 REVISE = [{"category": "incorrect", "detail": "the draft invents a defect"}]
-SECTIONS = ("overview", "triage", "plan", "implement", "review")
+SECTIONS = ("overview", "screen", "triage", "plan", "implement", "review")   # the Env seeds a screen at step 0
 
 
 def error_code(result):
@@ -40,7 +40,7 @@ def test_writer_saves_an_immutable_artifact_and_draft_with_code_made_headings(en
     assert json.loads((env.run_dir / "07-writer.json").read_text()) == result["artifact"]
     draft = (env.run_dir / "07-writer-draft.md").read_text()
     assert [l for l in draft.splitlines() if l.startswith("#")] == [
-        "# Result: VERIFIED", "## Overview", "## Triage: PASS", "## Plan: PASS", "## Implement: PASS", "## Review"]
+        "# Result: VERIFIED", "## Overview", "## Screen: PASS", "## Triage: PASS", "## Plan: PASS", "## Implement: PASS", "## Review"]
 
 
 def test_writer_gets_sources_reviews_reason_and_never_a_previous_artifact(env):
@@ -51,7 +51,8 @@ def test_writer_gets_sources_reviews_reason_and_never_a_previous_artifact(env):
                           "historical_challenges", "human_required", "human_reasons", "writer_feedback"}
     assert first["terminal_state"] == "VERIFIED" and first["human_required"] is False
     assert first["reviews"]["plan"] == {"target": "plan", "status": "pass", "verdict": "pass", "findings": []}
-    assert first["artifacts"] == {"triage": TRIAGE, "plan": PLAN, "implement": IMPLEMENT}
+    assert first["artifacts"] == {"screen": env.store.latest("screen").artifact, "triage": TRIAGE, "plan": PLAN,
+                                  "implement": IMPLEMENT}
     assert first["writer_feedback"] is None
     write(env, feedback="the draft invents a defect")
     again = writer_message(env)
@@ -123,7 +124,7 @@ def test_required_sections_follow_the_attempted_steps(env):
     env.run("triage", json_reply({**TRIAGE, "decision": "defer"}))
     env.run("reviewer", review_reply(), target="triage")
     assert write(env, state="DEFERRED", reply=writer_reply())["ok"]
-    assert set(writer_message(env)["required_sections"]) == {"overview", "triage", "review"}
+    assert set(writer_message(env)["required_sections"]) == {"overview", "screen", "triage", "review"}
     draft = (env.run_dir / "03-writer-draft.md").read_text()
     assert "- Plan: NOT RUN" in draft and "- Implement: NOT RUN" in draft and "## Plan" not in draft.split("Review status")[0]
 
@@ -136,7 +137,7 @@ def test_an_attempted_step_that_failed_still_needs_a_section_and_renders_fail(en
     env.run("reviewer", review_reply(), target="escalate")
     assert write(env, state="HUMAN_PUNCH_OUT")["ok"]
     message = writer_message(env)
-    assert set(message["required_sections"]) == {"overview", "triage", "plan", "escalation", "review"}
+    assert set(message["required_sections"]) == {"overview", "screen", "triage", "plan", "escalation", "review"}
     assert message["human_required"] is True and "escalate/dangerous" in message["reason"]
     draft = (env.run_dir / "07-writer-draft.md").read_text()
     assert "## Plan: FAIL (step failed)" in draft and "## Escalation: AWAITING HUMAN (review: pass)" in draft
@@ -165,7 +166,7 @@ def test_reviewer_is_bound_to_the_exact_draft_and_sees_it(env):
     draft = (env.run_dir / "07-writer-draft.md").read_text()
     assert env.run("reviewer", review_reply(), target="writer")["ok"]
     seen = writer_message(env)
-    assert seen["draft"] == draft and set(seen["artifacts"]) == {"triage", "plan", "implement"}
+    assert seen["draft"] == draft and set(seen["artifacts"]) == {"screen", "triage", "plan", "implement"}
     assert seen["echo_these_fields_in_your_reply"]["draft_sha256"] == sha256_text(draft)
     assert seen["reviews"]["triage"]["status"] == "pass"
     saved = env.store.latest("reviewer", "writer")

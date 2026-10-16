@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
+from clean_screen import PASSING_REVIEW, seed_clean_screen
 from eval_case import WRITER_TARGET
 from fixed_diff_sandbox import FixedDiffSandbox
 from history import seed_history
@@ -22,8 +23,8 @@ from harness.store import REVIEWER, WRITER, ArtifactStore
 from harness.tools import run_test
 from harness.wiring import build_dispatcher
 
-PASSING_REVIEW = {"verdict": "pass", "findings": []}
 IMPLEMENT = "implement"
+TRIAGE = "triage"
 
 
 @dataclass(frozen=True)
@@ -92,6 +93,8 @@ def run_case(case, llm):
         else:
             sandbox = GitSandbox(workspace)
         store = ArtifactStore(run_dir)
+        if case.agent == TRIAGE:
+            seed_clean_screen(store, sandbox)
         seed_upstream(store, sandbox, case)
         seed_history(store, sandbox, case.history)
         seed_previous(store, case)

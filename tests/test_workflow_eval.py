@@ -9,7 +9,7 @@ import yaml
 
 from conftest import IMPLEMENT, PLAN_FILE, json_reply, tool_reply
 from harness.tools import PROJECT_ROOT
-from test_coordinator import BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, SplitLlm
+from test_coordinator import BUG, HAPPY_COORDINATOR, HAPPY_HELPERS, SCREEN_COORDINATOR, SCREEN_HELPERS, SplitLlm
 
 EVALS = PROJECT_ROOT / "evals"
 sys.path[:0] = [str(EVALS), str(EVALS / "providers")]
@@ -21,7 +21,7 @@ import workflow  # noqa: E402
 CONFIG = yaml.safe_load((EVALS / "promptfoo.workflow.yaml").read_text(encoding="utf-8"))
 EDIT = tool_reply("edit_file", {"path": PLAN_FILE, "old_text": "    return sum(values) / len(values)",
                                 "new_text": "    if not values:\n        return 0.0\n    return sum(values) / len(values)"})
-HELPERS_WITH_EDIT = HAPPY_HELPERS[:4] + [EDIT, json_reply(IMPLEMENT)] + HAPPY_HELPERS[5:]
+HELPERS_WITH_EDIT = SCREEN_HELPERS + HAPPY_HELPERS[:4] + [EDIT, json_reply(IMPLEMENT)] + HAPPY_HELPERS[5:]
 
 
 def porcelain(root):
@@ -36,18 +36,18 @@ def workspace():
 
 
 def test_a_live_style_run_ends_verified_with_a_complete_audit_and_leaves_the_sandbox_clean(workspace, tmp_path):
-    llm = SplitLlm(HAPPY_COORDINATOR, HELPERS_WITH_EDIT)
+    llm = SplitLlm(SCREEN_COORDINATOR + HAPPY_COORDINATOR, HELPERS_WITH_EDIT)
     response = workflow.call_api("x", {}, {"vars": {"report": BUG}}, llm=llm, root=workspace, runs_dir=tmp_path / "runs")
     summary = json.loads(response["output"])
-    assert summary["result"] == "VERIFIED" and summary["dispatches"] == 8 and summary["reviews"] == 4
+    assert summary["result"] == "VERIFIED" and summary["dispatches"] == 10 and summary["reviews"] == 5
     assert summary["audit_problems"] == [] and response["tokenUsage"]["total"] > 0
     assert (tmp_path / "runs" / summary["run_id"] / "audit.jsonl").is_file()
     assert (tmp_path / "runs" / summary["run_id"] / "disposition.json").is_file()
     assert porcelain(workspace) == ""     # the implement edit the run needed to pass the scope check is reverted
     for function, expect in (("terminal_state_reached", {"result": "VERIFIED"}),
-                             ("step_count_in_range", {"steps_min": 8, "steps_max": 16}), ("audit_complete", {})):
+                             ("step_count_in_range", {"steps_min": 10, "steps_max": 16}), ("audit_complete", {})):
         assert getattr(criteria, function)(response["output"], {"vars": {"expect": expect}})["pass"], function
-    assert not criteria.step_count_in_range(response["output"], {"vars": {"expect": {"steps_min": 9, "steps_max": 16}}})["pass"]
+    assert not criteria.step_count_in_range(response["output"], {"vars": {"expect": {"steps_min": 11, "steps_max": 16}}})["pass"]
     assert not criteria.terminal_state_reached(response["output"], {"vars": {"expect": {"result": "DEFERRED"}}})["pass"]
 
 

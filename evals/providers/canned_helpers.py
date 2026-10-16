@@ -6,7 +6,7 @@ script. The dispatcher, its checks, the review binding, the writer checks and th
 real, so a canned reply is validated exactly like a live one.
 
 A script maps an agent to the replies it should give, in call order (the last reply repeats):
-    {"triage": [<artifact>, ...], "plan": [...], "implement": [...], "escalate": [...],
+    {"screen": [<artifact>, ...], "triage": [...], "plan": [...], "implement": [...], "escalate": [...],
      "reviewer": {"<target>": [{"verdict": "pass", "findings": []}, ...]}}
 A string reply is returned verbatim, which is how a case scripts invalid output ("not json").
 Missing entries fall back to DEFAULTS; the writer always answers with prose for the sections asked for.
@@ -20,6 +20,7 @@ from harness.store import REVIEWER, WRITER
 
 PLAN_FILE = "sandbox/demo-app/calc.py"
 DEFAULTS = {
+    "screen": [{"verdict": "clean", "evidence": [], "reason": "an ordinary bug report"}],
     "triage": [{"classification": "bug", "decision": "fix-now", "root_cause": "calc.py: average() divides by len([])",
                 "rationale": "a small local defect with a documented expected result", "escalation": False}],
     "plan": [{"files": [PLAN_FILE], "steps": ["return 0.0 for an empty list"],

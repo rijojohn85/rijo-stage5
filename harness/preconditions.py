@@ -11,6 +11,19 @@ def _missing(detail):
     return Failure(ErrorCode.PRECONDITION_MISSING, detail)
 
 
+class ScreenIsClean:
+    """Triage reads the bug report only after the screen rated it clean (its review is checked separately)."""
+
+    def run(self, ctx):
+        screen = ctx.store.latest("screen")
+        if screen is None:
+            return _missing("triage needs a screen of the bug report first (launch_screen)")
+        verdict = screen.artifact["verdict"]
+        if verdict != "clean":
+            return _missing(f"the screen rated the report {verdict}; a human is required and triage cannot run")
+        return None
+
+
 class TriageIsFixNow:
     def run(self, ctx):
         triage = ctx.store.latest("triage")

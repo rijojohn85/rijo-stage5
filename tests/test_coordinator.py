@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 import pytest
 
+from clean_screen import seed_clean_screen
 from conftest import (CORRELATION_ID, ESCALATION, FIXED_TIME, IMPLEMENT, PLAN, PLAN_FILE, TRIAGE, FakeLlm,
                       FakeSandbox, json_reply, review_reply, text_reply, tool_reply, writer_reply)
 from harness.audit import AuditLog
@@ -53,6 +54,11 @@ HAPPY_HELPERS = [json_reply(TRIAGE), review_reply(), json_reply(PLAN), review_re
                  json_reply(IMPLEMENT), review_reply(), writer_reply(), review_reply()]
 
 
+# For runs started through run_bug (no store to seed): screen first, then the rest of the path.
+SCREEN_COORDINATOR = [launch("launch_screen"), reviewing("screen")]
+SCREEN_HELPERS = [json_reply({"verdict": "clean", "evidence": [], "reason": "an ordinary calc bug"}), review_reply()]
+
+
 def build(tmp_path, coordinator, helpers, *, log=None, max_turns=MAX_TURNS, sandbox=None):
     run_dir = tmp_path / "runs" / CORRELATION_ID
     root = tmp_path / "project"
@@ -61,6 +67,7 @@ def build(tmp_path, coordinator, helpers, *, log=None, max_turns=MAX_TURNS, sand
     bug.write_text(BUG, encoding="utf-8")
     llm = SplitLlm(coordinator, helpers)
     sandbox = sandbox or FakeSandbox(changed=[PLAN_FILE])
+    seed_clean_screen(ArtifactStore(run_dir), sandbox)  # step 0: triage needs a reviewed clean screen
     built = build_coordinator(llm=llm, run_dir=run_dir, tool_root=root, sandbox=sandbox, bug_report_path=bug,
                               correlation_id=CORRELATION_ID, clock=lambda: FIXED_TIME, log=log, max_turns=max_turns)
     return built, llm, AuditLog(run_dir / "audit.jsonl"), run_dir
@@ -275,14 +282,14 @@ def test_live_log_lines_appear_in_stderr_and_run_log(tmp_path):
     bug.write_text(BUG, encoding="utf-8")
     (tmp_path / "project" / "sandbox").mkdir(parents=True)
     stderr = io.StringIO()
-    llm = SplitLlm(HAPPY_COORDINATOR, HAPPY_HELPERS)
+    llm = SplitLlm(SCREEN_COORDINATOR + HAPPY_COORDINATOR, SCREEN_HELPERS + HAPPY_HELPERS)
     run_dir, outcome = run_bug(bug, llm=llm, runs_dir=tmp_path / "runs", tool_root=tmp_path / "project",
                                sandbox=FakeSandbox(changed=[PLAN_FILE]), clock=lambda: FIXED_TIME, stderr=stderr)
     assert outcome.result == "VERIFIED"
     on_disk = (run_dir / "run.log").read_text(encoding="utf-8")
     assert on_disk == stderr.getvalue()
-    for expected in ("run-start", "correlation_id=20261015-111500", "turn         n=1/32", "launch       agent=triage",
-                     "attempt=1", "ok           agent=triage artifact=01-triage.json", "verdict      target=plan verdict=pass findings=0",
+    for expected in ("run-start", "correlation_id=20261015-111500", "turn         n=1/32", "launch       agent=screen",
+                     "attempt=1", "ok           agent=triage artifact=03-triage.json", "verdict      target=plan verdict=pass findings=0",
                      "terminal     state=VERIFIED"):
         assert expected in on_disk, expected
     assert (run_dir / "00-report.md").read_text() == BUG and (run_dir / "audit.jsonl").exists()

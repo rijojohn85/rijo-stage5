@@ -4,7 +4,7 @@ The dispatcher walks a list of them (see agents.py), so a new check never edits 
 """
 import json
 
-from guardrails import escalate_gate, plan_scope, validate
+from guardrails import escalate_gate, plan_scope, screen_gate, validate
 from harness.binding import expected_binding
 from harness.guardrail_runner import run_guardrail, temp_json_file
 from harness.results import ErrorCode, Failure
@@ -28,22 +28,36 @@ class SchemaCheck:
         return None
 
 
-class EscalationBackstop:
-    """Forces escalation when the bug report matches a data-loss/security/outage trigger.
+class _RepairingGate:
+    """Runs a guardrails/ gate on the bug report and copies its override into the artifact in place.
 
-    This check repairs rather than rejects: the gate's override is copied into the artifact
-    in place, so the coordinator only ever sees a triage that already escalates.
+    This kind of check repairs rather than rejects, so the coordinator only ever sees an
+    artifact that already carries the override. Subclasses name the gate and how to word its failure.
     """
+    gate_main = None   # the gate's main(argv)
+    label = ""         # used in "<label> could not run"
 
     def run(self, ctx, artifact):
         with temp_json_file(artifact) as path:
-            result = run_guardrail(escalate_gate.main, [str(ctx.bug_report_path), str(path), "--apply"])
+            result = run_guardrail(self.gate_main,[str(ctx.bug_report_path), str(path), "--apply"])
             if result.exit_code == GUARDRAIL_BLOCKED:
                 artifact.clear()
                 artifact.update(json.loads(path.read_text(encoding="utf-8")))
         if result.exit_code not in (GUARDRAIL_OK, GUARDRAIL_BLOCKED):
-            return Failure(ErrorCode.PRECONDITION_MISSING, f"escalation gate could not run: {result.stderr.strip()}")
+            return Failure(ErrorCode.PRECONDITION_MISSING, f"{self.label} could not run: {result.stderr.strip()}")
         return None
+
+
+class EscalationBackstop(_RepairingGate):
+    """Forces escalation when the bug report matches a data-loss/security/outage trigger."""
+    gate_main = staticmethod(escalate_gate.main)
+    label = "escalation gate"
+
+
+class ScreenBackstop(_RepairingGate):
+    """Forces a suspicious screen when the bug report matches a known prompt-injection pattern."""
+    gate_main = staticmethod(screen_gate.main)
+    label = "screen gate"
 
 
 class PlanScopeCheck:

@@ -5,12 +5,13 @@ sections are required, what label each step carries, and what the assembled draf
 failure report says. It reads; it never writes.
 """
 from harness import report
-from harness.run_state import is_caller_mistake
+from harness.run_state import PRODUCERS, is_caller_mistake
 from harness.store import WRITER, draft_filename
 
-STEPS = ("triage", "plan", "implement", "escalate")
+STEPS = PRODUCERS
 ALWAYS_REQUIRED = ("overview", "review")
-PRODUCER_SECTIONS = ("triage", "plan", "implement")  # required once attempted, even if they failed
+PRODUCER_SECTIONS = ("screen", "triage", "plan", "implement")  # required once attempted, even if they failed
+CLEAN = "clean"
 
 
 class ReportBuilder:
@@ -18,6 +19,12 @@ class ReportBuilder:
         self._store, self._audit, self._state = store, audit, run_state
 
     # --- facts and labels ----------------------------------------------------------------------
+
+    def _screen_evidence(self):
+        """The latest screen's quotes when it flagged the report, else nothing."""
+        record = self._store.latest("screen")
+        flagged = record is not None and record.artifact["verdict"] != CLEAN
+        return tuple(record.artifact["evidence"]) if flagged else ()
 
     def step_facts(self, agent):
         record = self._store.latest(agent)
@@ -27,6 +34,8 @@ class ReportBuilder:
             artifact_fresh=self._state.is_fresh(agent), step_failed=bool(real) and not real[-1]["ok"],
             review=self._state.review_status(agent),
             test_failed=agent == "implement" and record is not None and not record.artifact["test_passed"],
+            flagged=agent == "screen" and bool(self._screen_evidence()),
+            evidence=self._screen_evidence() if agent == "screen" else (),
         )
 
     def labels(self):
@@ -43,9 +52,10 @@ class ReportBuilder:
     # --- text ----------------------------------------------------------------------------------
 
     def draft(self, terminal_state, sections):
-        return report.assemble_draft(terminal_state, self._state.human_required(), sections, self.labels())
+        return report.assemble_draft(terminal_state, self._state.human_required(), sections, self.labels(),
+                                     self._screen_evidence())
 
     def failure_report(self, result):
         drafts = [draft_filename(r) for r in self._store.records(WRITER)]
         return report.render_failure(result, self._state.human_required(), self._state.human_reasons(),
-                                     self.labels(), self._audit.failures(), drafts)
+                                     self.labels(), self._audit.failures(), drafts, self._screen_evidence())

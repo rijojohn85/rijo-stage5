@@ -245,7 +245,7 @@ def test_reviewer_can_review_every_non_writer_target(target):
     response, llm = call(case_vars, review_reply())
     assert output_of(response)["target"] == target
     seen = json.loads(llm.calls[0]["messages"][1]["content"])["artifacts"]
-    assert set(seen) == set(ARTIFACT_CHAIN[target])
+    assert set(seen) == set(ARTIFACT_CHAIN[target]) - {"screen"}   # these cases carry no screen artifact
     assert grade("targets_correct_artifact", response, case_vars)["pass"]
 
 
