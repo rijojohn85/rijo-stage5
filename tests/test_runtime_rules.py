@@ -65,13 +65,27 @@ def test_harness_does_not_import_a_cli_wrapper_or_agent_sdk():
 
 def finished_run(tmp_path):
     coordinator, _, audit, run_dir = build(tmp_path, HAPPY_COORDINATOR, HAPPY_HELPERS)
-    assert coordinator.run(BUG).result == "VERIFIED"
-    return run_dir, audit
+    outcome = coordinator.run(BUG)
+    assert outcome.result == "VERIFIED"
+    return run_dir, outcome.turns
+
+
+def drop_coordinator_lines(run_dir, keep):
+    """Rewrite audit.jsonl keeping only the first `keep` coordinator turn lines."""
+    path = run_dir / "audit.jsonl"
+    lines, seen = [], 0
+    for line in path.read_text().splitlines():
+        if json.loads(line).get("agent") == "coordinator":
+            seen += 1
+            if seen > keep:
+                continue
+        lines.append(line)
+    path.write_text("".join(line + "\n" for line in lines))
 
 
 def test_a_finished_run_has_one_correlation_id_complete_lines_and_the_file_on_disk(tmp_path):
-    run_dir, audit = finished_run(tmp_path)
-    assert (run_dir / "audit.jsonl").is_file() and run_trace.audit_problems(run_dir) == []
+    run_dir, turns = finished_run(tmp_path)
+    assert (run_dir / "audit.jsonl").is_file() and run_trace.audit_problems(run_dir, turns) == []
     lines = [json.loads(line) for line in (run_dir / "audit.jsonl").read_text().splitlines()]
     assert len(lines) == 16 and {line["correlation_id"] for line in lines} == {run_dir.name}
     assert all(key in line for line in lines for key in run_trace.REQUIRED_AUDIT_KEYS)
@@ -79,19 +93,31 @@ def test_a_finished_run_has_one_correlation_id_complete_lines_and_the_file_on_di
 
 
 def test_audit_check_reports_a_missing_artifact_a_second_correlation_id_and_an_incomplete_line(tmp_path):
-    run_dir, _ = finished_run(tmp_path)
+    run_dir, turns = finished_run(tmp_path)
     (run_dir / "03-plan.json").unlink()
     path = run_dir / "audit.jsonl"
     lines = [json.loads(line) for line in path.read_text().splitlines()]
     lines[0]["correlation_id"] = "other"
     del lines[1]["cost_usd"]
     path.write_text("".join(json.dumps(line) + "\n" for line in lines))
-    problems = " | ".join(run_trace.audit_problems(run_dir))
+    problems = " | ".join(run_trace.audit_problems(run_dir, turns))
     assert "03-plan.json is not on disk" in problems and "'other'" in problems and "lacks ['cost_usd']" in problems
 
 
 def test_audit_check_fails_when_there_is_no_audit_file(tmp_path):
-    assert run_trace.audit_problems(tmp_path)
+    assert run_trace.audit_problems(tmp_path, 1)
+
+
+def test_audit_check_reports_deleted_coordinator_lines(tmp_path):
+    run_dir, turns = finished_run(tmp_path)
+    drop_coordinator_lines(run_dir, keep=0)
+    assert any("0 coordinator turn line(s), the run made" in p for p in run_trace.audit_problems(run_dir, turns))
+
+
+def test_audit_check_reports_the_last_coordinator_lines_dropped(tmp_path):
+    run_dir, turns = finished_run(tmp_path)
+    drop_coordinator_lines(run_dir, keep=turns - 2)
+    assert any(f"{turns - 2} coordinator turn line(s)" in p for p in run_trace.audit_problems(run_dir, turns))
 
 
 # --- one failure format ------------------------------------------------------------------------

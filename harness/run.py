@@ -11,6 +11,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+from harness.assessment_file import save_assessment
 from harness.coordinator import MAX_TURNS
 from harness.coordinator_wiring import build_coordinator
 from harness.decision_log import DecisionLog
@@ -47,6 +48,7 @@ def run_bug(bug_path, *, llm, runs_dir=PROJECT_ROOT / RUNS_DIRNAME, tool_root=PR
     assessment = load_assessment(paths.substance_path, paths.manifest_path)  # fail before any paid call
     sandbox = sandbox or GitSandbox(tool_root)
     correlation_id, run_dir, bug_copy = start_run(bug_path, runs_dir, clock)
+    save_assessment(run_dir, assessment)  # written once, before the first paid call
     log = RunLog.for_run(run_dir, clock, stderr)
     try:
         log.event("run-start", correlation_id=correlation_id, bug_report=bug_path, run_dir=run_dir)

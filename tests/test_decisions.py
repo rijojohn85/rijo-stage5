@@ -8,6 +8,7 @@ import pytest
 
 from conftest import FIXED_TIME, TRIAGE, FakeSandbox
 from harness import tools
+from harness.assessment_file import ASSESSMENT_FILE, save_assessment
 from harness.decision_log import (CONTINUE, PUNCH_OUT, REJECT, SUBSTANCE, DecisionLog, binds_punch_out,
                                   binds_substance, make_decision)
 from harness.decisions import DecisionDesk, DecisionError, Paths, main
@@ -388,3 +389,66 @@ def test_run_is_final_when_nothing_is_elevated(tmp_path, paths):
     paths.substance_path.write_text(json.dumps(data))
     run_dir, _ = run_clean(tmp_path, paths)
     assert read_disposition(run_dir)["disposition"] == FINAL
+
+
+# --- the run's own write-once substance assessment -------------------------------------------
+
+def save_current_assessment(paths, run_dir):
+    save_assessment(run_dir, load_assessment(paths.substance_path, paths.manifest_path))
+    return run_dir / ASSESSMENT_FILE
+
+
+def make_nothing_elevated(paths):
+    data = json.loads(paths.substance_path.read_text())
+    data["workflows"]["escalate"]["rating"] = data["workflows"]["writer"]["rating"] = "core"
+    paths.substance_path.write_text(json.dumps(data))
+
+
+def test_saved_assessment_keeps_a_run_pending_after_substance_is_edited(paths):
+    run_dir = make_run(paths, escalated=False)
+    saved = save_current_assessment(paths, run_dir)
+    before = saved.read_bytes()
+    desk, _ = desk_for(paths)
+    assert desk.status(RUN_ID)["disposition"] == PENDING_HUMAN
+    make_nothing_elevated(paths)
+    pending = desk.status(RUN_ID)
+    assert pending["disposition"] == PENDING_HUMAN and pending["missing"] == [SUBSTANCE]
+    assert saved.read_bytes() == before
+
+
+def test_signing_the_edited_files_does_not_clear_a_run_saved_with_the_original_hash(paths):
+    run_dir = make_run(paths, escalated=False)
+    save_current_assessment(paths, run_dir)
+    desk, _ = desk_for(paths)
+    make_nothing_elevated(paths)
+    desk.sign_substance(CONTINUE, "Rijo John")
+    assert desk.status(RUN_ID)["disposition"] == PENDING_HUMAN
+    shutil.copy(ROOT / "substance.json", paths.substance_path)
+    desk.sign_substance(CONTINUE, "Rijo John")
+    assert desk.status(RUN_ID)["disposition"] == RELEASED
+
+
+def test_saving_an_assessment_twice_fails_and_leaves_the_file_unchanged(paths):
+    run_dir = make_run(paths, escalated=False)
+    saved = save_current_assessment(paths, run_dir)
+    before = saved.read_bytes()
+    make_nothing_elevated(paths)
+    with pytest.raises(FileExistsError):
+        save_current_assessment(paths, run_dir)
+    assert saved.read_bytes() == before
+
+
+def test_disposition_points_at_the_assessment_file_only_when_it_exists(paths):
+    run_dir = make_run(paths, escalated=False)
+    desk, _ = desk_for(paths)
+    assert "substance_assessment_file" not in desk.status(RUN_ID)
+    assert not (run_dir / ASSESSMENT_FILE).exists()  # status never creates the file
+    save_current_assessment(paths, run_dir)
+    assert desk.status(RUN_ID)["substance_assessment_file"] == ASSESSMENT_FILE
+
+
+def test_run_saves_its_assessment_once_before_the_first_call(tmp_path, paths):
+    run_dir, _ = run_clean(tmp_path, paths)
+    expected = load_assessment(paths.substance_path, paths.manifest_path)
+    assert json.loads((run_dir / ASSESSMENT_FILE).read_text()) == expected.as_record()
+    assert read_disposition(run_dir)["substance_assessment_file"] == ASSESSMENT_FILE

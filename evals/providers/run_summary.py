@@ -31,7 +31,7 @@ def summarize_run(run_dir, outcome):
         "steps": steps_as_dicts(steps),
         "dispatches": len(steps),
         "reviews": sum(1 for s in steps if s.agent == REVIEWER),
-        "audit_problems": audit_problems(run_dir),
+        "audit_problems": audit_problems(run_dir, outcome.turns),
     }
 
 

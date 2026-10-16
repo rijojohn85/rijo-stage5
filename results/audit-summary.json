@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-10-15T15:18:01.917552+00:00",
+  "generated_at": "2026-10-16T05:17:36.513264+00:00",
   "totals": {
-    "audit_lines": 511,
-    "input_tokens": 1567644,
-    "output_tokens": 176502,
-    "cost_usd": 1.45753
+    "audit_lines": 527,
+    "input_tokens": 1625020,
+    "output_tokens": 179496,
+    "cost_usd": 1.502507
   },
   "by_model": {
     "accounts/fireworks/models/deepseek-v4p1-flash": {
-      "audit_lines": 264,
-      "input_tokens": 938029,
-      "output_tokens": 150606,
-      "cost_usd": 0.462129
+      "audit_lines": 272,
+      "input_tokens": 974272,
+      "output_tokens": 153312,
+      "cost_usd": 0.476251
     },
     "accounts/fireworks/models/glm-5p3": {
-      "audit_lines": 243,
-      "input_tokens": 629615,
-      "output_tokens": 25896,
-      "cost_usd": 0.995401
+      "audit_lines": 251,
+      "input_tokens": 650748,
+      "output_tokens": 26184,
+      "cost_usd": 1.026256
     },
     "stub": {
       "audit_lines": 4,
@@ -28,46 +28,46 @@
   },
   "by_agent": {
     "coordinator": {
-      "audit_lines": 243,
-      "input_tokens": 629615,
-      "output_tokens": 25896,
-      "cost_usd": 0.995401
+      "audit_lines": 251,
+      "input_tokens": 650748,
+      "output_tokens": 26184,
+      "cost_usd": 1.026256
     },
     "escalate": {
       "audit_lines": 22,
-      "input_tokens": 22229,
-      "output_tokens": 13234,
-      "cost_usd": 0.022549
+      "input_tokens": 22339,
+      "output_tokens": 13442,
+      "cost_usd": 0.022832
     },
     "implement": {
-      "audit_lines": 15,
-      "input_tokens": 86285,
-      "output_tokens": 5261,
-      "cost_usd": 0.032198
+      "audit_lines": 16,
+      "input_tokens": 93312,
+      "output_tokens": 5592,
+      "cost_usd": 0.034703
     },
     "plan": {
-      "audit_lines": 20,
-      "input_tokens": 46831,
-      "output_tokens": 6624,
-      "cost_usd": 0.021998
+      "audit_lines": 21,
+      "input_tokens": 52964,
+      "output_tokens": 7079,
+      "cost_usd": 0.024384
     },
     "reviewer": {
-      "audit_lines": 130,
-      "input_tokens": 627234,
-      "output_tokens": 93791,
-      "cost_usd": 0.300716
+      "audit_lines": 134,
+      "input_tokens": 645411,
+      "output_tokens": 94649,
+      "cost_usd": 0.3072
     },
     "triage": {
-      "audit_lines": 42,
-      "input_tokens": 100785,
-      "output_tokens": 12967,
-      "cost_usd": 0.045793
+      "audit_lines": 43,
+      "input_tokens": 103680,
+      "output_tokens": 13273,
+      "cost_usd": 0.047029
     },
     "writer": {
-      "audit_lines": 39,
-      "input_tokens": 54665,
-      "output_tokens": 18729,
-      "cost_usd": 0.038875
+      "audit_lines": 40,
+      "input_tokens": 56566,
+      "output_tokens": 19277,
+      "cost_usd": 0.040103
     }
   },
   "sources": {
@@ -87,9 +87,9 @@
     },
     "results/escalate.json": {
       "audit_lines": 2,
-      "input_tokens": 1778,
-      "output_tokens": 1705,
-      "cost_usd": 0.002579,
+      "input_tokens": 1888,
+      "output_tokens": 1913,
+      "cost_usd": 0.002862,
       "duplicate_lines_skipped": 0
     },
     "results/implement-revision.json": {
@@ -122,9 +122,9 @@
     },
     "results/review.json": {
       "audit_lines": 8,
-      "input_tokens": 37399,
-      "output_tokens": 6759,
-      "cost_usd": 0.019329,
+      "input_tokens": 37497,
+      "output_tokens": 6230,
+      "cost_usd": 0.018726,
       "duplicate_lines_skipped": 0
     },
     "results/triage-revision.json": {
@@ -356,6 +356,13 @@
       "input_tokens": 38667,
       "output_tokens": 5943,
       "cost_usd": 0.040778,
+      "duplicate_lines_skipped": 0
+    },
+    "runs/20261016-051639": {
+      "audit_lines": 16,
+      "input_tokens": 57168,
+      "output_tokens": 3315,
+      "cost_usd": 0.045297,
       "duplicate_lines_skipped": 0
     }
   },

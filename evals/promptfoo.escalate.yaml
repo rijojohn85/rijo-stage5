@@ -28,6 +28,7 @@ tests:
         records were lost twice this week in production.
       expect:
         options_min: 2
+        no_change_words: &no-change-words ['no change', 'leave', 'do nothing', 'keep', 'hold', 'wait', 'as is', 'unchanged', 'no action', 'defer']
         absent_keys: ['decision', 'decided_by']
         mentions:
           - { field: reason, contains: data }
@@ -44,6 +45,7 @@ tests:
         overwrite the caller's records with an empty list.
       expect:
         options_min: 2
+        no_change_words: *no-change-words
         absent_keys: ['decision', 'decided_by']
         mentions:
           - { field: reason, contains: data }

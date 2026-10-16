@@ -246,7 +246,7 @@ def test_a_dangerous_review_keeps_human_required_after_a_later_pass(env):
     env.reviewed("triage", TRIAGE)
     env.run("reviewer", review_reply("escalate", [{"category": "dangerous", "detail": "deletes data"}]),
             target="triage")
-    env.run("triage", json_reply(TRIAGE), feedback="redo")
+    env.run("triage", json_reply({**TRIAGE, "rationale": "reworked"}), feedback="redo")
     env.run("reviewer", review_reply(), target="triage")
     state = make_state(env)
     assert state.review_status("triage") == "pass" and state.human_required()

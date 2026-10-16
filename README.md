@@ -53,7 +53,7 @@ bug.md --> harness.run --> coordinator (glm-5p3; tools: launch_* only; max 32 tu
 | Plan-scope check | edited files and `git status` must match the plan's file list (`PLAN_SCOPE_VIOLATION`) | `harness/checks.py` (`PlanScopeCheck`), `guardrails/plan_scope.py` |
 | Escalation check | data loss, security or outage keywords force `escalation: true` in code | `harness/checks.py` (`EscalationBackstop`), `guardrails/escalate_gate.py`, `guardrails/escalate_rules.yaml` |
 | Review-binding check | a review must name the exact artifact (and diff or writer draft) hash it read (`REVIEW_BINDING_MISMATCH`) | `harness/checks.py` (`ReviewBindingCheck`), `harness/binding.py` |
-| Preconditions | plan needs a fresh passing triage review, implement a fresh passing plan review, one replacement per producer, legal terminal state | `harness/preconditions.py`, `harness/freshness.py` |
+| Preconditions | plan needs a fresh passing triage review, implement a fresh passing plan review, one replacement per producer, legal terminal state; plan and implement also refuse to run while a human is required (human-checkpoint check) | `harness/preconditions.py`, `harness/freshness.py` |
 | Structured errors | a rejected result goes to `rejected/`; the coordinator gets only `{ok: false, error_code, detail}` | `harness/results.py`, `harness/rejected.py` |
 | Report | headings and PASS/FAIL come from code; the writer model writes prose only; `report.md` is a byte copy of the reviewed draft | `harness/report.py`, `harness/report_builder.py`, `harness/report_publisher.py`, `harness/writer_checks.py` |
 | Audit trail | one correlation ID per run; one line per dispatch and coordinator turn with model, tokens, calculated cost; persisted in `runs/<id>/audit.jsonl` | `harness/audit.py`, `harness/pricing.py`, `config/prices.json` |
@@ -93,7 +93,7 @@ Run on 2026-10-15. Coordinator `accounts/fireworks/models/glm-5p3`; all sub-agen
 | triage | 4 | valid-enums 4/4, root-cause-cites-real-file 3/3, escalation-flagged 4/4 |
 | plan | 3 | names-right-file 3/3, excludes-wrong-files 3/3, test-targets-function 3/3 |
 | implement | 2 | changes-only-plan-files 2/2, test-red-to-green 2/2, no-unreported-edits 2/2 |
-| review | 8 | zero-findings-on-clean 2/2, catches-real-defect 4/4, escalates-danger 2/2, targets-correct-artifact 8/8 |
+| review | 8 | zero-findings-on-clean 2/2, catches-real-defect 5/5, escalates-danger 2/2, targets-correct-artifact 8/8 |
 | escalate | 2 | names-trigger 2/2, offers-safe-default 2/2, no-decision-made 2/2 |
 | writer | 3 | structure-valid 3/3, no-new-findings 3/3, tone 3/3, headings-untouched 3/3 |
 | triage-revision, plan-revision, implement-revision | 1 each | all criteria 1/1, including addresses-feedback |
@@ -101,7 +101,7 @@ Run on 2026-10-15. Coordinator `accounts/fireworks/models/glm-5p3`; all sub-agen
 | workflow, first run (`--repeat 3`) | 12 | terminal-state 12/12, audit-complete 12/12, step-count 11/12 |
 | workflow, escalation recheck (`--repeat 5`) | 5 | terminal-state 5/5, audit-complete 5/5, step-count 5/5 |
 | workflow, bypass recheck (`escalation-data-loss`, 1 run) | 1 | terminal-state 1/1 (`HUMAN_PUNCH_OUT`), audit-complete 1/1, step-count 1/1 |
-| pytest | 465 passed (392 before step 8, plus 73 from the README evidence-path test, one per listed path) | `results/pytest.txt` |
+| pytest | 507 passed (465 before the Step A fixes, plus the new tests added by A1 to A9) | `results/pytest.txt` |
 
 Workflow detail. In the first run bug-clear, bug-regression and feature-as-bug each ended in the
 expected state 3/3 (`VERIFIED`, `VERIFIED`, `DEFERRED`). The data-loss case ended `HUMAN_PUNCH_OUT`
@@ -136,6 +136,14 @@ writer suite's `tone` and `no-new-findings` criteria write no audit line and are
 - Sample sizes are small (1 to 3 runs per case, 5 for the escalation recheck, 1 adversarial run).
 - The "read at most 3 files" limit in the reviewer prompt is guidance. The harness bound is 8 turns.
 - The limit of 3 refused terminal claims before `FAILED_COORDINATION` is a design choice.
+- `offers-safe-default` is a keyword heuristic: it needs an option that matches one of the listed
+  no-change words (on word boundaries).
+- `catches-real-defect` is a keyword heuristic: it checks that a finding's text names the planted
+  problem.
+- Terminal states skip stale (replaced) attempts: only the latest attempt of each artifact needs a
+  fresh, bound review.
+- Each run's substance assessment is saved once in `runs/<id>/substance-assessment.json`. Runs made
+  before that change have none and use the current `substance.json` and `manifest.yaml`.
 - The substance sign-off binds to the exact bytes of `substance.json` and `manifest.yaml`, so any
   edit to either needs a new sign-off.
 - The reviewer-name check blocks obvious AI names but cannot prove the signer is human. The typed

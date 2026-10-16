@@ -1,8 +1,11 @@
 """The completion check: is the coordinator's proposed terminal state backed by fresh evidence?
 
 Used twice: before a writer draft is allowed, and again at finalization. Section 5 table.
+Every state first applies one shared review rule to all producer artifacts; replaced (stale)
+attempts are skipped, so only the latest attempt of each artifact needs a fresh bound review.
 """
 from harness.results import ErrorCode, Failure
+from harness.run_state import PRODUCERS
 from harness.store import REVIEWER
 
 VERIFIED, DEFERRED, HUMAN_PUNCH_OUT = "VERIFIED", "DEFERRED", "HUMAN_PUNCH_OUT"
@@ -25,22 +28,38 @@ class TerminalStateCheck:
         return rule()
 
     def _verified(self):
-        return (self._no_human_needed() or self._all_passing("triage", "plan", "implement")
+        return (self._every_artifact_reviewed(require_pass=True) or self._no_human_needed() or self._all_passing("triage", "plan", "implement")
                 or self._triage_decided("fix-now") or self._implement_tests_passed() or self._no_open_findings())
 
     def _deferred(self):
-        return self._no_human_needed() or self._all_passing("triage") or self._triage_decided("defer")
+        return (self._every_artifact_reviewed(require_pass=True) or self._no_human_needed()
+                or self._all_passing("triage") or self._triage_decided("defer"))
 
     def _punch_out(self):
-        if not self._run_state.human_required():
-            return _refuse("HUMAN_PUNCH_OUT needs a recorded reason a human is required")
-        failure = self._all_passing("escalate")
+        failure = self._every_artifact_reviewed(require_pass=False)
         if failure:
             return failure
-        triage = self._store.latest("triage")
-        review = self._store.latest(REVIEWER, "triage")
-        if triage is not None and (review is None or not self._freshness.review_is_fresh(review)):
-            return _refuse("the triage artifact has no fresh review")
+        if not self._run_state.human_required():
+            return _refuse("HUMAN_PUNCH_OUT needs a recorded reason a human is required")
+        return self._all_passing("escalate")
+
+    def _every_artifact_reviewed(self, require_pass):
+        """Each producer's latest fresh artifact needs a fresh bound review (a passing one if `require_pass`).
+
+        Replaced (stale) attempts are skipped: only the latest attempt of each artifact is reviewed.
+        """
+        for agent in PRODUCERS:
+            record = self._store.latest(agent)
+            if record is None or not self._freshness.artifact_is_fresh(record):
+                continue
+            if require_pass:
+                failure = self._all_passing(agent)
+            else:
+                review = self._store.latest(REVIEWER, agent)
+                failure = None if review and self._freshness.review_is_fresh(review) else _refuse(
+                    f"the {agent} artifact has no fresh review")
+            if failure:
+                return failure
         return None
 
     def _no_human_needed(self):

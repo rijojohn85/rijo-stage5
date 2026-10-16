@@ -7,6 +7,7 @@ required). Both gates must be satisfied when both apply; the latest decision per
 import json
 from pathlib import Path
 
+from harness.assessment_file import ASSESSMENT_FILE, load_saved_assessment
 from harness.decision_log import PUNCH_OUT, REJECT, SUBSTANCE, binds_punch_out, binds_substance
 from harness.run_facts import read_run_facts
 
@@ -67,8 +68,15 @@ def describe(disposition):
 
 
 def refresh_disposition(run_dir, sandbox, log, assessment):
-    """Recompute from the log and the run as it stands, write disposition.json, return the disposition."""
-    disposition = build_disposition(log, assessment, read_run_facts(run_dir, sandbox))
+    """Recompute from the log and the run as it stands, write disposition.json, return the disposition.
+
+    The run's assessment is read from its write-once substance-assessment.json when present;
+    `assessment` (the current files) is used only for runs that have none.
+    """
+    saved = load_saved_assessment(run_dir)
+    disposition = build_disposition(log, saved or assessment, read_run_facts(run_dir, sandbox))
+    if saved:
+        disposition["substance_assessment_file"] = ASSESSMENT_FILE
     write_disposition(run_dir, disposition)
     return disposition
 

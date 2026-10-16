@@ -177,8 +177,11 @@ def _dispatch_problems(dispatches, run_dir):
     return problems
 
 
-def audit_problems(run_dir):
-    """What is wrong with the run's audit trail: [] when one correlation id, complete lines and artifacts on disk."""
+def audit_problems(run_dir, expected_turns):
+    """What is wrong with the run's audit trail: [] when one correlation id, complete lines and artifacts on disk.
+
+    `expected_turns` is the run's own turn count, so deleted coordinator lines cannot go unnoticed.
+    """
     run_dir = Path(run_dir)
     log = AuditLog(run_dir / "audit.jsonl")
     entries = log.entries()
@@ -188,4 +191,6 @@ def audit_problems(run_dir):
     problems = _line_problems(entries, run_dir) + _dispatch_problems(log.dispatches(), run_dir)
     if turns != list(range(1, len(turns) + 1)):
         problems.append("coordinator turns are not 1..n in order")
+    if len(turns) != expected_turns:
+        problems.append(f"audit has {len(turns)} coordinator turn line(s), the run made {expected_turns}")
     return problems

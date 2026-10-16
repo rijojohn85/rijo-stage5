@@ -35,6 +35,11 @@ class Assessment:
         """The computed assessment, retained verbatim in a substance decision."""
         return {"workflows": self.workflows, "elevated": self.elevated, "binding_sha256": self.binding_sha256}
 
+    @classmethod
+    def from_record(cls, record):
+        """The inverse of as_record."""
+        return cls(record["workflows"], record["elevated"], record["binding_sha256"])
+
 
 def is_elevated(workflows):
     ratings = [entry["rating"] for entry in workflows.values()]

@@ -48,7 +48,7 @@ review,"plan: names the wrong file -> revise, incorrect",(all assertions),1,1,1.
 review,"escalate: no safe default offered -> revise, incorrect",(all assertions),1,1,1.0,
 review,writer draft: faithful to its sources -> pass with no findings,(all assertions),1,1,1.0,
 review,"writer draft: invents a finding -> revise, incorrect",(all assertions),1,1,1.0,
-review,(all cases),catches-real-defect,4,4,1.0,
+review,(all cases),catches-real-defect,5,5,1.0,
 review,(all cases),escalates-danger,2,2,1.0,
 review,(all cases),targets-correct-artifact,8,8,1.0,
 review,(all cases),zero-findings-on-clean,2,2,1.0,

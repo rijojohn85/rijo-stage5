@@ -8,6 +8,7 @@ from harness.hashing import sha256_text
 from harness.report_publisher import ReportPublisher
 from harness.results import ErrorCode
 from harness.run_views import RunViews
+from harness.writer_checks import sections_with_heading_lines
 
 REVISE = [{"category": "incorrect", "detail": "the draft invents a defect"}]
 SECTIONS = ("overview", "triage", "plan", "implement", "review")
@@ -75,13 +76,28 @@ def test_an_illegal_terminal_state_is_refused_without_a_model_call(env):
     assert len(env.llm.calls) == 2  # only the triage and its review
 
 
+@pytest.mark.parametrize("text,is_heading", [
+    ("Title\n=====", True), ("Title\n---", True), ("  ==  ", True), ("<h2>Result</h2>", True),
+    ("<H3 class=x>", True), ("# Title", True), ("- item", False), ("a well-known fix", False),
+    ("x - y", False), ("use `--flag`", False),
+])
+def test_heading_line_detection(text, is_heading):
+    assert sections_with_heading_lines({"k": text}) == (["k"] if is_heading else [])
+
+
 @pytest.mark.parametrize("sections,detail", [
     ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "   "}, "empty section(s): review"),
     ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": ""}, "empty section(s): review"),
     ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "fine\n## Fake: PASS"},
-     "line starting with '#'"),
+     "heading line"),
     ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "fine\n   # indented"},
-     "line starting with '#'"),
+     "heading line"),
+    ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "Title\n====="}, "heading line"),
+    ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "Title\n---"}, "heading line"),
+    ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "  ==  "}, "heading line"),
+    ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "<h2>Result</h2>"},
+     "heading line"),
+    ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "<H3 class=x>"}, "heading line"),
     ({"overview": "ok", "triage": "ok", "plan": "ok", "review": "ok"}, "missing section(s): implement"),
     ({"overview": "ok", "triage": "ok", "plan": "ok", "implement": "ok", "review": "ok", "escalation": "x"},
      "unexpected section(s): escalation"),
@@ -192,6 +208,9 @@ def test_nothing_is_accepted_until_the_exact_draft_passes_review(env):
     assert publisher(env).accepted_state() is None
     env.run("reviewer", review_reply("revise", REVISE), target="writer")
     assert publisher(env).accepted_state() is None
+    env.run("reviewer", review_reply(), target="writer")
+    assert publisher(env).accepted_state() is None  # a pass after a challenge of the same draft does not count
+    assert write(env, writer_reply(overview="A different overview."))["ok"]
     env.run("reviewer", review_reply(), target="writer")
     assert publisher(env).accepted_state() == "VERIFIED"
 

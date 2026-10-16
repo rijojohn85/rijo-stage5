@@ -11,6 +11,7 @@ so a rate never counts a case that was not checked.
 import functools
 import json
 import posixpath
+import re
 import sys
 from pathlib import Path
 
@@ -167,9 +168,19 @@ def zero_findings_on_clean(artifact, expect, context):
 
 @criterion
 def catches_real_defect(artifact, expect, context):
+    """A non-pass verdict, a finding of each expected category, and one that names the planted problem.
+
+    The last check is a keyword heuristic: a finding in an expected category must mention
+    (case-insensitive substring) at least one of `finding_mentions`.
+    """
     problems = [] if artifact.get("verdict") != "pass" else ["verdict is pass for an artifact with a planted defect"]
-    return problems + [f"no finding with category {want!r}" for want in expect["categories_include"]
-                       if want not in _categories(artifact)]
+    problems += [f"no finding with category {want!r}" for want in expect["categories_include"]
+                 if want not in _categories(artifact)]
+    mentions = [word.lower() for word in expect["finding_mentions"]]
+    named = any(finding.get("category") in expect["categories_include"]
+                and any(word in str(finding.get("detail", "")).lower() for word in mentions)
+                for finding in artifact.get("findings", []))
+    return problems + ([] if named else [f"no finding in {expect['categories_include']} mentions any of {mentions}"])
 
 
 @criterion
@@ -201,9 +212,15 @@ def names_trigger(artifact, expect, context):
 
 @criterion
 def offers_safe_default(artifact, expect, context):
+    """Enough options, and at least one that changes nothing (a keyword heuristic on word boundaries)."""
     options = artifact.get("options")
-    count = len(options) if isinstance(options, list) else 0
-    return [] if count >= expect["options_min"] else [f"options: {count}, expected at least {expect['options_min']}"]
+    options = [str(option) for option in options] if isinstance(options, list) else []
+    if len(options) < expect["options_min"]:
+        return [f"options: {len(options)}, expected at least {expect['options_min']}"]
+    words = expect["no_change_words"]
+    if not any(re.search(rf"\b{re.escape(word)}\b", option, re.IGNORECASE) for option in options for word in words):
+        return [f"no option leaves things unchanged (none mentions any of {words})"]
+    return []
 
 
 @criterion

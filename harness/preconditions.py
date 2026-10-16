@@ -53,6 +53,15 @@ class WithinRevisionAllowance:
         return None
 
 
+class NoHumanCheckpoint:
+    """Work that moves the fix forward stops while a person must decide; list it last so other refusals keep their codes."""
+
+    def run(self, ctx):
+        if ctx.run_state.human_required():
+            return _missing("a human is required, this agent cannot run: " + "; ".join(ctx.run_state.human_reasons()))
+        return None
+
+
 class TerminalStateIsLegal:
     """The writer drafts only for a terminal state the evidence supports (the Section 5 table)."""
 

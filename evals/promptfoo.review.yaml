@@ -44,6 +44,7 @@ tests:
       diff: file://fixtures/review/calc-wrong.diff
       expect:
         categories_include: ['incorrect']
+        finding_mentions: ['//', 'integer', 'floor']
     assert:
       - &catches { type: python, metric: catches-real-defect, value: 'file://criteria.py:catches_real_defect' }
   - description: 'implement: silently discards records -> escalate, dangerous'
@@ -63,8 +64,12 @@ tests:
       target: triage
       report: file://../test-data/bugs/escalation-data-loss.md
       triage: file://fixtures/review/triage-missed-data-loss.json
+      expect:
+        categories_include: ['dangerous']
+        finding_mentions: ['escalat', 'data loss', 'lost', 'records']
     assert:
       - *danger
+      - *catches
   - description: 'plan: names the wrong file -> revise, incorrect'
     vars:
       target: plan
@@ -73,6 +78,7 @@ tests:
       plan: file://fixtures/review/plan-wrong-file.json
       expect:
         categories_include: ['incorrect']
+        finding_mentions: ['storage', 'wrong file', 'calc.py']
     assert:
       - *catches
   - description: 'escalate: no safe default offered -> revise, incorrect'
@@ -83,6 +89,7 @@ tests:
       escalate: file://fixtures/review/escalate-no-safe-default.json
       expect:
         categories_include: ['incorrect']
+        finding_mentions: ['default', 'changes nothing', 'change nothing', 'no change', 'do nothing']
     assert:
       - *catches
   - description: 'writer draft: faithful to its sources -> pass with no findings'
@@ -101,5 +108,6 @@ tests:
       draft: file://fixtures/review/writer-draft-invented.md
       expect:
         categories_include: ['incorrect']
+        finding_mentions: ['negative', 'invent', 'not supported', 'unsupported', 'no review']
     assert:
       - *catches

@@ -37,17 +37,17 @@ class RunState:
         review = self._store.latest(REVIEWER, agent)
         if review is None:
             return NO_REVIEW
-        return review.artifact["verdict"] if self._freshness.review_is_fresh(review) else STALE_REVIEW
+        if not self._freshness.review_is_fresh(review):
+            return STALE_REVIEW
+        challenge = self._freshness.first_challenge(agent)  # a pass after a challenge is not shown as PASS
+        return challenge.artifact["verdict"] if challenge else review.artifact["verdict"]
 
     def replacements_left(self, agent):
         return max(0, MAX_ARTIFACTS_PER_PRODUCER - len(self._store.records(agent)))
 
     def allowance_spent_on_a_challenge(self, agent):
         """The latest artifact was challenged by its review but no replacement is allowed."""
-        latest, review = self._store.latest(agent), self._store.latest(REVIEWER, agent)
-        return (latest is not None and review is not None and self.replacements_left(agent) == 0
-                and review.binding.get("reviewed_sha256") == latest.sha256
-                and review.artifact["verdict"] != "pass")
+        return self.replacements_left(agent) == 0 and self._freshness.was_challenged(agent)
 
     # --- human_required ------------------------------------------------------------------------
 

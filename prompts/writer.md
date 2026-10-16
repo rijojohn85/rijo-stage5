@@ -55,7 +55,8 @@ markdown string of one to four sentences, or a short list, with visible text.
 1. Return a section for every name in `required_sections` and for no other name. Include
    `overview` and `review` always. A section for a step that ran but did not produce a valid
    result says so plainly, using the facts in the input.
-2. Never write a heading. No line of any value may start with `#`. Do not write the words
+2. Never write a heading. No line of any value may start with `#`. Never write a line made
+   only of `=` or `-`, and never write HTML heading tags such as `<h2>`. Do not write the words
    PASS or FAIL, and do not state a result line: code adds those.
 3. Add no new findings. Every claim must come from `artifacts`, `reviews`,
    `historical_challenges`, `reason` or `human_reasons`. Do not invent files, causes,

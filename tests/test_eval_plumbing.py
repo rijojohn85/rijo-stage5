@@ -33,6 +33,7 @@ EXPECTED_METRICS = {
     "writer": {"structure-valid", "no-new-findings", "tone", "headings-untouched"},
 }
 FIXTURES = EVALS / "fixtures"
+NO_CHANGE_WORDS = ["no change", "leave", "do nothing", "keep", "hold", "wait", "as is", "unchanged", "no action", "defer"]  # as in promptfoo.escalate.yaml
 CALC = "sandbox/demo-app/calc.py"
 
 
@@ -343,27 +344,39 @@ def test_plan_criteria():
 
 
 def test_reviewer_criteria():
-    finding = lambda category: {"category": category, "detail": "x"}  # noqa: E731
+    finding = lambda category: {"category": category, "detail": "naming is unclear"}  # noqa: E731
     clean = {"verdict": "pass", "findings": []}
     assert run_criterion("zero_findings_on_clean", clean)["pass"]
     assert not run_criterion("zero_findings_on_clean", {"verdict": "revise", "findings": [finding("incorrect")]})["pass"]
     revise = {"verdict": "revise", "findings": [finding("incorrect")]}
-    expect = {"categories_include": ["incorrect"]}
-    assert run_criterion("catches_real_defect", revise, expect)["pass"]
+    expect = {"categories_include": ["incorrect"], "finding_mentions": ["integer", "floor"]}
+    matching = {"verdict": "revise", "findings": [{"category": "incorrect", "detail": "Uses INTEGER division"}]}
+    assert run_criterion("catches_real_defect", matching, expect)["pass"]
+    assert not run_criterion("catches_real_defect", revise, expect)["pass"]  # right category, unrelated text
     assert not run_criterion("catches_real_defect", clean, expect)["pass"]
-    assert not run_criterion("catches_real_defect", revise, {"categories_include": ["dangerous"]})["pass"]
+    assert not run_criterion("catches_real_defect", matching, {**expect, "categories_include": ["dangerous"]})["pass"]
     danger = {"verdict": "escalate", "findings": [finding("dangerous")]}
     assert run_criterion("escalates_danger", danger)["pass"]
     assert not run_criterion("escalates_danger", revise)["pass"]
 
 
 def test_escalate_criteria():
-    expect = {"options_min": 2, "absent_keys": ["decision"], "mentions": [{"field": "reason", "contains": "data"}]}
-    brief = {"reason": "Data loss", "question": "q", "options": ["a", "b"], "risk_if_wrong": "r"}
+    expect = {"options_min": 2, "absent_keys": ["decision"], "mentions": [{"field": "reason", "contains": "data"}],
+              "no_change_words": ["leave", "hold"]}
+    brief = {"reason": "Data loss", "question": "q", "options": ["a", "Leave the code unchanged"],
+             "risk_if_wrong": "r"}
     for name in ("names_trigger", "offers_safe_default", "no_decision_made"):
         assert run_criterion(name, brief, expect)["pass"], name
     assert not run_criterion("names_trigger", {**brief, "reason": "something"}, expect)["pass"]
     assert not run_criterion("offers_safe_default", {**brief, "options": ["a"]}, expect)["pass"]
+    no_default = json.loads(fixture("review/escalate-no-safe-default.json"))
+    assert not run_criterion("offers_safe_default", no_default, {**expect, "no_change_words": NO_CHANGE_WORDS})["pass"]
+    only_changes = {**brief, "options": ["Apply the atomic-write fix now", "Replace storage with a database"]}
+    assert not run_criterion("offers_safe_default", only_changes, {**expect, "no_change_words": NO_CHANGE_WORDS})["pass"]
+    deferring = {**brief, "options": ["Apply the fix now", "Defer the code fix and take no action on storage.py"]}
+    assert run_criterion("offers_safe_default", deferring, {**expect, "no_change_words": NO_CHANGE_WORDS})["pass"]
+    threshold = {**brief, "options": ["a", "raise the threshold"]}
+    assert not run_criterion("offers_safe_default", threshold, expect)["pass"]  # `hold` is not inside `threshold`
     assert not run_criterion("no_decision_made", {**brief, "decision": "go"}, expect)["pass"]
 
 

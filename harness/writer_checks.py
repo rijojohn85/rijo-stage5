@@ -4,8 +4,13 @@ Each check is a pure function over the sections (so evals reuse the exact rule) 
 object with run(ctx, artifact) -> Failure | None for the dispatcher's check list. All of them
 fail with SCHEMA_INVALID, the usual structured error for an artifact that breaks its contract.
 """
+import re
+
 from harness.report import section_heading_count
 from harness.results import ErrorCode, Failure
+
+_SETEXT_UNDERLINE = re.compile(r"^\s*(=+|-+)\s*$")
+_HTML_HEADING = re.compile(r"<h[1-6][\s>/]", re.IGNORECASE)
 
 
 def empty_sections(sections):
@@ -13,10 +18,14 @@ def empty_sections(sections):
     return sorted(key for key, text in sections.items() if not text.strip())
 
 
+def _is_heading_line(line):
+    """A Markdown hash heading, a Setext underline (a line of only '=' or '-'), or an HTML <h1>-<h6> tag."""
+    return line.lstrip().startswith("#") or bool(_SETEXT_UNDERLINE.match(line) or _HTML_HEADING.search(line))
+
+
 def sections_with_heading_lines(sections):
-    """Keys with a prose line starting with '#': the model must not write headings."""
-    return sorted(key for key, text in sections.items()
-                  if any(line.lstrip().startswith("#") for line in text.splitlines()))
+    """Keys with a prose line that is a heading: the model must not write headings."""
+    return sorted(key for key, text in sections.items() if any(_is_heading_line(line) for line in text.splitlines()))
 
 
 def section_set_problem(sections, required):
@@ -47,7 +56,8 @@ class NonEmptySections:
 class NoHeadingLines:
     def run(self, ctx, artifact):
         bad = sections_with_heading_lines(artifact["sections"])
-        return _invalid(f"section(s) with a line starting with '#' (headings are written by code): {', '.join(bad)}") if bad else None
+        return _invalid("section(s) with a heading line (a line starting with '#', a line of only '=' or '-', "
+                        f"or an <h1>-<h6> tag; headings are written by code): {', '.join(bad)}") if bad else None
 
 
 class ExactSectionSet:

@@ -5,8 +5,8 @@ Adding an agent or a check means editing this table, not the dispatcher.
 from dataclasses import dataclass
 
 from harness.checks import EscalationBackstop, PlanScopeCheck, ReviewBindingCheck, SchemaCheck
-from harness.preconditions import (FreshPassingReviewOf, ReviewableTarget, TerminalStateIsLegal, TriageIsFixNow,
-                                   WithinRevisionAllowance)
+from harness.preconditions import (FreshPassingReviewOf, NoHumanCheckpoint, ReviewableTarget, TerminalStateIsLegal,
+                                   TriageIsFixNow, WithinRevisionAllowance)
 from harness.store import REVIEWER, WRITER
 from harness.writer_checks import AssembledDraft, ExactSectionSet, NoHeadingLines, NonEmptySections
 
@@ -40,12 +40,13 @@ PROFILES = {
         summarize=lambda a: f"{a['classification']}, {a['decision']}, escalation={a['escalation']}",
     ),
     "plan": AgentProfile(
-        preconditions=(TriageIsFixNow(), FreshPassingReviewOf("triage"), WithinRevisionAllowance()),
+        preconditions=(TriageIsFixNow(), FreshPassingReviewOf("triage"), WithinRevisionAllowance(),
+                       NoHumanCheckpoint()),
         checks=(SchemaCheck("plan"),),
         summarize=lambda a: f"{len(a['files'])} file(s); test: {a['test']}",
     ),
     "implement": AgentProfile(
-        preconditions=(FreshPassingReviewOf("plan"), WithinRevisionAllowance()),
+        preconditions=(FreshPassingReviewOf("plan"), WithinRevisionAllowance(), NoHumanCheckpoint()),
         checks=(SchemaCheck("implement"), PlanScopeCheck()),
         summarize=lambda a: a["summary"],
     ),

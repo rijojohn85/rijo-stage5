@@ -3,7 +3,8 @@
 Only a person at a terminal can record a decision: every signing command shows what is being
 signed and waits for typed confirmation (EOF, such as a pipe or a non-interactive agent, counts
 as declined). The coordinator and the sub-agents have no tool that reaches this module or the
-log. A decision is appended to decisions/decisions.jsonl and nothing else changes: the run's
+log. A run's assessment is read from its write-once `substance-assessment.json` when present.
+A decision is appended to decisions/decisions.jsonl and nothing else changes: the run's
 report.md and artifacts stay byte-identical; only the derived disposition.json is refreshed.
 """
 import argparse
@@ -13,6 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from harness.assessment_file import load_saved_assessment
 from harness.decision_log import (DECISIONS, PUNCH_OUT, SUBSTANCE, DecisionLog, make_decision, punch_out_binding,
                                   substance_binding)
 from harness.disposition import describe, refresh_disposition
@@ -60,6 +62,10 @@ class DecisionDesk:
     def _assessment(self):
         return load_assessment(self._paths.substance_path, self._paths.manifest_path)
 
+    def _assessment_for(self, run_dir):
+        """The run's write-once substance-assessment.json when present, else the current files."""
+        return load_saved_assessment(run_dir) or self._assessment()
+
     def _facts(self, run_id):
         run_dir = self._paths.runs_dir / run_id
         if not run_dir.is_dir():
@@ -106,7 +112,7 @@ class DecisionDesk:
 
     def status(self, run_id):
         run_dir, _ = self._facts(run_id)
-        disposition = refresh_disposition(run_dir, self._sandbox_for(), self._log, self._assessment())
+        disposition = refresh_disposition(run_dir, self._sandbox_for(), self._log, self._assessment_for(run_dir))
         self._say(describe(disposition))
         self._say(f"required: {', '.join(disposition['required']) or 'nothing'}")
         return disposition
