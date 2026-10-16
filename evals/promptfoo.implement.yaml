@@ -1,11 +1,13 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-# implement — a plan in, a minimal applied fix out, proved by the plan's test.
+# implement — a plan in, a minimal applied fix out, proved by the plan's new test files.
 #
 # This eval EDITS files. The provider copies sandbox/ into a throwaway git repository for every
 # case (providers/scratch_workspace.py), so the real sandbox keeps its bugs and each case starts
 # from the same baseline. The provider also measures, outside the model, what git says changed and
-# whether the plan's test really went red to green (criteria.py reads that from the metadata).
-description: implement — apply the plan, change only its files, run its test
+# whether the plan's test_files really went red to green (criteria.py reads that from the metadata):
+# red = the implementer's new test file, replayed on a fresh copy of the ORIGINAL code, fails
+# (pytest exit 1); green = the same file passes in the edited workspace.
+description: implement — create the plan's test files, apply the plan, change only its files, run its tests
 prompts:
   - '{{agent}}'  # unused by the provider; the test vars describe the case
 providers:

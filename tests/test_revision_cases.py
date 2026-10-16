@@ -4,7 +4,7 @@ import json
 import pytest
 
 from conftest import json_reply, tool_reply
-from test_eval_plumbing import CALC, EVALS, call, fixture, grade, load_suite, output_of
+from test_eval_plumbing import CALC, CALC_TEST_CONTENT, EVALS, call, fixture, grade, load_suite, output_of
 
 import criteria  # noqa: E402  (test_eval_plumbing puts evals/ on sys.path)
 from providers.eval_case import EvalCase  # noqa: E402
@@ -95,11 +95,11 @@ def test_implement_good_revision_passes_and_ignored_feedback_fails():
     case_vars = resolved_vars("implement")
     edit = tool_reply("edit_file", {"path": CALC, "old_text": "    return sum(values) / len(values)",
                                     "new_text": "    if not values:\n        return 0.0\n    return sum(values) / len(values)"})
-    response, _ = call(case_vars, edit, json_reply(GOOD_REVISIONS["implement"]))
-    # red_to_green cannot be measured until the plan has test_files (Step C2/C3), so leave it out for now
-    measurable = {**case_vars, "expect": {**case_vars["expect"], "fixes": ["changes_only_plan_files"]}}
-    assert grade("addresses_feedback", response, measurable)["pass"]
-    for function in ("changes_only_plan_files", "no_unreported_edits"):  # red_to_green returns in Step C3
+    new_test = tool_reply("create_file", {"path": CALC_TEST, "content": CALC_TEST_CONTENT})
+    good = {**GOOD_REVISIONS["implement"], "changed": [CALC, CALC_TEST]}
+    response, _ = call(case_vars, new_test, edit, json_reply(good))
+    assert grade("addresses_feedback", response, case_vars)["pass"]
+    for function in ("changes_only_plan_files", "no_unreported_edits", "red_to_green"):
         assert grade(function, response, case_vars)["pass"], function
     ignored, _ = call(case_vars, json_reply(GOOD_REVISIONS["implement"]))  # claims success, edits nothing
     assert "does not pass" in grade("addresses_feedback", ignored, case_vars)["reason"]

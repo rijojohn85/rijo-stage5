@@ -10,7 +10,7 @@ The report was classified as a bug against SPEC.md, which requires calc.average 
 
 ## Plan: PASS
 
-The plan changes only sandbox/demo-app/calc.py: add a guard so average() returns 0.0 for an empty list and leave the non-empty path alone.
+The plan creates the test sandbox/demo-app/test_calc_empty.py, which asserts calc.average([]) == 0.0, and changes sandbox/demo-app/calc.py: add a guard so average() returns 0.0 for an empty list and leave the non-empty path alone.
 
 ## Implement: PASS
 

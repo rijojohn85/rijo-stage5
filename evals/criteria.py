@@ -122,8 +122,13 @@ def excludes_wrong_files(artifact, expect, context):
 
 @criterion
 def targets_function(artifact, expect, context):
-    needle = expect["test_mentions"]
-    return [] if needle.lower() in str(artifact.get("test", "")).lower() else [f"test does not mention {needle!r}"]
+    """Some plan step names a test_files path and says what it asserts (mentions the function under test)."""
+    needle = expect["test_mentions"].lower()
+    test_files = [_norm(path) for path in artifact.get("test_files", [])]
+    steps = [str(step).lower() for step in artifact.get("steps", [])]
+    if any(needle in step and any(path.lower() in step for path in test_files) for step in steps):
+        return []
+    return [f"no plan step names a test file from test_files and mentions {needle!r}"]
 
 
 # --- implement --------------------------------------------------------------------------

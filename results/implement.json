@@ -1,8 +1,8 @@
 {
-  "evalId": "eval-tPh-2026-10-15T12:21:53",
+  "evalId": "eval-TP7-2026-10-16T13:15:28",
   "results": {
     "version": 3,
-    "timestamp": "2026-10-15T12:21:53.069Z",
+    "timestamp": "2026-10-16T13:15:28.011Z",
     "prompts": [
       {
         "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
@@ -10,19 +10,19 @@
         "label": "{{agent}}",
         "provider": "deepseek-v4p1-flash",
         "metrics": {
-          "score": 2,
-          "testPassCount": 2,
+          "score": 3,
+          "testPassCount": 3,
           "testFailCount": 0,
           "testErrorCount": 0,
-          "assertPassCount": 8,
+          "assertPassCount": 13,
           "assertFailCount": 0,
-          "totalLatencyMs": 15335,
+          "totalLatencyMs": 46769,
           "tokenUsage": {
-            "prompt": 13188,
-            "completion": 725,
+            "prompt": 44786,
+            "completion": 2621,
             "cached": 0,
-            "total": 13913,
-            "numRequests": 2,
+            "total": 47407,
+            "numRequests": 3,
             "completionDetails": {
               "reasoning": 0,
               "acceptedPrediction": 0,
@@ -46,40 +46,43 @@
             }
           },
           "namedScores": {
-            "changes-only-plan-files": 2,
-            "test-red-to-green": 2,
-            "no-unreported-edits": 2
+            "no-unreported-edits": 3,
+            "changes-only-plan-files": 3,
+            "test-red-to-green": 3,
+            "addresses-feedback": 1
           },
           "namedScoresCount": {
-            "changes-only-plan-files": 2,
-            "test-red-to-green": 2,
-            "no-unreported-edits": 2
+            "no-unreported-edits": 3,
+            "changes-only-plan-files": 3,
+            "test-red-to-green": 3,
+            "addresses-feedback": 1
           },
           "namedScoreWeights": {
-            "changes-only-plan-files": 2,
-            "test-red-to-green": 2,
-            "no-unreported-edits": 2
+            "no-unreported-edits": 3,
+            "changes-only-plan-files": 3,
+            "test-red-to-green": 3,
+            "addresses-feedback": 1
           },
-          "cost": 0.004826
+          "cost": 0.016579999999999998
         }
       }
     ],
     "results": [
       {
-        "cost": 0.00236,
+        "cost": 0.004996,
         "gradingResult": {
           "pass": true,
           "score": 1,
           "reason": "All assertions passed",
           "namedScores": {
+            "no-unreported-edits": 1,
             "changes-only-plan-files": 1,
-            "test-red-to-green": 1,
-            "no-unreported-edits": 1
+            "test-red-to-green": 1
           },
           "namedScoreWeights": {
+            "no-unreported-edits": 1,
             "changes-only-plan-files": 1,
-            "test-red-to-green": 1,
-            "no-unreported-edits": 1
+            "test-red-to-green": 1
           },
           "tokensUsed": {
             "total": 0,
@@ -129,12 +132,12 @@
             }
           ]
         },
-        "id": "3082ef51-30bb-40fa-84f7-b4673909b1e4",
-        "latencyMs": 7004,
+        "id": "6378b279-551b-40d6-8748-0a35897de9ce",
+        "latencyMs": 12983,
         "namedScores": {
+          "no-unreported-edits": 1,
           "changes-only-plan-files": 1,
-          "test-red-to-green": 1,
-          "no-unreported-edits": 1
+          "test-red-to-green": 1
         },
         "prompt": {
           "raw": "implement",
@@ -148,13 +151,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"changed\": [\"sandbox/demo-app/calc.py\"], \"summary\": \"Added an empty-input guard to average() in calc.py so it returns 0.0 for an empty list, leaving the non-empty arithmetic mean path unchanged. The plan's test passed.\", \"test_passed\": true}",
-          "cost": 0.00236,
+          "output": "{\"changed\": [\"sandbox/demo-app/calc.py\", \"sandbox/demo-app/test_calc_empty.py\"], \"summary\": \"Added an empty-input guard to average() in calc.py so it returns 0.0 for an empty list, leaving the non-empty arithmetic mean unchanged, and created test_calc_empty.py asserting both behaviours. The test failed with ZeroDivisionError before the fix and passes after.\", \"test_passed\": true}",
+          "cost": 0.004996,
           "tokenUsage": {
-            "prompt": 6540,
-            "completion": 332,
+            "prompt": 14554,
+            "completion": 525,
             "cached": 0,
-            "total": 6872,
+            "total": 15079,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -187,20 +190,21 @@
                 "agent": "implement",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 6540,
-                "output_tokens": 332,
-                "cost_usd": 0.00236,
+                "input_tokens": 14554,
+                "output_tokens": 525,
+                "cost_usd": 0.004996,
                 "ok": true,
                 "artifact": "01-implement.json",
-                "sha256": "de066bf3b2b3f4a8685620fe2a3d2666ca5f775ac9d4ce4b3fdf8bf72c910c50",
+                "sha256": "dc05fe034c2f0ed5db7718119cb9380a99bc3bc07ae6ae6a38f2e8b67b3d84f2",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:21:59.970438+00:00"
+                "ts": "2026-10-16T13:15:40.173872+00:00"
               }
             ],
             "actual_changed": [
-              "sandbox/demo-app/calc.py"
+              "sandbox/demo-app/calc.py",
+              "sandbox/demo-app/test_calc_empty.py"
             ],
             "test_failed_before": true,
             "test_passed_after": true
@@ -247,10 +251,10 @@
         },
         "testIdx": 0,
         "tokenUsage": {
-          "prompt": 6540,
-          "completion": 332,
+          "prompt": 14554,
+          "completion": 525,
           "cached": 0,
-          "total": 6872,
+          "total": 15079,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -294,20 +298,21 @@
               "agent": "implement",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 6540,
-              "output_tokens": 332,
-              "cost_usd": 0.00236,
+              "input_tokens": 14554,
+              "output_tokens": 525,
+              "cost_usd": 0.004996,
               "ok": true,
               "artifact": "01-implement.json",
-              "sha256": "de066bf3b2b3f4a8685620fe2a3d2666ca5f775ac9d4ce4b3fdf8bf72c910c50",
+              "sha256": "dc05fe034c2f0ed5db7718119cb9380a99bc3bc07ae6ae6a38f2e8b67b3d84f2",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:21:59.970438+00:00"
+              "ts": "2026-10-16T13:15:40.173872+00:00"
             }
           ],
           "actual_changed": [
-            "sandbox/demo-app/calc.py"
+            "sandbox/demo-app/calc.py",
+            "sandbox/demo-app/test_calc_empty.py"
           ],
           "test_failed_before": true,
           "test_passed_after": true,
@@ -316,20 +321,20 @@
         "failureReason": 0
       },
       {
-        "cost": 0.002466,
+        "cost": 0.005343,
         "gradingResult": {
           "pass": true,
           "score": 1,
           "reason": "All assertions passed",
           "namedScores": {
-            "changes-only-plan-files": 1,
+            "no-unreported-edits": 1,
             "test-red-to-green": 1,
-            "no-unreported-edits": 1
+            "changes-only-plan-files": 1
           },
           "namedScoreWeights": {
-            "changes-only-plan-files": 1,
+            "no-unreported-edits": 1,
             "test-red-to-green": 1,
-            "no-unreported-edits": 1
+            "changes-only-plan-files": 1
           },
           "tokensUsed": {
             "total": 0,
@@ -379,12 +384,12 @@
             }
           ]
         },
-        "id": "d299d01a-771b-49cf-a604-f123f7b481fb",
-        "latencyMs": 8331,
+        "id": "73b48458-a7ee-4749-87bb-ec95196c2e84",
+        "latencyMs": 12270,
         "namedScores": {
-          "changes-only-plan-files": 1,
+          "no-unreported-edits": 1,
           "test-red-to-green": 1,
-          "no-unreported-edits": 1
+          "changes-only-plan-files": 1
         },
         "prompt": {
           "raw": "implement",
@@ -398,13 +403,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"changed\": [\"sandbox/demo-app/storage.py\"], \"summary\": \"Serialized the records with json.dumps into a local variable before opening the target path, so a serialization failure (e.g. a set) raises before the file is truncated and existing contents are preserved. The plan's test passes.\", \"test_passed\": true}",
-          "cost": 0.002466,
+          "output": "{\"changed\": [\"sandbox/demo-app/storage.py\", \"sandbox/demo-app/test_storage_keeps_file.py\"], \"summary\": \"Serialized the records with json.dumps before opening the target path, so a serialization failure no longer truncates an existing file; added a test asserting the file keeps its old content on a failed write and is replaced on a successful one.\", \"test_passed\": true}",
+          "cost": 0.005343,
           "tokenUsage": {
-            "prompt": 6648,
-            "completion": 393,
+            "prompt": 15075,
+            "completion": 684,
             "cached": 0,
-            "total": 7041,
+            "total": 15759,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -437,20 +442,21 @@
                 "agent": "implement",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 6648,
-                "output_tokens": 393,
-                "cost_usd": 0.002466,
+                "input_tokens": 15075,
+                "output_tokens": 684,
+                "cost_usd": 0.005343,
                 "ok": true,
                 "artifact": "01-implement.json",
-                "sha256": "529505caec5460dcc2ee78f139c321c4e5298b764e6f2fce2f707808edd219f4",
+                "sha256": "83c84e146fd829d1c890e80fb26fe9e09dbd6263258b01eddff1144789600bba",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:22:08.468395+00:00"
+                "ts": "2026-10-16T13:15:52.732928+00:00"
               }
             ],
             "actual_changed": [
-              "sandbox/demo-app/storage.py"
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/test_storage_keeps_file.py"
             ],
             "test_failed_before": true,
             "test_passed_after": true
@@ -496,10 +502,10 @@
         },
         "testIdx": 1,
         "tokenUsage": {
-          "prompt": 6648,
-          "completion": 393,
+          "prompt": 15075,
+          "completion": 684,
           "cached": 0,
-          "total": 7041,
+          "total": 15759,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -542,20 +548,303 @@
               "agent": "implement",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 6648,
-              "output_tokens": 393,
-              "cost_usd": 0.002466,
+              "input_tokens": 15075,
+              "output_tokens": 684,
+              "cost_usd": 0.005343,
               "ok": true,
               "artifact": "01-implement.json",
-              "sha256": "529505caec5460dcc2ee78f139c321c4e5298b764e6f2fce2f707808edd219f4",
+              "sha256": "83c84e146fd829d1c890e80fb26fe9e09dbd6263258b01eddff1144789600bba",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:22:08.468395+00:00"
+              "ts": "2026-10-16T13:15:52.732928+00:00"
             }
           ],
           "actual_changed": [
-            "sandbox/demo-app/storage.py"
+            "sandbox/demo-app/storage.py",
+            "sandbox/demo-app/test_storage_keeps_file.py"
+          ],
+          "test_failed_before": true,
+          "test_passed_after": true,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.006241,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "no-unreported-edits": 1,
+            "test-red-to-green": 1,
+            "changes-only-plan-files": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoreWeights": {
+            "no-unreported-edits": 1,
+            "test-red-to-green": 1,
+            "changes-only-plan-files": 1,
+            "addresses-feedback": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "changes-only-plan-files",
+                "value": "file://criteria.py:changes_only_plan_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-red-to-green",
+                "value": "file://criteria.py:red_to_green"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "no-unreported-edits",
+                "value": "file://criteria.py:no_unreported_edits"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "addresses-feedback",
+                "value": "file://criteria.py:addresses_feedback"
+              }
+            }
+          ]
+        },
+        "id": "aaf8b6a0-dcfb-4195-8558-392ea137c2b4",
+        "latencyMs": 21516,
+        "namedScores": {
+          "no-unreported-edits": 1,
+          "test-red-to-green": 1,
+          "changes-only-plan-files": 1,
+          "addresses-feedback": 1
+        },
+        "prompt": {
+          "raw": "implement",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"changed\": [\"sandbox/demo-app/calc.py\", \"sandbox/demo-app/test_calc_empty.py\"], \"summary\": \"Added the plan's test file asserting average([]) == 0.0 (plus a non-empty regression check), then added an empty-input guard to average() in calc.py so it returns 0.0 while leaving the mean path unchanged. Both tests pass; storage.py was not modified.\", \"test_passed\": true}",
+          "cost": 0.006241,
+          "tokenUsage": {
+            "prompt": 15157,
+            "completion": 1412,
+            "cached": 0,
+            "total": 16569,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "implement",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 15157,
+                "output_tokens": 1412,
+                "cost_usd": 0.006241,
+                "ok": true,
+                "artifact": "01-implement.json",
+                "sha256": "5525cecda0ad423744887057e4e4cd75d796b29dd2553ac4ac962471bf6394cc",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-16T13:16:14.541338+00:00"
+              }
+            ],
+            "actual_changed": [
+              "sandbox/demo-app/calc.py",
+              "sandbox/demo-app/test_calc_empty.py"
+            ],
+            "test_failed_before": true,
+            "test_passed_after": true
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "[revision] edit outside the plan and failing test, reviewer feedback -> in scope and green",
+          "vars": {
+            "agent": "implement",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+            "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/revision/impl-calc-out-of-scope.json",
+            "feedback": "Findings (category: incorrect): the previous change edited sandbox/demo-app/storage.py, which the plan does not name, and the plan's test still fails. Change only the files the plan names and make the plan's test pass.",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/calc.py"
+              ],
+              "fixes": [
+                "changes_only_plan_files",
+                "red_to_green"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "changes-only-plan-files",
+              "value": "file://criteria.py:changes_only_plan_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-red-to-green",
+              "value": "file://criteria.py:red_to_green"
+            },
+            {
+              "type": "python",
+              "metric": "no-unreported-edits",
+              "value": "file://criteria.py:no_unreported_edits"
+            },
+            {
+              "type": "python",
+              "metric": "addresses-feedback",
+              "value": "file://criteria.py:addresses_feedback"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 15157,
+          "completion": 1412,
+          "cached": 0,
+          "total": 16569,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "implement",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/revision/impl-calc-out-of-scope.json",
+          "feedback": "Findings (category: incorrect): the previous change edited sandbox/demo-app/storage.py, which the plan does not name, and the plan's test still fails. Change only the files the plan names and make the plan's test pass.",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "fixes": [
+              "changes_only_plan_files",
+              "red_to_green"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "implement",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 15157,
+              "output_tokens": 1412,
+              "cost_usd": 0.006241,
+              "ok": true,
+              "artifact": "01-implement.json",
+              "sha256": "5525cecda0ad423744887057e4e4cd75d796b29dd2553ac4ac962471bf6394cc",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-16T13:16:14.541338+00:00"
+            }
+          ],
+          "actual_changed": [
+            "sandbox/demo-app/calc.py",
+            "sandbox/demo-app/test_calc_empty.py"
           ],
           "test_failed_before": true,
           "test_passed_after": true,
@@ -565,15 +854,15 @@
       }
     ],
     "stats": {
-      "successes": 2,
+      "successes": 3,
       "failures": 0,
       "errors": 0,
       "tokenUsage": {
-        "prompt": 13188,
-        "completion": 725,
+        "prompt": 44786,
+        "completion": 2621,
         "cached": 0,
-        "total": 13913,
-        "numRequests": 2,
+        "total": 47407,
+        "numRequests": 3,
         "completionDetails": {
           "reasoning": 0,
           "acceptedPrediction": 0,
@@ -596,13 +885,13 @@
           }
         }
       },
-      "durationMs": 15694,
-      "evaluationDurationMs": 15694
+      "durationMs": 48045,
+      "evaluationDurationMs": 48045
     }
   },
   "config": {
     "tags": {},
-    "description": "implement — apply the plan, change only its files, run its test",
+    "description": "implement — create the plan's test files, apply the plan, change only its files, run its tests",
     "prompts": [
       "{{agent}}"
     ],
@@ -674,6 +963,47 @@
             "value": "file://criteria.py:no_unreported_edits"
           }
         ]
+      },
+      {
+        "description": "[revision] edit outside the plan and failing test, reviewer feedback -> in scope and green",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "plan": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/plan/impl-calc.json",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/revision/impl-calc-out-of-scope.json",
+          "feedback": "Findings (category: incorrect): the previous change edited sandbox/demo-app/storage.py, which the plan does not name, and the plan's test still fails. Change only the files the plan names and make the plan's test pass.",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "fixes": [
+              "changes_only_plan_files",
+              "red_to_green"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "changes-only-plan-files",
+            "value": "file://criteria.py:changes_only_plan_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-red-to-green",
+            "value": "file://criteria.py:red_to_green"
+          },
+          {
+            "type": "python",
+            "metric": "no-unreported-edits",
+            "value": "file://criteria.py:no_unreported_edits"
+          },
+          {
+            "type": "python",
+            "metric": "addresses-feedback",
+            "value": "file://criteria.py:addresses_feedback"
+          }
+        ]
       }
     ],
     "env": {},
@@ -703,15 +1033,17 @@
     "nodeVersion": "v26.10.0",
     "platform": "linux",
     "arch": "x64",
-    "exportedAt": "2026-10-15T12:22:08.908Z",
-    "evaluationCreatedAt": "2026-10-15T12:21:53.069Z"
+    "exportedAt": "2026-10-16T13:16:16.491Z",
+    "evaluationCreatedAt": "2026-10-16T13:15:28.011Z"
   },
   "vars": [
     "agent",
     "report",
     "triage",
     "plan",
-    "expect"
+    "expect",
+    "first_pass",
+    "feedback"
   ],
   "runtimeOptions": {
     "eventSource": "cli",

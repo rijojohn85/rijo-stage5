@@ -1,8 +1,8 @@
 {
-  "evalId": "eval-zDw-2026-10-15T12:21:18",
+  "evalId": "eval-lae-2026-10-16T13:14:57",
   "results": {
     "version": 3,
-    "timestamp": "2026-10-15T12:21:18.112Z",
+    "timestamp": "2026-10-16T13:14:57.647Z",
     "prompts": [
       {
         "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
@@ -10,19 +10,19 @@
         "label": "{{agent}}",
         "provider": "deepseek-v4p1-flash",
         "metrics": {
-          "score": 3,
-          "testPassCount": 3,
+          "score": 4,
+          "testPassCount": 4,
           "testFailCount": 0,
           "testErrorCount": 0,
-          "assertPassCount": 12,
+          "assertPassCount": 17,
           "assertFailCount": 0,
-          "totalLatencyMs": 31951,
+          "totalLatencyMs": 25222,
           "tokenUsage": {
-            "prompt": 13759,
-            "completion": 3064,
+            "prompt": 12483,
+            "completion": 1835,
             "cached": 0,
-            "total": 16823,
-            "numRequests": 3,
+            "total": 14318,
+            "numRequests": 4,
             "completionDetails": {
               "reasoning": 0,
               "acceptedPrediction": 0,
@@ -46,40 +46,43 @@
             }
           },
           "namedScores": {
-            "excludes-wrong-files": 3,
-            "test-targets-function": 3,
-            "names-right-file": 3
+            "excludes-wrong-files": 4,
+            "names-right-file": 4,
+            "test-targets-function": 4,
+            "addresses-feedback": 1
           },
           "namedScoresCount": {
-            "excludes-wrong-files": 3,
-            "test-targets-function": 3,
-            "names-right-file": 3
+            "excludes-wrong-files": 4,
+            "names-right-file": 4,
+            "test-targets-function": 4,
+            "addresses-feedback": 1
           },
           "namedScoreWeights": {
-            "excludes-wrong-files": 3,
-            "test-targets-function": 3,
-            "names-right-file": 3
+            "excludes-wrong-files": 4,
+            "names-right-file": 4,
+            "test-targets-function": 4,
+            "addresses-feedback": 1
           },
-          "cost": 0.007804
+          "cost": 0.005947
         }
       }
     ],
     "results": [
       {
-        "cost": 0.001218,
+        "cost": 0.001205,
         "gradingResult": {
           "pass": true,
           "score": 1,
           "reason": "All assertions passed",
           "namedScores": {
             "excludes-wrong-files": 1,
-            "test-targets-function": 1,
-            "names-right-file": 1
+            "names-right-file": 1,
+            "test-targets-function": 1
           },
           "namedScoreWeights": {
             "excludes-wrong-files": 1,
-            "test-targets-function": 1,
-            "names-right-file": 1
+            "names-right-file": 1,
+            "test-targets-function": 1
           },
           "tokensUsed": {
             "total": 0,
@@ -129,12 +132,12 @@
             }
           ]
         },
-        "id": "f32e0156-40d3-4cb1-b3db-a35bf79bcfde",
-        "latencyMs": 4601,
+        "id": "b0484810-1255-41ad-9cff-47d164cb12d0",
+        "latencyMs": 5136,
         "namedScores": {
           "excludes-wrong-files": 1,
-          "test-targets-function": 1,
-          "names-right-file": 1
+          "names-right-file": 1,
+          "test-targets-function": 1
         },
         "prompt": {
           "raw": "plan",
@@ -148,13 +151,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"files\": [\"sandbox/demo-app/calc.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values, return 0.0 (matching SPEC.md's requirement that average([]) returns 0.0).\", \"Leave the existing return sum(values) / len(values) as the non-empty path, so the mean for non-empty input is unchanged.\"], \"test\": \"python -c \\\"import sys; sys.path.insert(0, 'sandbox/demo-app'); from calc import average; assert average([]) == 0.0; assert average([1, 2, 3]) == 2.0\\\"\"}",
-          "cost": 0.001218,
+          "output": "{\"files\": [\"sandbox/demo-app/calc.py\", \"sandbox/demo-app/test_calc_average_empty.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values: return 0.0, before the existing return sum(values) / len(values) line.\", \"Create sandbox/demo-app/test_calc_average_empty.py with a test that calls calc.average([]) and asserts the result is 0.0 (and equals 0.0 exactly, not an exception).\"], \"test_files\": [\"sandbox/demo-app/test_calc_average_empty.py\"]}",
+          "cost": 0.001205,
           "tokenUsage": {
-            "prompt": 2685,
-            "completion": 344,
+            "prompt": 3035,
+            "completion": 245,
             "cached": 0,
-            "total": 3029,
+            "total": 3280,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -187,16 +190,16 @@
                 "agent": "plan",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 2685,
-                "output_tokens": 344,
-                "cost_usd": 0.001218,
+                "input_tokens": 3035,
+                "output_tokens": 245,
+                "cost_usd": 0.001205,
                 "ok": true,
                 "artifact": "01-plan.json",
-                "sha256": "1bd68c7bb013c84f4f1f7bdcf5a338ce08139e6ada89b0c1310479836bf879af",
+                "sha256": "2010accbdbc3ece25cccf956e7678c0b0866d32be743fb352f2779b951e7bf4d",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:21:22.730015+00:00"
+                "ts": "2026-10-16T13:15:02.818203+00:00"
               }
             ]
           },
@@ -246,10 +249,10 @@
         },
         "testIdx": 0,
         "tokenUsage": {
-          "prompt": 2685,
-          "completion": 344,
+          "prompt": 3035,
+          "completion": 245,
           "cached": 0,
-          "total": 3029,
+          "total": 3280,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -297,16 +300,16 @@
               "agent": "plan",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 2685,
-              "output_tokens": 344,
-              "cost_usd": 0.001218,
+              "input_tokens": 3035,
+              "output_tokens": 245,
+              "cost_usd": 0.001205,
               "ok": true,
               "artifact": "01-plan.json",
-              "sha256": "1bd68c7bb013c84f4f1f7bdcf5a338ce08139e6ada89b0c1310479836bf879af",
+              "sha256": "2010accbdbc3ece25cccf956e7678c0b0866d32be743fb352f2779b951e7bf4d",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:21:22.730015+00:00"
+              "ts": "2026-10-16T13:15:02.818203+00:00"
             }
           ],
           "_promptfooFileMetadata": {}
@@ -314,7 +317,7 @@
         "failureReason": 0
       },
       {
-        "cost": 0.001272,
+        "cost": 0.001288,
         "gradingResult": {
           "pass": true,
           "score": 1,
@@ -377,8 +380,8 @@
             }
           ]
         },
-        "id": "b8235619-9b9f-4108-a562-35feb182e192",
-        "latencyMs": 5106,
+        "id": "7365158d-cd21-4d4b-8cf9-d99f9f0a2307",
+        "latencyMs": 4251,
         "namedScores": {
           "excludes-wrong-files": 1,
           "test-targets-function": 1,
@@ -396,13 +399,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"files\": [\"sandbox/demo-app/calc.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values: return 0.0, so an empty list returns 0.0 as SPEC.md requires instead of dividing by zero.\", \"Leave the existing return sum(values) / len(values) line unchanged for non-empty input.\"], \"test\": \"python -c \\\"import sys; sys.path.insert(0, 'sandbox/demo-app'); from calc import average; assert average([]) == 0.0\\\"\"}",
-          "cost": 0.001272,
+          "output": "{\"files\": [\"sandbox/demo-app/calc.py\", \"sandbox/demo-app/test_calc_average_empty.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values, return 0.0, so average([]) returns 0.0 as SPEC.md requires instead of raising ZeroDivisionError.\", \"Leave the existing non-empty path unchanged: return sum(values) / len(values) for non-empty input.\", \"Create sandbox/demo-app/test_calc_average_empty.py with a test that calls calc.average([]) and asserts the result is 0.0, plus a test that calc.average([1, 2, 3]) still returns 2.0.\"], \"test_files\": [\"sandbox/demo-app/test_calc_average_empty.py\"]}",
+          "cost": 0.001288,
           "tokenUsage": {
-            "prompt": 2773,
-            "completion": 367,
+            "prompt": 3123,
+            "completion": 293,
             "cached": 0,
-            "total": 3140,
+            "total": 3416,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -435,16 +438,16 @@
                 "agent": "plan",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 2773,
-                "output_tokens": 367,
-                "cost_usd": 0.001272,
+                "input_tokens": 3123,
+                "output_tokens": 293,
+                "cost_usd": 0.001288,
                 "ok": true,
                 "artifact": "01-plan.json",
-                "sha256": "2b491794a852a1a6401c7622b0ac0b8d4e8ac4b164655315dad2d523b351e188",
+                "sha256": "891c8deaaa8ed2adcd5b3f9c2f112f7643bb3751f6c9e22a1dcb8379dc36b15b",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:21:28.031946+00:00"
+                "ts": "2026-10-16T13:15:07.384304+00:00"
               }
             ]
           },
@@ -494,10 +497,10 @@
         },
         "testIdx": 1,
         "tokenUsage": {
-          "prompt": 2773,
-          "completion": 367,
+          "prompt": 3123,
+          "completion": 293,
           "cached": 0,
-          "total": 3140,
+          "total": 3416,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -545,16 +548,16 @@
               "agent": "plan",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 2773,
-              "output_tokens": 367,
-              "cost_usd": 0.001272,
+              "input_tokens": 3123,
+              "output_tokens": 293,
+              "cost_usd": 0.001288,
               "ok": true,
               "artifact": "01-plan.json",
-              "sha256": "2b491794a852a1a6401c7622b0ac0b8d4e8ac4b164655315dad2d523b351e188",
+              "sha256": "891c8deaaa8ed2adcd5b3f9c2f112f7643bb3751f6c9e22a1dcb8379dc36b15b",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:21:28.031946+00:00"
+              "ts": "2026-10-16T13:15:07.384304+00:00"
             }
           ],
           "_promptfooFileMetadata": {}
@@ -562,7 +565,7 @@
         "failureReason": 0
       },
       {
-        "cost": 0.005314,
+        "cost": 0.002055,
         "gradingResult": {
           "pass": true,
           "score": 1,
@@ -625,8 +628,8 @@
             }
           ]
         },
-        "id": "a5dc31b4-613d-4971-83bb-0fd15795a3ff",
-        "latencyMs": 22244,
+        "id": "f321a5b1-3e27-4273-acc6-0edd6a81eb8f",
+        "latencyMs": 10267,
         "namedScores": {
           "excludes-wrong-files": 1,
           "test-targets-function": 1,
@@ -644,13 +647,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"files\": [\"sandbox/demo-app/storage.py\"], \"steps\": [\"In sandbox/demo-app/storage.py, add `import os` and `import tempfile` to the module imports (json is already imported).\", \"In save_records, serialize before touching the destination: compute `payload = json.dumps(records, indent=2)` as the first statement, so a serialization failure raises before any file is opened or truncated.\", \"In save_records, write `payload` to a temporary file created in the same directory as `path` (e.g. `tempfile.NamedTemporaryFile(mode=\\\"w\\\", dir=os.path.dirname(os.path.abspath(path)), delete=False)`), flush and close it, then call `os.replace(tmp_path, path)` so the existing file is replaced only after the new content is fully written.\", \"In save_records, wrap the temp-file write and replace in a try/except that removes the temporary file and re-raises on failure, leaving the original file at `path` untouched.\"], \"test\": \"python -c \\\"import sys; sys.path.insert(0, 'sandbox/demo-app'); import storage; p = '/tmp/recs.json'; open(p, 'w').write('[1]');\\ntry:\\n    storage.save_records(p, {1, 2})\\nexcept TypeError:\\n    pass\\nassert open(p).read() == '[1]', 'existing records were destroyed'\\\"\"}",
-          "cost": 0.005314,
+          "output": "{\"files\": [\"sandbox/demo-app/storage.py\", \"sandbox/demo-app/test_storage_save_failure.py\"], \"steps\": [\"In sandbox/demo-app/storage.py, change save_records so the payload is serialized before the destination path is touched: compute `payload = json.dumps(records, indent=2)` as the first statement, so a serialization failure raises before any file is opened or truncated.\", \"In sandbox/demo-app/storage.py, write the serialized payload to a temporary file in the same directory as `path` (for example `path + \\\".tmp\\\"`), then replace the destination with `os.replace(tmp_path, path)` after the write completes, so an existing file at `path` is only replaced once the new content has been written successfully; add `import os` at the top of the file and remove the temporary file if the write fails.\", \"Add sandbox/demo-app/test_storage_save_failure.py: assert that save_records(path, records) with a non-JSON-serializable record (for example an object() instance) raises TypeError and leaves the pre-existing file content at path byte-for-byte unchanged, and assert that a successful save_records call replaces the file content with the new JSON.\"], \"test_files\": [\"sandbox/demo-app/test_storage_save_failure.py\"]}",
+          "cost": 0.002055,
           "tokenUsage": {
-            "prompt": 8301,
-            "completion": 2353,
+            "prompt": 2943,
+            "completion": 977,
             "cached": 0,
-            "total": 10654,
+            "total": 3920,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -683,16 +686,16 @@
                 "agent": "plan",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 8301,
-                "output_tokens": 2353,
-                "cost_usd": 0.005314,
+                "input_tokens": 2943,
+                "output_tokens": 977,
+                "cost_usd": 0.002055,
                 "ok": true,
                 "artifact": "01-plan.json",
-                "sha256": "0e47ec88785dbc077d2673dc14b91c870be99c8b031b19234e0fb040e515574e",
+                "sha256": "41a5439d182bbc7a6ecb2dda8f1edb2e2ce2dc99a5a4fc734a44ec97802d9116",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:21:50.433878+00:00"
+                "ts": "2026-10-16T13:15:18.008064+00:00"
               }
             ]
           },
@@ -741,10 +744,10 @@
         },
         "testIdx": 2,
         "tokenUsage": {
-          "prompt": 8301,
-          "completion": 2353,
+          "prompt": 2943,
+          "completion": 977,
           "cached": 0,
-          "total": 10654,
+          "total": 3920,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -791,16 +794,294 @@
               "agent": "plan",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 8301,
-              "output_tokens": 2353,
-              "cost_usd": 0.005314,
+              "input_tokens": 2943,
+              "output_tokens": 977,
+              "cost_usd": 0.002055,
               "ok": true,
               "artifact": "01-plan.json",
-              "sha256": "0e47ec88785dbc077d2673dc14b91c870be99c8b031b19234e0fb040e515574e",
+              "sha256": "41a5439d182bbc7a6ecb2dda8f1edb2e2ce2dc99a5a4fc734a44ec97802d9116",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:21:50.433878+00:00"
+              "ts": "2026-10-16T13:15:18.008064+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.001399,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoreWeights": {
+            "excludes-wrong-files": 1,
+            "test-targets-function": 1,
+            "names-right-file": 1,
+            "addresses-feedback": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "names-right-file",
+                "value": "file://criteria.py:names_right_file"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "excludes-wrong-files",
+                "value": "file://criteria.py:excludes_wrong_files"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "test-targets-function",
+                "value": "file://criteria.py:targets_function"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "addresses-feedback",
+                "value": "file://criteria.py:addresses_feedback"
+              }
+            }
+          ]
+        },
+        "id": "b0a0c04b-dcd5-4af8-98cc-cfee2a2acbc5",
+        "latencyMs": 5568,
+        "namedScores": {
+          "excludes-wrong-files": 1,
+          "test-targets-function": 1,
+          "names-right-file": 1,
+          "addresses-feedback": 1
+        },
+        "prompt": {
+          "raw": "plan",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"files\": [\"sandbox/demo-app/calc.py\", \"sandbox/demo-app/test_calc_empty.py\"], \"steps\": [\"In sandbox/demo-app/calc.py, add an empty-input guard at the start of average(): if not values, return 0.0, so average([]) returns 0.0 instead of raising ZeroDivisionError.\", \"Leave the non-empty path of average() unchanged: it still returns sum(values) / len(values).\", \"Create sandbox/demo-app/test_calc_empty.py with a test that imports calc and asserts calc.average([]) == 0.0, plus a test asserting calc.average([1, 2, 3]) == 2.0 to confirm the non-empty path is unaffected.\"], \"test_files\": [\"sandbox/demo-app/test_calc_empty.py\"]}",
+          "cost": 0.001399,
+          "tokenUsage": {
+            "prompt": 3382,
+            "completion": 320,
+            "cached": 0,
+            "total": 3702,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "plan",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 3382,
+                "output_tokens": 320,
+                "cost_usd": 0.001399,
+                "ok": true,
+                "artifact": "01-plan.json",
+                "sha256": "395bedbca26a4aff55ec8e716d6a66a31f5e872d721a157b3bbaefce4ff153a0",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-16T13:15:23.909622+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "[revision] wrong file, reviewer feedback -> plan moves to calc.py",
+          "vars": {
+            "agent": "plan",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+            "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+            "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+            "feedback": "Finding (category: incorrect): the previous plan names sandbox/demo-app/storage.py, but the defect is average() in sandbox/demo-app/calc.py, so the plan edits the wrong file. Name sandbox/demo-app/calc.py and do not list storage.py.",
+            "expect": {
+              "files_include": [
+                "sandbox/demo-app/calc.py"
+              ],
+              "files_exclude": [
+                "sandbox/demo-app/storage.py",
+                "sandbox/demo-app/SPEC.md"
+              ],
+              "test_mentions": "average",
+              "fixes": [
+                "names_right_file",
+                "excludes_wrong_files"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "names-right-file",
+              "value": "file://criteria.py:names_right_file"
+            },
+            {
+              "type": "python",
+              "metric": "excludes-wrong-files",
+              "value": "file://criteria.py:excludes_wrong_files"
+            },
+            {
+              "type": "python",
+              "metric": "test-targets-function",
+              "value": "file://criteria.py:targets_function"
+            },
+            {
+              "type": "python",
+              "metric": "addresses-feedback",
+              "value": "file://criteria.py:addresses_feedback"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "tokenUsage": {
+          "prompt": 3382,
+          "completion": 320,
+          "cached": 0,
+          "total": 3702,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "plan",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+          "feedback": "Finding (category: incorrect): the previous plan names sandbox/demo-app/storage.py, but the defect is average() in sandbox/demo-app/calc.py, so the plan edits the wrong file. Name sandbox/demo-app/calc.py and do not list storage.py.",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average",
+            "fixes": [
+              "names_right_file",
+              "excludes_wrong_files"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "plan",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 3382,
+              "output_tokens": 320,
+              "cost_usd": 0.001399,
+              "ok": true,
+              "artifact": "01-plan.json",
+              "sha256": "395bedbca26a4aff55ec8e716d6a66a31f5e872d721a157b3bbaefce4ff153a0",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-16T13:15:23.909622+00:00"
             }
           ],
           "_promptfooFileMetadata": {}
@@ -809,15 +1090,15 @@
       }
     ],
     "stats": {
-      "successes": 3,
+      "successes": 4,
       "failures": 0,
       "errors": 0,
       "tokenUsage": {
-        "prompt": 13759,
-        "completion": 3064,
+        "prompt": 12483,
+        "completion": 1835,
         "cached": 0,
-        "total": 16823,
-        "numRequests": 3,
+        "total": 14318,
+        "numRequests": 4,
         "completionDetails": {
           "reasoning": 0,
           "acceptedPrediction": 0,
@@ -840,13 +1121,13 @@
           }
         }
       },
-      "durationMs": 32488,
-      "evaluationDurationMs": 32488
+      "durationMs": 26745,
+      "evaluationDurationMs": 26745
     }
   },
   "config": {
     "tags": {},
-    "description": "plan — name the files the fix may touch, the steps, and the test",
+    "description": "plan — name the files the fix may touch, the steps, and the new test file (test_files, with a step that says what it asserts)",
     "prompts": [
       "{{agent}}"
     ],
@@ -960,6 +1241,51 @@
             "value": "file://criteria.py:targets_function"
           }
         ]
+      },
+      {
+        "description": "[revision] wrong file, reviewer feedback -> plan moves to calc.py",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/bug-clear.md",
+          "triage": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/triage/plan-calc.json",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/plan-wrong-file.json",
+          "feedback": "Finding (category: incorrect): the previous plan names sandbox/demo-app/storage.py, but the defect is average() in sandbox/demo-app/calc.py, so the plan edits the wrong file. Name sandbox/demo-app/calc.py and do not list storage.py.",
+          "expect": {
+            "files_include": [
+              "sandbox/demo-app/calc.py"
+            ],
+            "files_exclude": [
+              "sandbox/demo-app/storage.py",
+              "sandbox/demo-app/SPEC.md"
+            ],
+            "test_mentions": "average",
+            "fixes": [
+              "names_right_file",
+              "excludes_wrong_files"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "names-right-file",
+            "value": "file://criteria.py:names_right_file"
+          },
+          {
+            "type": "python",
+            "metric": "excludes-wrong-files",
+            "value": "file://criteria.py:excludes_wrong_files"
+          },
+          {
+            "type": "python",
+            "metric": "test-targets-function",
+            "value": "file://criteria.py:targets_function"
+          },
+          {
+            "type": "python",
+            "metric": "addresses-feedback",
+            "value": "file://criteria.py:addresses_feedback"
+          }
+        ]
       }
     ],
     "env": {},
@@ -989,14 +1315,16 @@
     "nodeVersion": "v26.10.0",
     "platform": "linux",
     "arch": "x64",
-    "exportedAt": "2026-10-15T12:21:50.779Z",
-    "evaluationCreatedAt": "2026-10-15T12:21:18.112Z"
+    "exportedAt": "2026-10-16T13:15:24.858Z",
+    "evaluationCreatedAt": "2026-10-16T13:14:57.647Z"
   },
   "vars": [
     "agent",
     "report",
     "triage",
-    "expect"
+    "expect",
+    "first_pass",
+    "feedback"
   ],
   "runtimeOptions": {
     "eventSource": "cli",

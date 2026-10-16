@@ -297,10 +297,45 @@ def test_implement_case_edits_a_scratch_copy_never_the_real_sandbox():
     assert subprocess.run(sandbox_status, capture_output=True, text=True).stdout == status_before  # unchanged by the eval
     metadata = response["metadata"]
     assert metadata["actual_changed"] == [CALC, CALC_TEST]
-    # green is measured on the plan's test_files; red needs the original-code replay (Step C3), so it is not measured yet
-    assert metadata["test_failed_before"] is False and metadata["test_passed_after"] is True
-    for function in ("changes_only_plan_files", "no_unreported_edits"):
+    # red: the new test file replayed on the original code fails; green: it passes after the edit
+    assert metadata["test_failed_before"] is True and metadata["test_passed_after"] is True
+    for function in ("changes_only_plan_files", "no_unreported_edits", "red_to_green"):
         assert grade(function, response, case_vars)["pass"], function
+
+
+def test_a_test_that_passes_on_the_original_code_is_not_red():
+    plan = json.loads(fixture("plan/impl-calc.json"))
+    always_green = "import calc\n\n\ndef test_average_of_a_list():\n    assert calc.average([2, 4]) == 3\n"
+    new_test = tool_reply("create_file", {"path": CALC_TEST, "content": always_green})
+    run_tests = tool_reply("run_test", {"files": [CALC_TEST]})
+    report = {"changed": [CALC_TEST], "summary": "test only", "test_passed": True}
+    case_vars = {"agent": "implement", "triage": json.dumps(TRIAGE), "plan": json.dumps(plan),
+                 "expect": {"files_include": [CALC_TEST]}}
+    response, _ = call(case_vars, new_test, run_tests, json_reply(report))
+    assert response["metadata"]["test_failed_before"] is False
+    assert response["metadata"]["test_passed_after"] is True
+    assert "did not fail" in grade("red_to_green", response, case_vars)["reason"]
+
+
+def test_a_test_file_that_was_never_created_is_not_red():
+    plan = json.loads(fixture("plan/impl-calc.json"))
+    report = {"changed": [CALC_TEST], "summary": "claimed", "test_passed": True}
+    case_vars = {"agent": "implement", "triage": json.dumps(TRIAGE), "plan": json.dumps(plan),
+                 "expect": {"files_include": [CALC_TEST]}}
+    response, _ = call(case_vars, json_reply(report))
+    assert response["metadata"]["test_failed_before"] is False
+    assert response["metadata"]["test_passed_after"] is False
+
+
+def test_a_test_with_a_collection_error_is_not_red():
+    plan = json.loads(fixture("plan/impl-calc.json"))
+    broken = "import calc\nfrom calc import no_such_name\n\n\ndef test_x():\n    assert True\n"
+    new_test = tool_reply("create_file", {"path": CALC_TEST, "content": broken})
+    report = {"changed": [CALC_TEST], "summary": "broken", "test_passed": False}
+    case_vars = {"agent": "implement", "triage": json.dumps(TRIAGE), "plan": json.dumps(plan),
+                 "expect": {"files_include": [CALC_TEST]}}
+    response, _ = call(case_vars, new_test, json_reply(report))
+    assert response["metadata"]["test_failed_before"] is False  # pytest exit 2, not 1
 
 
 def test_implement_that_edits_nothing_fails_red_to_green_and_files_criteria():
@@ -343,14 +378,20 @@ def test_triage_criteria():
 
 def test_plan_criteria():
     expect = {"files_include": [CALC], "files_exclude": ["sandbox/demo-app/storage.py"], "test_mentions": "average"}
-    plan = {**PLAN, "test": "check average"}
+    test_file = "sandbox/demo-app/test_calc_empty.py"
+    plan = {**PLAN, "files": [CALC, test_file], "test_files": [test_file],
+            "steps": [f"{test_file} asserts average([]) == 0.0", "guard average()"]}
     assert run_criterion("names_right_file", plan, expect)["pass"]
     assert run_criterion("excludes_wrong_files", plan, expect)["pass"]
     assert run_criterion("targets_function", plan, expect)["pass"]
     wrong = {**plan, "files": ["./sandbox/demo-app/storage.py"]}
     assert not run_criterion("names_right_file", wrong, expect)["pass"]
     assert not run_criterion("excludes_wrong_files", wrong, expect)["pass"]
-    assert not run_criterion("targets_function", PLAN, expect)["pass"]
+    assert not run_criterion("targets_function", PLAN, expect)["pass"]  # its step names no test_files path
+    names_file_only = {**plan, "steps": [f"create {test_file}", "guard average()"]}
+    names_function_only = {**plan, "steps": ["a test for average", "guard average()"]}
+    assert not run_criterion("targets_function", names_file_only, expect)["pass"]
+    assert not run_criterion("targets_function", names_function_only, expect)["pass"]
 
 
 def test_reviewer_criteria():

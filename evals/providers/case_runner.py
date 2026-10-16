@@ -4,6 +4,7 @@ Upstream artifacts from the fixtures are saved into a fresh run directory as if 
 had succeeded and passed review, so the dispatcher's own preconditions, tool loop, checks
 and audit run exactly as they do in a real run. Nothing here re-implements a rule.
 """
+import shutil
 import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -69,17 +70,38 @@ def _observe_draft(store, result):
     return {"draft": store.draft_text(store.latest(WRITER))} if result["ok"] else {}
 
 
+PYTEST_TESTS_FAILED = 1  # pytest exit codes: 0 passed, 1 tests failed, 2 collection error, 5 no tests
+
+
 def _plan_test(case):
-    """The plan's test files. Until the plan field `test_files` exists (Step C2) there are none, so run_test refuses."""
+    """The plan's test files: the new pytest files the implementer creates."""
     return case.artifacts["plan"].get("test_files", [])
 
 
-def _observe_implement(workspace, sandbox, case, result, before):
-    """What the model cannot be trusted to report: git's view of the edits and the test's real exit."""
-    after = run_test(_plan_test(case), root=workspace) if result["ok"] else None
+def _failed_on_original_code(workspace, test_files):
+    """Red check: replay the implementer's test files on a fresh, unedited copy of the sandbox.
+
+    Red means the tests ran and failed (exit 1). A test file the implementer never created, a
+    collection error or a test that passes on the original code is not red. Evals only; the
+    live harness trusts the implementer's `test_passed`.
+    """
+    with scratch_workspace() as original:
+        for relative in test_files:
+            created = workspace / relative
+            if created.is_file():
+                (original / relative).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy(created, original / relative)
+        replay = run_test(test_files, root=original)
+    return bool(replay.get("ok")) and replay["exit_code"] == PYTEST_TESTS_FAILED
+
+
+def _observe_implement(workspace, sandbox, case, result):
+    """What the model cannot be trusted to report: git's view of the edits and the test's real runs."""
+    test_files = _plan_test(case)
+    after = run_test(test_files, root=workspace) if result["ok"] else None
     return {
         "actual_changed": sandbox.changed_files(),
-        "test_failed_before": bool(before.get("ok")) and not before["passed"],
+        "test_failed_before": result["ok"] and _failed_on_original_code(workspace, test_files),
         "test_passed_after": bool(after and after.get("passed")),
     }
 
@@ -104,9 +126,8 @@ def run_case(case, llm):
             llm=llm, run_dir=run_dir, tool_root=workspace, sandbox=sandbox, bug_report_path=bug_report_path,
             correlation_id="eval", clock=lambda: datetime.now(timezone.utc),
         )
-        before = run_test(_plan_test(case), root=workspace) if case.agent == IMPLEMENT else {}
         result = dispatcher.dispatch(case.agent, target=case.target, feedback=case.feedback,
                                      terminal_state=case.terminal_state)
-        observed = _observe_implement(workspace, sandbox, case, result, before) if case.agent == IMPLEMENT else {}
+        observed = _observe_implement(workspace, sandbox, case, result) if case.agent == IMPLEMENT else {}
         observed = _observe_draft(store, result) if case.agent == WRITER else observed
         return CaseOutcome(result, AuditLog(run_dir / "audit.jsonl").entries(), observed)

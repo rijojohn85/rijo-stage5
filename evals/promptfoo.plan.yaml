@@ -3,7 +3,7 @@
 # Inputs are saved triage artifacts (seeded into the run as already reviewed and passing), so
 # the eval is deterministic and does not depend on re-running triage first. The provider runs
 # the real dispatcher; each `metric:` is a named criterion implemented in criteria.py.
-description: plan — name the files the fix may touch, the steps, and the test
+description: plan — name the files the fix may touch, the steps, and the new test file (test_files, with a step that says what it asserts)
 prompts:
   - '{{agent}}'  # unused by the provider; the test vars describe the case
 providers:
