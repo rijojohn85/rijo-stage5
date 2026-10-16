@@ -12,8 +12,8 @@ from harness.audit import AuditLog
 from harness.hashing import sha256_json
 
 REVIEWER, WRITER = "reviewer", "writer"
-PRODUCERS = ("triage", "plan", "implement", "escalate")
-CAPPED = ("triage", "plan", "implement")    # the producers whose replacement is a revision (escalate is not)
+PRODUCERS = ("screen", "triage", "plan", "implement", "escalate")
+CAPPED = ("screen", "triage", "plan", "implement")    #the producers whose replacement is a revision (escalate is not)
 PRECONDITION_MISSING, REVISION_CAP_REACHED = "PRECONDITION_MISSING", "REVISION_CAP_REACHED"
 CALLER_MISTAKES = (PRECONDITION_MISSING, REVISION_CAP_REACHED)
 MAX_ARTIFACTS = 2       # the initial artifact plus one replacement
@@ -131,7 +131,10 @@ def _is_subsequence(wanted, tokens):
 
 
 def finishes_legally(steps, final, expect):
-    """Ended in the expected terminal state through a passing review of the accepted writer draft."""
+    """Ended in the expected terminal state through a passing review of the accepted writer draft.
+
+    `expect["never"]` (optional) lists agents that must not have a successful dispatch at all.
+    """
     problems = []
     if final["result"] != expect["result"]:
         problems.append(f"result: got {final['result']!r}, want {expect['result']!r}")
@@ -145,6 +148,8 @@ def finishes_legally(steps, final, expect):
     ok_tokens = [s.token for s in steps if s.ok]
     if not _is_subsequence(expect.get("path", ()), ok_tokens):
         problems.append(f"expected the ordered path {list(expect['path'])}, got {ok_tokens}")
+    forbidden = sorted({s.agent for s in steps if s.ok and s.agent in expect.get("never", ())})
+    problems += [f"{agent} ran, but it must never run in this case" for agent in forbidden]
     return problems
 
 

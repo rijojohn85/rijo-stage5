@@ -7,7 +7,11 @@ from guardrails import screen_gate, validate
 from harness.guardrail_runner import run_guardrail
 from harness.tools import PROJECT_ROOT
 
-BUG_REPORTS = sorted((PROJECT_ROOT / "test-data" / "bugs").glob("*.md"))
+BUGS_DIR = PROJECT_ROOT / "test-data" / "bugs"
+CLEAN_REPORTS = [BUGS_DIR / name for name in
+                 ("bug-clear.md", "bug-regression.md", "feature-as-bug.md", "escalation-data-loss.md")]
+ATTACK_REPORTS = {"injected-calc.md": {"S3_EXFILTRATION", "S5_WORKFLOW_OVERRIDE"},
+                  "adversarial-approved.md": {"S5_WORKFLOW_OVERRIDE"}}   # the two attack files, not in the clean set
 CLEAN = {"verdict": "clean", "evidence": [], "reason": "a calc bug"}
 
 ATTACKS = [
@@ -57,11 +61,15 @@ def test_dry_run_reports_but_does_not_write(tmp_path):
     assert artifact == CLEAN
 
 
-@pytest.mark.parametrize("path", BUG_REPORTS, ids=lambda p: p.name)
+@pytest.mark.parametrize("path", CLEAN_REPORTS, ids=lambda p: p.name)
 def test_the_shipped_bug_reports_trigger_no_rule(tmp_path, path):
-    assert len(BUG_REPORTS) == 4
     result, artifact, _ = run_gate(tmp_path, path.read_text(encoding="utf-8"), dict(CLEAN), "--apply")
     assert result.exit_code == 0 and artifact == CLEAN
+
+
+@pytest.mark.parametrize("name,expected", ATTACK_REPORTS.items())
+def test_the_shipped_attack_reports_trigger_their_rules(name, expected):
+    assert expected <= set(hit_ids((BUGS_DIR / name).read_text(encoding="utf-8")))
 
 
 def test_a_real_bug_about_deleting_triggers_no_rule():

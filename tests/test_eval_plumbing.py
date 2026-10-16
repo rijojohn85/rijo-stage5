@@ -386,7 +386,8 @@ SCREEN_REPLY = {"verdict": "clean", "evidence": [], "reason": "an ordinary calc 
 def test_screen_suite_covers_every_fixture_and_the_four_test_data_bugs():
     reports = {t["vars"]["report"].removeprefix("file://") for t in load_suite("screen")["tests"]}
     expected = {f"fixtures/screen/{p.name}" for p in SCREEN_FIXTURES}
-    expected |= {f"../test-data/bugs/{p.name}" for p in (PROJECT_ROOT / "test-data" / "bugs").glob("*.md")}
+    expected |= {f"../test-data/bugs/{name}" for name in    # the two attack files (injected-calc, adversarial-approved) are workflow cases
+                 ("bug-clear.md", "bug-regression.md", "feature-as-bug.md", "escalation-data-loss.md")}
     assert reports == expected
 
 

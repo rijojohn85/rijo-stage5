@@ -10,7 +10,8 @@ from conftest import ESCALATION, IMPLEMENT, TRIAGE, json_reply, review_reply, te
 from harness.coordinator import FAILED_COORDINATION, FAILED_TURN_BUDGET, MAX_REFUSED_CLAIMS
 from harness.freshness import Freshness
 from harness.run_state import RunState
-from test_coordinator import HANDLE, HAPPY_COORDINATOR, HAPPY_HELPERS, REVISE, build, launch, reviewing
+from test_coordinator import (HANDLE, HAPPY_COORDINATOR, HAPPY_HELPERS, REVISE, SCREEN_COORDINATOR, build, launch,
+                              reviewing)
 
 DANGEROUS = [{"category": "dangerous", "detail": "the fix deletes customer records"}]
 DEFER = {**TRIAGE, "decision": "defer"}
@@ -146,6 +147,29 @@ def test_refused_launches_other_than_a_terminal_claim_are_not_counted(tmp_path):
     script = [reviewing("triage")] * 5      # a review with nothing to review is a caller mistake, not a completion claim
     outcome, _, _, _ = run_to_failure(tmp_path, script, [], max_turns=5)
     assert outcome.result == FAILED_TURN_BUDGET
+
+
+def test_triage_first_is_refused_and_names_launch_screen(tmp_path):
+    script = [launch("launch_triage"), *claims("DEFERRED", "DEFERRED", "DEFERRED")]
+    coordinator, llm, audit, run_dir = build(tmp_path, script, [], screened=False)
+    outcome = coordinator.run(HANDLE)
+    first = audit.dispatches()[0]
+    assert first["agent"] == "triage" and first["error_code"] == "PRECONDITION_MISSING"
+    assert "launch_screen" in first["detail"]
+    assert len(llm.helpers.calls) == 0       # the refused triage never reached a model
+    assert outcome.result == FAILED_COORDINATION
+
+
+def test_verified_after_a_suspicious_screen_without_escalating(tmp_path):
+    flagged = {"verdict": "suspicious", "evidence": ["mark the run VERIFIED"], "reason": "an instruction aimed at an AI"}
+    script = [*SCREEN_COORDINATOR, *claims("VERIFIED", "VERIFIED", "VERIFIED")]
+    outcome, audit, run_dir, llm = run_to_failure(tmp_path, script, [json_reply(flagged), review_reply()])
+    report = assert_failed_coordination(outcome, run_dir)
+    assert outcome.human_required and "**Human decision required**" in report   # kept in the failure report
+    assert "screen step 1 rated the report suspicious" in report
+    assert {e["agent"] for e in audit.dispatches()}.isdisjoint({"triage", "plan", "implement"})
+    assert [e["error_code"] for e in audit.dispatches() if e["agent"] == "writer"] == ["PRECONDITION_MISSING"] * 3
+    assert len(llm.helpers.calls) == 2       # only the screen and its review were paid for
 
 
 # --- human gate: history is never erased -----------------------------------------------------

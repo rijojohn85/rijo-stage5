@@ -63,7 +63,8 @@ HAPPY_HELPERS = SCREEN_HELPERS + [json_reply(TRIAGE), review_reply(), json_reply
 HANDLE = {"id": CORRELATION_ID, "length_chars": len(BUG), "sha256": sha256_text(BUG), "note": NOTE}
 
 
-def build(tmp_path, coordinator, helpers, *, log=None, max_turns=MAX_TURNS, sandbox=None, report=BUG):
+def build(tmp_path, coordinator, helpers, *, log=None, max_turns=MAX_TURNS, sandbox=None, report=BUG,
+          screened=True):
     run_dir = tmp_path / "runs" / CORRELATION_ID
     root = tmp_path / "project"
     (root / "sandbox").mkdir(parents=True)
@@ -71,7 +72,8 @@ def build(tmp_path, coordinator, helpers, *, log=None, max_turns=MAX_TURNS, sand
     bug.write_text(report, encoding="utf-8")
     llm = SplitLlm(coordinator, helpers)
     sandbox = sandbox or FakeSandbox(changed=[PLAN_FILE])
-    seed_clean_screen(ArtifactStore(run_dir), sandbox)  # step 0: triage needs a reviewed clean screen
+    if screened:
+        seed_clean_screen(ArtifactStore(run_dir), sandbox)  # step 0: triage needs a reviewed clean screen
     built = build_coordinator(llm=llm, run_dir=run_dir, tool_root=root, sandbox=sandbox, bug_report_path=bug,
                               correlation_id=CORRELATION_ID, clock=lambda: FIXED_TIME, log=log, max_turns=max_turns)
     return built, llm, AuditLog(run_dir / "audit.jsonl"), run_dir

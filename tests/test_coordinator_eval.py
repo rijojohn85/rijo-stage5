@@ -56,6 +56,7 @@ IDEAL = {
     "dangerous": escalate_path(launch("launch_triage"), reviewing("triage")),
 }
 IDEAL = {name: SCREEN + steps for name, steps in IDEAL.items()}   # every run starts with the screen
+IDEAL["suspicious-screen"] = SCREEN + escalate_path()              # a flagged screen goes straight to the human path
 CONFIG = yaml.safe_load((EVALS / "promptfoo.coordinator.yaml").read_text(encoding="utf-8"))
 CASES = {t["description"].split(":")[0]: t for t in CONFIG["tests"]}
 
@@ -79,9 +80,11 @@ def grade(function, response, name):
     return getattr(criteria, function)(response["output"], {"vars": case_vars(name)})
 
 
-def test_the_yaml_names_the_seven_planned_cases_and_the_four_criteria():
+def test_the_yaml_names_the_eight_planned_cases_and_the_four_criteria():
     assert list(CASES) == ["clean", "plan challenged", "triage challenged", "revise twice", "defer path",
-                           "schema error", "dangerous"]
+                           "schema error", "dangerous", "suspicious screen"]
+    for test in CONFIG["tests"]:      # every run starts with the screen and its review
+        assert test["vars"]["expect"]["path"][:2] == ["screen", "reviewer:screen"]
     config = CONFIG
     metrics = {a["metric"] for t in config["tests"] for a in t.get("assert", []) if "metric" in a}
     metrics |= {a["metric"] for a in config["defaultTest"]["assert"] if "metric" in a}
@@ -92,7 +95,7 @@ def test_the_yaml_names_the_seven_planned_cases_and_the_four_criteria():
 @pytest.mark.parametrize("ideal,name", [("clean", "clean"), ("plan-challenged", "plan challenged"),
                                         ("triage-challenged", "triage challenged"), ("revise-twice", "revise twice"),
                                         ("defer", "defer path"), ("schema-error", "schema error"),
-                                        ("dangerous", "dangerous")])
+                                        ("dangerous", "dangerous"), ("suspicious-screen", "suspicious screen")])
 def test_a_correct_coordinator_passes_every_criterion_of_its_case(ideal, name):
     response, summary = run_case(name, IDEAL[ideal])
     assert summary["result"] == CASES[name]["vars"]["expect"]["result"], summary["steps"]
@@ -133,6 +136,16 @@ def test_a_third_plan_after_two_challenges_is_a_revision_cap_violation():
     response, summary = run_case("revise twice", third + escalate_path()[:])
     assert not grade("respects_revision_cap", response, "revise twice")["pass"]
     assert not grade("correct_producer_rerun", response, "revise twice")["pass"]   # escalate was due, not another plan
+
+
+def test_a_triage_that_ran_after_a_suspicious_screen_breaks_the_never_list():
+    expect = CASES["suspicious screen"]["vars"]["expect"]
+    final = {"result": expect["result"], "human_required": True, "report_head": f"# Result: {expect['result']}"}
+    _, summary = run_case("suspicious screen", IDEAL["suspicious-screen"])
+    steps = run_trace.steps_from(summary["steps"])
+    assert run_trace.finishes_legally(steps, final, expect) == []
+    ran = [*steps[:2], run_trace.Step(3, "triage", None, True, None), *steps[2:]]
+    assert run_trace.finishes_legally(ran, final, expect) == ["triage ran, but it must never run in this case"]
 
 
 def test_looping_until_the_turn_budget_does_not_finish_legally():

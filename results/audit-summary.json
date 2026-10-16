@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-10-16T05:17:36.513264+00:00",
+  "generated_at": "2026-10-16T12:24:07.014455+00:00",
   "totals": {
-    "audit_lines": 527,
-    "input_tokens": 1625020,
-    "output_tokens": 179496,
-    "cost_usd": 1.502507
+    "audit_lines": 921,
+    "input_tokens": 2733881,
+    "output_tokens": 272306,
+    "cost_usd": 2.604648
   },
   "by_model": {
     "accounts/fireworks/models/deepseek-v4p1-flash": {
-      "audit_lines": 272,
-      "input_tokens": 974272,
-      "output_tokens": 153312,
-      "cost_usd": 0.476251
+      "audit_lines": 485,
+      "input_tokens": 1516335,
+      "output_tokens": 235300,
+      "cost_usd": 0.737258
     },
     "accounts/fireworks/models/glm-5p3": {
-      "audit_lines": 251,
-      "input_tokens": 650748,
-      "output_tokens": 26184,
-      "cost_usd": 1.026256
+      "audit_lines": 432,
+      "input_tokens": 1217546,
+      "output_tokens": 37006,
+      "cost_usd": 1.86739
     },
     "stub": {
       "audit_lines": 4,
@@ -28,46 +28,52 @@
   },
   "by_agent": {
     "coordinator": {
-      "audit_lines": 251,
-      "input_tokens": 650748,
-      "output_tokens": 26184,
-      "cost_usd": 1.026256
+      "audit_lines": 432,
+      "input_tokens": 1217546,
+      "output_tokens": 37006,
+      "cost_usd": 1.86739
     },
     "escalate": {
-      "audit_lines": 22,
-      "input_tokens": 22339,
-      "output_tokens": 13442,
-      "cost_usd": 0.022832
+      "audit_lines": 32,
+      "input_tokens": 31840,
+      "output_tokens": 19145,
+      "cost_usd": 0.032527
     },
     "implement": {
-      "audit_lines": 16,
-      "input_tokens": 93312,
-      "output_tokens": 5592,
-      "cost_usd": 0.034703
+      "audit_lines": 24,
+      "input_tokens": 149739,
+      "output_tokens": 8282,
+      "cost_usd": 0.05486
     },
     "plan": {
-      "audit_lines": 21,
-      "input_tokens": 52964,
-      "output_tokens": 7079,
-      "cost_usd": 0.024384
+      "audit_lines": 29,
+      "input_tokens": 88976,
+      "output_tokens": 10294,
+      "cost_usd": 0.039045
     },
     "reviewer": {
-      "audit_lines": 134,
-      "input_tokens": 645411,
-      "output_tokens": 94649,
-      "cost_usd": 0.3072
+      "audit_lines": 226,
+      "input_tokens": 952034,
+      "output_tokens": 140252,
+      "cost_usd": 0.45391
+    },
+    "screen": {
+      "audit_lines": 58,
+      "input_tokens": 46352,
+      "output_tokens": 5675,
+      "cost_usd": 0.020718
     },
     "triage": {
-      "audit_lines": 43,
-      "input_tokens": 103680,
-      "output_tokens": 13273,
-      "cost_usd": 0.047029
+      "audit_lines": 59,
+      "input_tokens": 150940,
+      "output_tokens": 18943,
+      "cost_usd": 0.06801
     },
     "writer": {
-      "audit_lines": 40,
-      "input_tokens": 56566,
-      "output_tokens": 19277,
-      "cost_usd": 0.040103
+      "audit_lines": 61,
+      "input_tokens": 96454,
+      "output_tokens": 32709,
+      "cost_usd": 0.068188
     }
   },
   "sources": {
@@ -79,10 +85,10 @@
       "duplicate_lines_skipped": 0
     },
     "results/coordinator.json": {
-      "audit_lines": 114,
-      "input_tokens": 144159,
-      "output_tokens": 4024,
-      "cost_usd": 0.219528,
+      "audit_lines": 154,
+      "input_tokens": 235721,
+      "output_tokens": 4378,
+      "cost_usd": 0.349271,
       "duplicate_lines_skipped": 0
     },
     "results/escalate.json": {
@@ -121,10 +127,24 @@
       "duplicate_lines_skipped": 0
     },
     "results/review.json": {
-      "audit_lines": 8,
-      "input_tokens": 37497,
-      "output_tokens": 6230,
-      "cost_usd": 0.018726,
+      "audit_lines": 10,
+      "input_tokens": 43088,
+      "output_tokens": 6941,
+      "cost_usd": 0.021256,
+      "duplicate_lines_skipped": 0
+    },
+    "results/screen-redteam.json": {
+      "audit_lines": 15,
+      "input_tokens": 14280,
+      "output_tokens": 2187,
+      "cost_usd": 0.00691,
+      "duplicate_lines_skipped": 0
+    },
+    "results/screen.json": {
+      "audit_lines": 14,
+      "input_tokens": 12647,
+      "output_tokens": 1437,
+      "cost_usd": 0.005518,
       "duplicate_lines_skipped": 0
     },
     "results/triage-revision.json": {
@@ -135,10 +155,10 @@
       "duplicate_lines_skipped": 0
     },
     "results/triage.json": {
-      "audit_lines": 4,
-      "input_tokens": 11172,
-      "output_tokens": 1364,
-      "cost_usd": 0.004988,
+      "audit_lines": 6,
+      "input_tokens": 17814,
+      "output_tokens": 2370,
+      "cost_usd": 0.008187,
       "duplicate_lines_skipped": 0
     },
     "results/workflow-escalation-recheck.json": {
@@ -149,10 +169,10 @@
       "duplicate_lines_skipped": 0
     },
     "results/workflow.json": {
-      "audit_lines": 172,
-      "input_tokens": 711531,
-      "output_tokens": 75240,
-      "cost_usd": 0.602981,
+      "audit_lines": 276,
+      "input_tokens": 826281,
+      "output_tokens": 79628,
+      "cost_usd": 0.820118,
       "duplicate_lines_skipped": 0
     },
     "results/writer.json": {
@@ -191,88 +211,88 @@
       "duplicate_lines_skipped": 0
     },
     "runs/20261015-134258": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 16
+      "audit_lines": 16,
+      "input_tokens": 60564,
+      "output_tokens": 3476,
+      "cost_usd": 0.046639,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134356": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 16
+      "audit_lines": 16,
+      "input_tokens": 61078,
+      "output_tokens": 3400,
+      "cost_usd": 0.04691,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134449": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 16
+      "audit_lines": 16,
+      "input_tokens": 62211,
+      "output_tokens": 3238,
+      "cost_usd": 0.046954,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134543": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 16
+      "audit_lines": 16,
+      "input_tokens": 59646,
+      "output_tokens": 3762,
+      "cost_usd": 0.045958,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134638": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 16
+      "audit_lines": 16,
+      "input_tokens": 56877,
+      "output_tokens": 3511,
+      "cost_usd": 0.044667,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134734": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 16
+      "audit_lines": 16,
+      "input_tokens": 56563,
+      "output_tokens": 3111,
+      "cost_usd": 0.044307,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134834": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 8
+      "audit_lines": 8,
+      "input_tokens": 27503,
+      "output_tokens": 2383,
+      "cost_usd": 0.020877,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134906": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 8
+      "audit_lines": 8,
+      "input_tokens": 21227,
+      "output_tokens": 1972,
+      "cost_usd": 0.018181,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-134935": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 8
+      "audit_lines": 8,
+      "input_tokens": 21448,
+      "output_tokens": 1926,
+      "cost_usd": 0.017841,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-135005": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 12
+      "audit_lines": 12,
+      "input_tokens": 44403,
+      "output_tokens": 6448,
+      "cost_usd": 0.038593,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-135115": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 28
+      "audit_lines": 28,
+      "input_tokens": 190311,
+      "output_tokens": 34572,
+      "cost_usd": 0.189854,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-135804": {
-      "audit_lines": 0,
-      "input_tokens": 0,
-      "output_tokens": 0,
-      "cost_usd": 0,
-      "duplicate_lines_skipped": 12
+      "audit_lines": 12,
+      "input_tokens": 49700,
+      "output_tokens": 7441,
+      "cost_usd": 0.0422,
+      "duplicate_lines_skipped": 0
     },
     "runs/20261015-141928": {
       "audit_lines": 12,
@@ -364,6 +384,153 @@
       "output_tokens": 3315,
       "cost_usd": 0.045297,
       "duplicate_lines_skipped": 0
+    },
+    "runs/20261016-115349": {
+      "audit_lines": 20,
+      "input_tokens": 71305,
+      "output_tokens": 3512,
+      "cost_usd": 0.062084,
+      "duplicate_lines_skipped": 0
+    },
+    "runs/20261016-115449": {
+      "audit_lines": 20,
+      "input_tokens": 71367,
+      "output_tokens": 3619,
+      "cost_usd": 0.061829,
+      "duplicate_lines_skipped": 0
+    },
+    "runs/20261016-115551": {
+      "audit_lines": 5,
+      "input_tokens": 9186,
+      "output_tokens": 356,
+      "cost_usd": 0.01021,
+      "duplicate_lines_skipped": 0
+    },
+    "runs/20261016-120344": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 20
+    },
+    "runs/20261016-120503": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 20
+    },
+    "runs/20261016-120613": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 20
+    },
+    "runs/20261016-120737": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 20
+    },
+    "runs/20261016-120838": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 20
+    },
+    "runs/20261016-120947": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 20
+    },
+    "runs/20261016-121047": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-121124": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-121157": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-121228": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 16
+    },
+    "runs/20261016-121331": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 16
+    },
+    "runs/20261016-121432": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 16
+    },
+    "runs/20261016-121547": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-121640": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-121748": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-121900": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-122002": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
+    },
+    "runs/20261016-122107": {
+      "audit_lines": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cost_usd": 0,
+      "duplicate_lines_skipped": 12
     }
   },
   "results_without_audit_lines": {},
