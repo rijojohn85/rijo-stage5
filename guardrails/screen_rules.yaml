@@ -1,0 +1,37 @@
+# Deterministic prompt-injection triggers for the screen check.
+#
+# These are the code backstop behind the screen agent's `verdict`. The screening model can be
+# fooled by a well-written attack; when the report text matches a trigger below, the gate
+# overrides the artifact to `suspicious` regardless of what the model said.
+#
+# Read by guardrails/screen_gate.py. A trigger fires only when EVERY regex in its `all_of`
+# list matches the report. The patterns are known-attack shapes only: they catch the
+# attacks someone already thought of and miss paraphrases, other languages and anything
+# novel. The model screen is the main judgement; this is a backstop, and a false positive
+# only costs a human a look.
+triggers:
+  - id: S1_OVERRIDE
+    note: tells the reader to ignore or forget its earlier instructions
+    all_of:
+      - '(?i)\b(ignore|disregard|forget)\b.{0,30}\b(previous|prior|above|earlier|all)\b.{0,20}\b(instructions?|rules|prompts?)\b'
+
+  - id: S2_ROLE_INJECTION
+    note: poses as a system or developer message, or reassigns the reader's role
+    all_of:
+      - '(?i)(system prompt|system message|developer message|\[system\]|<\|?system\|?>|\byou are now\b)'
+
+  - id: S3_EXFILTRATION
+    note: asks to send or upload something to an external URL or host
+    all_of:
+      - '(?i)(https?://|\b[a-z0-9-]+\.(com|net|org|io|xyz|ru|cn)\b)'
+      - '(?i)\b(upload\w*|send|curl|wget|exfiltrat\w*|scp|transmit\w*)\b'
+
+  - id: S4_PIPE_TO_SHELL
+    note: pipes a download into a shell
+    all_of:
+      - '(?i)\b(curl|wget)\b[^\n|]*\|\s*(ba|z)?sh\b'
+
+  - id: S5_WORKFLOW_OVERRIDE
+    note: tells the workflow to skip a step, declare a result, or treat the work as approved
+    all_of:
+      - '(?i)(\b(skip|bypass)\b.{0,30}\b(escalat\w*|review\w*|screen\w*)|\b(mark|finish|end|close)\b.{0,40}\bVERIFIED\b|\balready approved\b)'
