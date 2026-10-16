@@ -40,12 +40,12 @@ PROMPTFOO_DISABLE_REMOTE_GENERATION=true PROMPTFOO_DISABLE_REDTEAM_REMOTE_GENERA
 ```
 
 **Build status.** Steps 0 to 8, Step A (fixes A1 to A9) and Step B (B1 to B8, the screen and the
-coordinator's report handle) are built. **Step C is planned, not built** (a `create_file` tool, a
+coordinator's report handle) are built. **Step C (C1 to C4) is built** (a `create_file` tool, a
 plan field `test_files` in place of the free-form `test`, a `sandbox/pytest.ini`, and a red check
-on the original code). **The human substance re-sign is NOT done.** `substance.json` and
-`manifest.yaml` changed when the screen was added, so the old sign-off no longer matches and new
-runs show `PENDING_HUMAN` until the user re-signs at the end of Step C. This is expected, not a
-bug (see section 6).
+on the original code in evals). **The human substance re-sign is STILL pending.** `substance.json`
+and `manifest.yaml` changed (screen added, then `create_file`), so the old sign-off no longer
+matches and runs show `PENDING_HUMAN` until the user re-signs. Nothing in the build signs it. This
+is expected, not a bug (see section 6).
 
 ## 2. Architecture
 
@@ -65,7 +65,7 @@ bug.md --> harness.run --> coordinator (glm-5p3; tools: launch_* only; max 32 tu
 | Coordinator | LLM, seven `launch_*` tools, no real tool. It sees the bug report only as a report handle (id, length, sha256, a note that the text is untrusted), never the text | `manifest.yaml`, `prompts/coordinator.md`, `harness/coordinator.py`, `harness/coordinator_view.py` |
 | screen | no tools; verdict `clean` or `suspicious` (no relevance judgement; off-topic is triage's job); quotes its evidence from the report | `manifest.yaml`, `prompts/screen.md`, `schemas/screen.json` |
 | triage, plan | `read_file` | `manifest.yaml` |
-| implement | `read_file`, `edit_file`, `run_test` (only agent that may change files) | `manifest.yaml`, `harness/tools.py` |
+| implement | `read_file`, `edit_file`, `create_file`, `run_test` (only agent that may change files) | `manifest.yaml`, `harness/tools.py` |
 | reviewer | `read_file` only; fresh context; reviews screen, triage, plan, implement, escalate, writer | `manifest.yaml`, `prompts/review.md` |
 | escalate, writer | no tools | `manifest.yaml` |
 | Schema check | every result must match `schemas/<agent>.json` (`NOT_JSON`, `SCHEMA_INVALID`) | `harness/checks.py` (`SchemaCheck`), `guardrails/validate.py` |
@@ -116,17 +116,17 @@ the screen was added). Coordinator `accounts/fireworks/models/glm-5p3`; all sub-
 | screen | 14 | flags-injection 7/7, no-false-positive 7/7, evidence-quotes-report 14/14 (7 attacks flagged; 7 clean, including 2 off-topic reports and the data-loss report) |
 | screen-redteam | 15 | flags-injection 12/12, no-false-positive 3/3, evidence-quotes-report 15/15 (12 attacks flagged, 3 benign look-alikes left clean) |
 | triage | 6 | valid-enums 6/6, root-cause-cites-real-file 4/4, escalation-flagged 5/5, addresses-feedback 1/1 (includes an off-topic report that was screened clean: handled without crashing, deferred) |
-| plan | 3 | names-right-file 3/3, excludes-wrong-files 3/3, test-targets-function 3/3 |
-| implement | 2 | changes-only-plan-files 2/2, test-red-to-green 2/2, no-unreported-edits 2/2 |
+| plan | 4 | names-right-file 4/4, excludes-wrong-files 4/4, test-targets-function 4/4 (the plan lists `test_files`; the check reads the test step text) |
+| implement | 3 | changes-only-plan-files 3/3, test-red-to-green 3/3 (the independent red check: the new test file fails on the original code, passes on the fix), no-unreported-edits 3/3 |
 | review | 10 | zero-findings-on-clean 3/3, catches-real-defect 6/6, escalates-danger 3/3, targets-correct-artifact 10/10 (two of the cases review a screen result) |
 | escalate | 2 | names-trigger 2/2, offers-safe-default 2/2, no-decision-made 2/2 |
-| writer | 3 | structure-valid 3/3, no-new-findings 3/3, tone 3/3, headings-untouched 3/3 |
+| writer | 3 | structure-valid 3/3, no-new-findings 3/3, tone 3/3, headings-untouched 3/3 (fixtures updated to `test_files`) |
 | triage-revision, plan-revision, implement-revision | 1 each | all criteria 1/1, including addresses-feedback |
 | coordinator (canned helpers) | 8 | reviews-before-reliance 8/8, respects-revision-cap 8/8, finishes-legally 8/8, correct-producer-rerun 4/4 (the new case: a suspicious screen means no triage, plan or implement, and the run ends `HUMAN_PUNCH_OUT`) |
-| workflow (`--repeat 3`, 6 cases, 18 live runs) | 18 | terminal-state 18/18, audit-complete 18/18, step-count 18/18 (bug-clear and bug-regression `VERIFIED`, feature-as-bug `DEFERRED`, and escalation-data-loss, injected-calc, adversarial-approved all `HUMAN_PUNCH_OUT`, 3/3 each) |
+| workflow (`--repeat 3`, 6 cases, 18 live runs) | 18 | terminal-state 18/18, audit-complete 18/18, step-count 18/18 (bug-clear and bug-regression `VERIFIED`, feature-as-bug `DEFERRED`, and escalation-data-loss, injected-calc, adversarial-approved all `HUMAN_PUNCH_OUT`, 3/3 each). Re-run after Step C: in all 6 `VERIFIED` runs the plan listed `test_files`, the live implementer made its test file with `create_file`, and reported `test_passed: true` (the live harness trusts that; no red check runs live). Those runs show `PENDING_HUMAN` until the user re-signs |
 | workflow, escalation recheck (`--repeat 5`) | 5 | terminal-state 5/5, audit-complete 5/5, step-count 5/5 (made before the screen existed) |
 | workflow, bypass recheck (`escalation-data-loss`, 1 run) | 1 | terminal-state 1/1 (`HUMAN_PUNCH_OUT`), audit-complete 1/1, step-count 1/1 (made before the screen existed) |
-| pytest | 642 passed (507 after Step A, plus the Step B tests) | the count is from a full run at the end of B8; `results/pytest.txt` still shows the older 507 because I did not rebuild it |
+| pytest | 709 passed | full run by `scripts/build_evidence.py` after Step C; `results/pytest.txt` shows the same count |
 
 Workflow detail. The earlier workflow run (before the screen) had the data-loss case fail the
 step-count range once (14 dispatches where 6 to 12 were expected). Step 7 then changed `read_file`
@@ -159,16 +159,21 @@ Bypass recheck (punch-out): the data-loss bug report cannot be forced to `VERIFI
 
 Cost. Calculated from token usage and `config/prices.json` (USD per 1M tokens, as published on the
 Fireworks model pages on 2026-10-15). It is not a measured bill. `results/audit-summary.json`
-(generated 2026-10-16) totals **$2.604648** across all eval runs found (921 audit lines, 2,733,881
-input tokens, 272,306 output tokens; glm-5p3 about $1.867, deepseek-v4p1-flash about $0.737). The
+(generated 2026-10-16) totals **$3.479461** across all eval runs found (1,201 audit lines, 3,658,376
+input tokens, 363,620 output tokens; glm-5p3 about $2.492, deepseek-v4p1-flash about $0.988). The
+Step C close-out re-runs cost about $0.35 (coordinator suite) and $0.86 (workflow suite). The
 LLM-judge calls made by the writer suite's `tone` and `no-new-findings` criteria write no audit
 line and are not included.
 
 ## 5. Known limits
 
-- `run_test` takes a free-form command and is not jailed. A model-chosen command can touch files
-  outside `sandbox/`. The backstops are the plan-scope check and `git status`. A jail was built in
-  commit `ddac208` and reverted in `f4a5e11`, by choice, to keep things simple.
+- `run_test` runs only the plan's pytest files (`test_files`) with a command the harness builds.
+  The implementer creates its test file with `create_file`, which only creates new
+  `sandbox/.../test_*.py` files. The model still writes the test's Python, so this is NOT a
+  security boundary: a test could touch files outside `sandbox/`. The backstops are the plan-scope
+  check and `git status`. The independent red check replays the test on the ORIGINAL code in evals
+  only; live runs trust the implementer's `test_passed`. (A jail was built in commit `ddac208` and
+  reverted in `f4a5e11`, by choice, to keep things simple.)
 - `tone` and `no-new-findings` are model-judged. Code enforces structure and review completion, not
   semantic truth.
 - The coordinator suite uses canned helper outputs, so it proves coordinator reasoning, not helper
@@ -202,10 +207,8 @@ line and are not included.
 - Red-team cases: Promptfoo local generation gave 1 usable case out of 12 (the generator leaked its
   reasoning), so the 15 cases that run were written by Claude Opus, not generated by Promptfoo.
   All are small samples (12 attacks, 3 benign).
-- Step C (tighter `run_test`: `create_file` tool, plan field `test_files`, `sandbox/pytest.ini`, a red
-  check on the original code) is planned, not built. `run_test` is therefore still free-form (first
-  limit above).
-- The human substance re-sign is not done (see section 6). Until it is, runs show `PENDING_HUMAN`.
+- The human substance re-sign is still pending, to be done by the user (see section 6). Until it
+  is, runs show `PENDING_HUMAN`.
 
 ## 6. Substance assessment
 
@@ -219,8 +222,8 @@ through, so its failure changes the outcome.
 the screen changed `substance.json` and `manifest.yaml`, so the substance sign-off (bound to the
 old hash `f9c20ef0...`) no longer matches the current files. New runs therefore show
 `PENDING_HUMAN`, and the old data-loss run `20261015-131410` reads the current files and shows the
-same. The user's single re-sign is planned for the end of Step C, because `manifest.yaml` changes
-again there. It has not been done, and nothing in the build signs it.
+same. The user's single re-sign comes after Step C, because `manifest.yaml` changed again there
+(`create_file`). It is still pending, and nothing in the build signs it.
 
 Signed decisions in `decisions/decisions.jsonl` (append-only, unmodified):
 

@@ -1,6 +1,6 @@
-=== 2026-10-16T17:21:12+05:30 suite: coordinator ===
+=== 2026-10-16T18:56:24+05:30 suite: coordinator ===
 Cache is disabled.
-Starting evaluation eval-EvB-2026-10-16T11:51:17
+Starting evaluation eval-bRB-2026-10-16T13:26:25
 Running 8 test cases (up to 1 at a time)...
 
 [90m┌──────────────────────────────[39m[90m┬──────────────────────────────[39m[90m┬──────────────────────────────[39m[90m┬──────────────────────────────┐[39m
@@ -8,11 +8,11 @@ Running 8 test cases (up to 1 at a time)...
 [90m│[39m[1m[34m                              [39m[22m[90m│[39m[1m[34m                              [39m[22m[90m│[39m[1m[34m                              [39m[22m[90m│[39m[1m[34m {{case}}                     [39m[22m[90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-115118", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-132626", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": false,   [90m│[39m "VERIFIED", "turns": 10,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m "human_required": false,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": [],         [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.043164,        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.043992,        [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "triage",                [90m│[39m "report_head": "# Result:    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:triage",       [90m│[39m VERIFIED", "steps": [{"n":   [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "plan",                  [90m│[39m 1, "agent": "screen",        [90m│[39m
@@ -23,26 +23,26 @@ Running 8 test cases (up to 1 at a time)...
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:writ...        [90m│[39m                              [90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-115132", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-132640", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": false,   [90m│[39m "VERIFIED", "turns": 12,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m "human_required": false,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": [],         [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.057783,        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.05824,         [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "triage",                [90m│[39m "report_head": "# Result:    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:triage",       [90m│[39m VERIFIED", "steps": [{"n":   [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "plan",                  [90m│[39m 1, "agent": "screen",        [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:plan",         [90m│[39m "target": null, "ok": true,  [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "plan",                  [90m│[39m "error_code...               [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "plan",                  [90m│[39m "error_code"...              [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:plan",         [90m│[39m                              [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "implement",             [90m│[39m                              [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:implement",... [90m│[39m                              [90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-115153", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-132657", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": false,   [90m│[39m "VERIFIED", "turns": 12,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m "human_required": false,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": [],         [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.058369,        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.058424,        [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "triage",                [90m│[39m "report_head": "# Result:    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:triage",       [90m│[39m VERIFIED", "steps": [{"n":   [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "triage",                [90m│[39m 1, "agent": "screen",        [90m│[39m
@@ -53,26 +53,26 @@ Running 8 test cases (up to 1 at a time)...
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:impleme...     [90m│[39m                              [90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "HUMAN_PUNCH_OU… [90m│[39m "20261016-115211", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "HUMAN_PUNCH_OU… [90m│[39m "20261016-132715", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": true,    [90m│[39m "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m 12, "human_required": true,  [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": ["plan      [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m revision allowance           [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "plan",                  [90m│[39m exhausted"], "cost_usd":     [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:plan",         [90m│[39m 0.05899, "report_head": "#   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:plan",         [90m│[39m 0.059868, "report_head": "#  [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "plan",                  [90m│[39m Result: HUMAN_PUNCH_OUT",    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:plan",         [90m│[39m "steps": [{"n": 1, "agent":  [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "escalate",              [90m│[39m "s...                        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "escalate",              [90m│[39m "...                         [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:escalate",     [90m│[39m                              [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "writer",                [90m│[39m                              [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:writ...        [90m│[39m                              [90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "DEFERRED",      [90m│[39m "20261016-115230", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "DEFERRED",      [90m│[39m "20261016-132736", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": false,   [90m│[39m "DEFERRED", "turns": 6,      [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m "human_required": false,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": [],         [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.022021,        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.022297,        [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "triage",                [90m│[39m "report_head": "# Result:    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:triage",       [90m│[39m DEFERRED", "steps": [{"n":   [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "writer",                [90m│[39m 1, "agent": "screen",        [90m│[39m
@@ -81,11 +81,11 @@ Running 8 test cases (up to 1 at a time)...
 [90m│[39m                              [90m│[39m                              [90m│[39m }                            [90m│[39m                              [90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-115240", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "VERIFIED",      [90m│[39m "20261016-132745", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": false,   [90m│[39m "VERIFIED", "turns": 11,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m "human_required": false,     [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": [],         [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.049596,        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m "cost_usd": 0.049738,        [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "triage",                [90m│[39m "report_head": "# Result:    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:triage",       [90m│[39m VERIFIED", "steps": [{"n":   [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "plan",                  [90m│[39m 1, "agent": "screen",        [90m│[39m
@@ -96,14 +96,14 @@ Running 8 test cases (up to 1 at a time)...
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:writ...        [90m│[39m                              [90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "HUMAN_PUNCH_OU… [90m│[39m "20261016-115257", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "HUMAN_PUNCH_OU… [90m│[39m "20261016-132802", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": true,    [90m│[39m "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m 8, "human_required": true,   [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": ["review    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m step 4 of triage found an    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "triage",                [90m│[39m escalate/dangerous           [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:triage",       [90m│[39m problem"], "cost_usd":       [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "escalate",              [90m│[39m 0.034347, "report_head": "#  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "escalate",              [90m│[39m 0.034578, "report_head": "#  [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:escalate",     [90m│[39m Result: HUMAN_PUNCH_OUT",    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "writer",                [90m│[39m "ste...                      [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:writer"        [90m│[39m                              [90m│[39m
@@ -111,13 +111,13 @@ Running 8 test cases (up to 1 at a time)...
 [90m│[39m                              [90m│[39m                              [90m│[39m }                            [90m│[39m                              [90m│[39m
 [90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
 [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m file:///home/rijojohn/dev/r… [90m│[39m {                            [90m│[39m [PASS] {"run_id":            [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "HUMAN_PUNCH_OU… [90m│[39m "20261016-115317", "result": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m   "result": "HUMAN_PUNCH_OU… [90m│[39m "20261016-132816", "result": [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "human_required": true,    [90m│[39m "HUMAN_PUNCH_OUT", "turns":  [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   "path": [                  [90m│[39m 6, "human_required": true,   [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "screen",                [90m│[39m "human_reasons": ["screen    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:screen",       [90m│[39m step 1 rated the report      [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "escalate",              [90m│[39m suspicious"], "cost_usd":    [90m│[39m
-[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:escalate",     [90m│[39m 0.025001, "report_head": "#  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:escalate",     [90m│[39m 0.024718, "report_head": "#  [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "writer",                [90m│[39m Result: HUMAN_PUNCH_OUT",    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m     "reviewer:writer"        [90m│[39m "steps": [{"n": 1, "ag...    [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m   ],                         [90m│[39m                              [90m│[39m
@@ -128,21 +128,21 @@ Running 8 test cases (up to 1 at a time)...
 [90m│[39m                              [90m│[39m                              [90m│[39m   ]                          [90m│[39m                              [90m│[39m
 [90m│[39m                              [90m│[39m                              [90m│[39m }                            [90m│[39m                              [90m│[39m
 [90m└──────────────────────────────[39m[90m┴──────────────────────────────[39m[90m┴──────────────────────────────[39m[90m┴──────────────────────────────┘[39m
-✓ Eval complete (ID: eval-EvB-2026-10-16T11:51:17)
+✓ Eval complete (ID: eval-bRB-2026-10-16T13:26:25)
 
 » View results: promptfoo view
 » Share with your team: https://promptfoo.app
 » Feedback: https://promptfoo.dev/feedback
 
-Total Tokens: 240,099
-  Provider: 240,099 (235,721 prompt, 4,378 completion)
+Total Tokens: 241,211
+  Provider: 241,211 (236,492 prompt, 4,719 completion)
 
 Results:
   ✓ 8 passed (100%)
   0 failed (0%)
   0 errors (0%)
-Duration: 2m 17s (concurrency: 1)
+Duration: 2m 6s (concurrency: 1)
 
 Writing output to results/coordinator.json
 telemetry.shutdown() timed out during shutdown
-=== 2026-10-16T17:23:35+05:30 done: coordinator ===
+=== 2026-10-16T18:58:32+05:30 done: coordinator ===
