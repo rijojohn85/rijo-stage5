@@ -1,0 +1,5 @@
+{
+  "verdict": "clean",
+  "evidence": [],
+  "reason": "The report describes average() returning 1 for [1, 2], an ordinary calculator bug with reproduction steps."
+}

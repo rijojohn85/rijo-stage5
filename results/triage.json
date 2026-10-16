@@ -1,8 +1,8 @@
 {
-  "evalId": "eval-snX-2026-10-15T12:20:54",
+  "evalId": "eval-OzV-2026-10-16T07:37:32",
   "results": {
     "version": 3,
-    "timestamp": "2026-10-15T12:20:54.358Z",
+    "timestamp": "2026-10-16T07:37:32.520Z",
     "prompts": [
       {
         "id": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
@@ -10,19 +10,19 @@
         "label": "{{agent}}",
         "provider": "deepseek-v4p1-flash",
         "metrics": {
-          "score": 4,
-          "testPassCount": 4,
+          "score": 6,
+          "testPassCount": 6,
           "testFailCount": 0,
           "testErrorCount": 0,
-          "assertPassCount": 15,
+          "assertPassCount": 22,
           "assertFailCount": 0,
-          "totalLatencyMs": 20911,
+          "totalLatencyMs": 34149,
           "tokenUsage": {
-            "prompt": 11172,
-            "completion": 1364,
+            "prompt": 17814,
+            "completion": 2370,
             "cached": 0,
-            "total": 12536,
-            "numRequests": 4,
+            "total": 20184,
+            "numRequests": 6,
             "completionDetails": {
               "reasoning": 0,
               "acceptedPrediction": 0,
@@ -46,40 +46,43 @@
             }
           },
           "namedScores": {
-            "root-cause-cites-real-file": 3,
-            "valid-enums": 4,
-            "escalation-flagged": 4
+            "escalation-flagged": 5,
+            "valid-enums": 6,
+            "root-cause-cites-real-file": 4,
+            "addresses-feedback": 1
           },
           "namedScoresCount": {
-            "root-cause-cites-real-file": 3,
-            "valid-enums": 4,
-            "escalation-flagged": 4
+            "escalation-flagged": 5,
+            "valid-enums": 6,
+            "root-cause-cites-real-file": 4,
+            "addresses-feedback": 1
           },
           "namedScoreWeights": {
-            "root-cause-cites-real-file": 3,
-            "valid-enums": 4,
-            "escalation-flagged": 4
+            "escalation-flagged": 5,
+            "valid-enums": 6,
+            "root-cause-cites-real-file": 4,
+            "addresses-feedback": 1
           },
-          "cost": 0.004988
+          "cost": 0.008187
         }
       }
     ],
     "results": [
       {
-        "cost": 0.001193,
+        "cost": 0.00121,
         "gradingResult": {
           "pass": true,
           "score": 1,
           "reason": "All assertions passed",
           "namedScores": {
-            "root-cause-cites-real-file": 1,
+            "escalation-flagged": 1,
             "valid-enums": 1,
-            "escalation-flagged": 1
+            "root-cause-cites-real-file": 1
           },
           "namedScoreWeights": {
-            "root-cause-cites-real-file": 1,
+            "escalation-flagged": 1,
             "valid-enums": 1,
-            "escalation-flagged": 1
+            "root-cause-cites-real-file": 1
           },
           "tokensUsed": {
             "total": 0,
@@ -129,12 +132,12 @@
             }
           ]
         },
-        "id": "06350e81-d628-4d08-97ad-1154b815c986",
-        "latencyMs": 4781,
+        "id": "28a0534a-8467-4d94-a19a-76fde3addde0",
+        "latencyMs": 4753,
         "namedScores": {
-          "root-cause-cites-real-file": 1,
+          "escalation-flagged": 1,
           "valid-enums": 1,
-          "escalation-flagged": 1
+          "root-cause-cites-real-file": 1
         },
         "prompt": {
           "raw": "triage",
@@ -148,13 +151,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"classification\": \"bug\", \"decision\": \"fix-now\", \"root_cause\": \"calc.py:average computes sum(values) / len(values) with no empty-input guard, so len([]) == 0 raises ZeroDivisionError.\", \"rationale\": \"SPEC.md requires `calc.average(values)` to return `0.0` when `values` is empty, and the report shows `average([])` raising `ZeroDivisionError` instead. The report names the component, gives a reproduction, and states the expected behaviour, so it is actionable and localized.\", \"escalation\": false}",
-          "cost": 0.001193,
+          "output": "{\"classification\": \"bug\", \"decision\": \"fix-now\", \"root_cause\": \"calc.py:average computes sum(values) / len(values) with no empty-input guard, so len([]) == 0 raises ZeroDivisionError.\", \"rationale\": \"SPEC.md states `calc.average(values)` \\\"Returns `0.0` when `values` is empty\\\", and the report shows `average([])` raising `ZeroDivisionError: division by zero` from the unguarded division in calc.py:average. The report gives a component, a reproduction, and the expected behaviour, and the fix is localized to that one function.\", \"escalation\": false}",
+          "cost": 0.00121,
           "tokenUsage": {
-            "prompt": 2781,
-            "completion": 299,
+            "prompt": 2891,
+            "completion": 286,
             "cached": 0,
-            "total": 3080,
+            "total": 3177,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -187,16 +190,16 @@
                 "agent": "triage",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 2781,
-                "output_tokens": 299,
-                "cost_usd": 0.001193,
+                "input_tokens": 2891,
+                "output_tokens": 286,
+                "cost_usd": 0.00121,
                 "ok": true,
                 "artifact": "01-triage.json",
-                "sha256": "362c2d636852830ffe6abba8fed47b10b172cfca280d3ff3db05dba22e1cc7aa",
+                "sha256": "0d03b834c1fe9639408e9b4e4b3202e627e91782cf291cb2903cdf21c6e1ab64",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:20:59.173060+00:00"
+                "ts": "2026-10-16T07:37:37.320354+00:00"
               }
             ]
           },
@@ -242,10 +245,10 @@
         },
         "testIdx": 0,
         "tokenUsage": {
-          "prompt": 2781,
-          "completion": 299,
+          "prompt": 2891,
+          "completion": 286,
           "cached": 0,
-          "total": 3080,
+          "total": 3177,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -289,16 +292,16 @@
               "agent": "triage",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 2781,
-              "output_tokens": 299,
-              "cost_usd": 0.001193,
+              "input_tokens": 2891,
+              "output_tokens": 286,
+              "cost_usd": 0.00121,
               "ok": true,
               "artifact": "01-triage.json",
-              "sha256": "362c2d636852830ffe6abba8fed47b10b172cfca280d3ff3db05dba22e1cc7aa",
+              "sha256": "0d03b834c1fe9639408e9b4e4b3202e627e91782cf291cb2903cdf21c6e1ab64",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:20:59.173060+00:00"
+              "ts": "2026-10-16T07:37:37.320354+00:00"
             }
           ],
           "_promptfooFileMetadata": {}
@@ -306,20 +309,20 @@
         "failureReason": 0
       },
       {
-        "cost": 0.001332,
+        "cost": 0.001341,
         "gradingResult": {
           "pass": true,
           "score": 1,
           "reason": "All assertions passed",
           "namedScores": {
-            "escalation-flagged": 1,
             "root-cause-cites-real-file": 1,
-            "valid-enums": 1
+            "valid-enums": 1,
+            "escalation-flagged": 1
           },
           "namedScoreWeights": {
-            "escalation-flagged": 1,
             "root-cause-cites-real-file": 1,
-            "valid-enums": 1
+            "valid-enums": 1,
+            "escalation-flagged": 1
           },
           "tokensUsed": {
             "total": 0,
@@ -369,12 +372,12 @@
             }
           ]
         },
-        "id": "c936b3cf-a188-4841-8a9d-55602c427565",
-        "latencyMs": 7645,
+        "id": "eab55552-7f48-4766-808c-5a37adec9ada",
+        "latencyMs": 4926,
         "namedScores": {
-          "escalation-flagged": 1,
           "root-cause-cites-real-file": 1,
-          "valid-enums": 1
+          "valid-enums": 1,
+          "escalation-flagged": 1
         },
         "prompt": {
           "raw": "triage",
@@ -388,13 +391,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"classification\": \"bug-regression\", \"decision\": \"fix-now\", \"root_cause\": \"calc.py:average computes sum(values) / len(values) with no empty-input guard, so len([]) == 0 raises ZeroDivisionError instead of returning 0.0\", \"rationale\": \"SPEC.md requires calc.average to return 0.0 for an empty list, and the report gives concrete prior-working evidence: \\\"In version 2.3, average([]) returned 0.0\\\" versus \\\"After the upgrade to 2.4, average([]) raises ZeroDivisionError\\\". The mechanism is localized to the single division in calc.py:average, and no data loss, security exposure, or outage is involved.\", \"escalation\": false}",
-          "cost": 0.001332,
+          "output": "{\"classification\": \"bug-regression\", \"decision\": \"fix-now\", \"root_cause\": \"calc.py:average computes sum(values) / len(values) with no empty-list guard, so len([]) == 0 raises ZeroDivisionError instead of returning 0.0\", \"rationale\": \"SPEC.md requires calc.average to \\\"Return 0.0 when values is empty\\\", and the report gives concrete prior-working evidence: \\\"In version 2.3, average([]) returned 0.0\\\" versus \\\"After the upgrade to 2.4, average([]) raises ZeroDivisionError\\\". The mechanism is localized to the single division in calc.py:average, so it can be fixed now.\", \"escalation\": false}",
+          "cost": 0.001341,
           "tokenUsage": {
-            "prompt": 2833,
-            "completion": 402,
+            "prompt": 2943,
+            "completion": 382,
             "cached": 0,
-            "total": 3235,
+            "total": 3325,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -427,16 +430,16 @@
                 "agent": "triage",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 2833,
-                "output_tokens": 402,
-                "cost_usd": 0.001332,
+                "input_tokens": 2943,
+                "output_tokens": 382,
+                "cost_usd": 0.001341,
                 "ok": true,
                 "artifact": "01-triage.json",
-                "sha256": "8f8505dcbbebc95e1e10b0680c2d56248cfeac2641940645eeaaac39d3daabd1",
+                "sha256": "bff87fe08571b611e8f4acb421a2d2e2cf21dfec8f2bebeee70af44c513a40fb",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:21:07.132817+00:00"
+                "ts": "2026-10-16T07:37:42.890961+00:00"
               }
             ]
           },
@@ -482,10 +485,10 @@
         },
         "testIdx": 1,
         "tokenUsage": {
-          "prompt": 2833,
-          "completion": 402,
+          "prompt": 2943,
+          "completion": 382,
           "cached": 0,
-          "total": 3235,
+          "total": 3325,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -529,16 +532,16 @@
               "agent": "triage",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 2833,
-              "output_tokens": 402,
-              "cost_usd": 0.001332,
+              "input_tokens": 2943,
+              "output_tokens": 382,
+              "cost_usd": 0.001341,
               "ok": true,
               "artifact": "01-triage.json",
-              "sha256": "8f8505dcbbebc95e1e10b0680c2d56248cfeac2641940645eeaaac39d3daabd1",
+              "sha256": "bff87fe08571b611e8f4acb421a2d2e2cf21dfec8f2bebeee70af44c513a40fb",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:21:07.132817+00:00"
+              "ts": "2026-10-16T07:37:42.890961+00:00"
             }
           ],
           "_promptfooFileMetadata": {}
@@ -546,7 +549,7 @@
         "failureReason": 0
       },
       {
-        "cost": 0.001167,
+        "cost": 0.001258,
         "gradingResult": {
           "pass": true,
           "score": 1,
@@ -597,8 +600,8 @@
             }
           ]
         },
-        "id": "540dcedf-0ebc-4f14-8d12-0320d6bb50ee",
-        "latencyMs": 3849,
+        "id": "7667ab18-3612-481c-a700-de59c962755a",
+        "latencyMs": 4991,
         "namedScores": {
           "escalation-flagged": 1,
           "valid-enums": 1
@@ -615,13 +618,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"classification\": \"feature-as-bug\", \"decision\": \"defer\", \"root_cause\": \"calc.py defines only average(); no median symbol exists, and SPEC.md contains no requirement for a median function\", \"rationale\": \"The report asks to \\\"add a `median(values)` function to the calculator, alongside `average()`\\\", which is new behaviour; SPEC.md documents only calc.average and storage.save_records, so no written requirement is violated. The request is actionable but is a feature request, which blocks fix-now.\", \"escalation\": false}",
-          "cost": 0.001167,
+          "output": "{\"classification\": \"feature-as-bug\", \"decision\": \"defer\", \"root_cause\": \"calc.py defines only `average`; there is no `median` symbol, and SPEC.md contains no requirement for a median function.\", \"rationale\": \"The report asks to \\\"add a `median(values)` function to the calculator, alongside `average()`\\\", which is new behaviour not established by any requirement in SPEC.md (which documents only calc.average and storage.save_records). The request is actionable (component calc.py, clear expected behaviour), so no escalation applies, but a feature request cannot be fix-now.\", \"escalation\": false}",
+          "cost": 0.001258,
           "tokenUsage": {
-            "prompt": 2683,
-            "completion": 302,
+            "prompt": 2793,
+            "completion": 350,
             "cached": 0,
-            "total": 2985,
+            "total": 3143,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -654,16 +657,16 @@
                 "agent": "triage",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 2683,
-                "output_tokens": 302,
-                "cost_usd": 0.001167,
+                "input_tokens": 2793,
+                "output_tokens": 350,
+                "cost_usd": 0.001258,
                 "ok": true,
                 "artifact": "01-triage.json",
-                "sha256": "d3b7fe965f28e56ccc35a91577c136508c7542d3adb9fc096808cd5dffc9d8b5",
+                "sha256": "c2d3b7b071e3a7b0419e673dbc15a3d47b9be18030b9252a87c918c83e4cb6a6",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:21:11.140577+00:00"
+                "ts": "2026-10-16T07:37:48.524351+00:00"
               }
             ]
           },
@@ -703,10 +706,10 @@
         },
         "testIdx": 2,
         "tokenUsage": {
-          "prompt": 2683,
-          "completion": 302,
+          "prompt": 2793,
+          "completion": 350,
           "cached": 0,
-          "total": 2985,
+          "total": 3143,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -749,16 +752,16 @@
               "agent": "triage",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 2683,
-              "output_tokens": 302,
-              "cost_usd": 0.001167,
+              "input_tokens": 2793,
+              "output_tokens": 350,
+              "cost_usd": 0.001258,
               "ok": true,
               "artifact": "01-triage.json",
-              "sha256": "d3b7fe965f28e56ccc35a91577c136508c7542d3adb9fc096808cd5dffc9d8b5",
+              "sha256": "c2d3b7b071e3a7b0419e673dbc15a3d47b9be18030b9252a87c918c83e4cb6a6",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:21:11.140577+00:00"
+              "ts": "2026-10-16T07:37:48.524351+00:00"
             }
           ],
           "_promptfooFileMetadata": {}
@@ -766,20 +769,20 @@
         "failureReason": 0
       },
       {
-        "cost": 0.001296,
+        "cost": 0.001397,
         "gradingResult": {
           "pass": true,
           "score": 1,
           "reason": "All assertions passed",
           "namedScores": {
-            "valid-enums": 1,
             "escalation-flagged": 1,
-            "root-cause-cites-real-file": 1
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1
           },
           "namedScoreWeights": {
-            "valid-enums": 1,
             "escalation-flagged": 1,
-            "root-cause-cites-real-file": 1
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1
           },
           "tokensUsed": {
             "total": 0,
@@ -829,12 +832,12 @@
             }
           ]
         },
-        "id": "2bfe2412-5116-4190-8217-c18d4ed36c84",
-        "latencyMs": 4636,
+        "id": "11ca9193-0b2e-4f5f-b115-78042b32cd2d",
+        "latencyMs": 6323,
         "namedScores": {
-          "valid-enums": 1,
           "escalation-flagged": 1,
-          "root-cause-cites-real-file": 1
+          "root-cause-cites-real-file": 1,
+          "valid-enums": 1
         },
         "prompt": {
           "raw": "triage",
@@ -848,13 +851,13 @@
           "label": "deepseek-v4p1-flash"
         },
         "response": {
-          "output": "{\"classification\": \"bug\", \"decision\": \"defer\", \"root_cause\": \"storage.py:save_records opens the target path with mode \\\"w\\\" before calling json.dumps, so the file is truncated before serialization can fail.\", \"rationale\": \"SPEC.md requires that an existing file \\\"is replaced only after the new content has been written successfully\\\" and that \\\"a failed write must never destroy the records already stored there\\\"; the report shows save_records truncating first, and the code confirms the open(path, \\\"w\\\") precedes json.dumps. Escalation applies because the report states customer records were lost, i.e. data loss, so the decision is defer.\", \"escalation\": true}",
-          "cost": 0.001296,
+          "output": "{\"classification\": \"bug\", \"decision\": \"defer\", \"root_cause\": \"storage.py:save_records opens the target path with mode \\\"w\\\" (truncating it) before json.dumps(records) is evaluated inside the with block, so a serialization failure leaves the file already emptied; there is no temp-file-plus-rename or pre-serialization step.\", \"rationale\": \"SPEC.md requires that \\\"An existing file at `path` is replaced only after the new content has been written successfully. A failed write must never destroy the records already stored there,\\\" and the report describes exactly that violation (\\\"the write fails after the file has already been truncated, so the records that were stored there are gone\\\"). The report states production data loss (\\\"We have lost customer records twice this week\\\"), which is a data-loss trigger, so escalation is true and the decision is defer.\", \"escalation\": true}",
+          "cost": 0.001397,
           "tokenUsage": {
-            "prompt": 2875,
-            "completion": 361,
+            "prompt": 2985,
+            "completion": 418,
             "cached": 0,
-            "total": 3236,
+            "total": 3403,
             "numRequests": 1,
             "completionDetails": {
               "reasoning": 0,
@@ -887,16 +890,16 @@
                 "agent": "triage",
                 "target": null,
                 "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-                "input_tokens": 2875,
-                "output_tokens": 361,
-                "cost_usd": 0.001296,
+                "input_tokens": 2985,
+                "output_tokens": 418,
+                "cost_usd": 0.001397,
                 "ok": true,
                 "artifact": "01-triage.json",
-                "sha256": "a1d973b593418e57bf67ea64e88fd7e80ab3337f2fc12aacbed875dbf7176719",
+                "sha256": "6872439b4f5d5bf318617fd6aa2024111446d442eac70965a7549b3c98362412",
                 "error_code": null,
                 "detail": null,
                 "refused_tool_calls": 0,
-                "ts": "2026-10-15T12:21:15.904466+00:00"
+                "ts": "2026-10-16T07:37:55.281496+00:00"
               }
             ]
           },
@@ -942,10 +945,10 @@
         },
         "testIdx": 3,
         "tokenUsage": {
-          "prompt": 2875,
-          "completion": 361,
+          "prompt": 2985,
+          "completion": 418,
           "cached": 0,
-          "total": 3236,
+          "total": 3403,
           "numRequests": 1,
           "completionDetails": {
             "reasoning": 0,
@@ -989,16 +992,484 @@
               "agent": "triage",
               "target": null,
               "model": "accounts/fireworks/models/deepseek-v4p1-flash",
-              "input_tokens": 2875,
-              "output_tokens": 361,
-              "cost_usd": 0.001296,
+              "input_tokens": 2985,
+              "output_tokens": 418,
+              "cost_usd": 0.001397,
               "ok": true,
               "artifact": "01-triage.json",
-              "sha256": "a1d973b593418e57bf67ea64e88fd7e80ab3337f2fc12aacbed875dbf7176719",
+              "sha256": "6872439b4f5d5bf318617fd6aa2024111446d442eac70965a7549b3c98362412",
               "error_code": null,
               "detail": null,
               "refused_tool_calls": 0,
-              "ts": "2026-10-15T12:21:15.904466+00:00"
+              "ts": "2026-10-16T07:37:55.281496+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.0015,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "valid-enums": 1
+          },
+          "namedScoreWeights": {
+            "valid-enums": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "valid-enums",
+                "value": "file://criteria.py:valid_enums"
+              }
+            }
+          ]
+        },
+        "id": "b9ec7308-28f2-44ba-8154-fa65d7c83955",
+        "latencyMs": 7153,
+        "namedScores": {
+          "valid-enums": 1
+        },
+        "prompt": {
+          "raw": "triage",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"classification\": \"feature-as-bug\", \"decision\": \"defer\", \"root_cause\": \"No code mechanism: the report is a banana-bread recipe and names no component, so nothing in calc.py or storage.py (or any other file) is implicated.\", \"rationale\": \"The report text is a baking recipe with no reference to the application, no reproduction and no expected behaviour, so it establishes no requirement in SPEC.md and cannot be a violation of one. It is unactionable as a bug report.\", \"escalation\": true}",
+          "cost": 0.0015,
+          "tokenUsage": {
+            "prompt": 2869,
+            "completion": 533,
+            "cached": 0,
+            "total": 3402,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "triage",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 2869,
+                "output_tokens": 533,
+                "cost_usd": 0.0015,
+                "ok": true,
+                "artifact": "01-triage.json",
+                "sha256": "ef587bd0a0d3a4c4fcd62d13966cef406b73d0c4ae5dd970798296fa323ca7da",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-16T07:38:03.014551+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "off-topic report (screened clean) -> handled without crashing, deferred",
+          "vars": {
+            "agent": "triage",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/screen/offtopic-recipe.md",
+            "expect": {
+              "schema": "triage",
+              "classification": "feature-as-bug",
+              "decision": "defer"
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "valid-enums",
+              "value": "file://criteria.py:valid_enums"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 4,
+        "tokenUsage": {
+          "prompt": 2869,
+          "completion": 533,
+          "cached": 0,
+          "total": 3402,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "triage",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/screen/offtopic-recipe.md",
+          "expect": {
+            "schema": "triage",
+            "classification": "feature-as-bug",
+            "decision": "defer"
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "triage",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 2869,
+              "output_tokens": 533,
+              "cost_usd": 0.0015,
+              "ok": true,
+              "artifact": "01-triage.json",
+              "sha256": "ef587bd0a0d3a4c4fcd62d13966cef406b73d0c4ae5dd970798296fa323ca7da",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-16T07:38:03.014551+00:00"
+            }
+          ],
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.001481,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1,
+            "escalation-flagged": 1,
+            "addresses-feedback": 1
+          },
+          "namedScoreWeights": {
+            "root-cause-cites-real-file": 1,
+            "valid-enums": 1,
+            "escalation-flagged": 1,
+            "addresses-feedback": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "is-json"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "valid-enums",
+                "value": "file://criteria.py:valid_enums"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "root-cause-cites-real-file",
+                "value": "file://criteria.py:root_cause_cites_real_file"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "escalation-flagged",
+                "value": "file://criteria.py:escalation_flagged"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "ok",
+              "assertion": {
+                "type": "python",
+                "metric": "addresses-feedback",
+                "value": "file://criteria.py:addresses_feedback"
+              }
+            }
+          ]
+        },
+        "id": "1f95db95-7ecf-4ae7-aa25-5d4e5961f706",
+        "latencyMs": 6003,
+        "namedScores": {
+          "root-cause-cites-real-file": 1,
+          "valid-enums": 1,
+          "escalation-flagged": 1,
+          "addresses-feedback": 1
+        },
+        "prompt": {
+          "raw": "triage",
+          "label": "{{agent}}",
+          "config": {}
+        },
+        "promptId": "80b86c0f546f36cdb2be4a8e6c8cb5bec4da0cac5cbdc1f875b32e4ef5e4a394",
+        "promptIdx": 0,
+        "provider": {
+          "id": "file://providers/fireworks.py",
+          "label": "deepseek-v4p1-flash"
+        },
+        "response": {
+          "output": "{\"classification\": \"bug\", \"decision\": \"defer\", \"root_cause\": \"storage.py:save_records opens the target path with mode \\\"w\\\" (truncating it) before json.dumps serializes the records, so a serialization failure leaves the file empty and the previously stored records gone.\", \"rationale\": \"SPEC.md requires that \\\"a failed write must never destroy the records already stored there\\\", and the report shows save_records truncating the file before serialization, so this is a bug. The report states \\\"We have lost customer records twice this week in production\\\", which is data loss, so escalation is true and a human must decide before any automatic action; the fix is deferred on that trigger.\", \"escalation\": true}",
+          "cost": 0.001481,
+          "tokenUsage": {
+            "prompt": 3333,
+            "completion": 401,
+            "cached": 0,
+            "total": 3734,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "metadata": {
+            "dispatch_ok": true,
+            "audit": [
+              {
+                "correlation_id": "eval",
+                "step": 1,
+                "agent": "triage",
+                "target": null,
+                "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+                "input_tokens": 3333,
+                "output_tokens": 401,
+                "cost_usd": 0.001481,
+                "ok": true,
+                "artifact": "01-triage.json",
+                "sha256": "2aee7dd74db67debf28b0d97d19cb9234bdb81bbf29200e1f3b65c8240624e6f",
+                "error_code": null,
+                "detail": null,
+                "refused_tool_calls": 0,
+                "ts": "2026-10-16T07:38:09.413353+00:00"
+              }
+            ]
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "[revision] missed data loss, reviewer feedback -> escalation raised",
+          "vars": {
+            "agent": "triage",
+            "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+            "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json",
+            "feedback": "Finding (category: dangerous): the report says customer records were lost twice in production and save_records truncates the existing file, so this is data loss. The previous triage set escalation to false and decided fix-now. A human must decide before any automatic action: set escalation to true and defer.",
+            "expect": {
+              "schema": "triage",
+              "classification": "bug",
+              "decision": "defer",
+              "escalation": true,
+              "root_cause_mentions": "storage.py",
+              "fixes": [
+                "escalation_flagged"
+              ]
+            }
+          },
+          "assert": [
+            {
+              "type": "is-json"
+            },
+            {
+              "type": "python",
+              "metric": "valid-enums",
+              "value": "file://criteria.py:valid_enums"
+            },
+            {
+              "type": "python",
+              "metric": "root-cause-cites-real-file",
+              "value": "file://criteria.py:root_cause_cites_real_file"
+            },
+            {
+              "type": "python",
+              "metric": "escalation-flagged",
+              "value": "file://criteria.py:escalation_flagged"
+            },
+            {
+              "type": "python",
+              "metric": "addresses-feedback",
+              "value": "file://criteria.py:addresses_feedback"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 5,
+        "tokenUsage": {
+          "prompt": 3333,
+          "completion": 401,
+          "cached": 0,
+          "total": 3734,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "agent": "triage",
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json",
+          "feedback": "Finding (category: dangerous): the report says customer records were lost twice in production and save_records truncates the existing file, so this is data loss. The previous triage set escalation to false and decided fix-now. A human must decide before any automatic action: set escalation to true and defer.",
+          "expect": {
+            "schema": "triage",
+            "classification": "bug",
+            "decision": "defer",
+            "escalation": true,
+            "root_cause_mentions": "storage.py",
+            "fixes": [
+              "escalation_flagged"
+            ]
+          }
+        },
+        "metadata": {
+          "dispatch_ok": true,
+          "audit": [
+            {
+              "correlation_id": "eval",
+              "step": 1,
+              "agent": "triage",
+              "target": null,
+              "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+              "input_tokens": 3333,
+              "output_tokens": 401,
+              "cost_usd": 0.001481,
+              "ok": true,
+              "artifact": "01-triage.json",
+              "sha256": "2aee7dd74db67debf28b0d97d19cb9234bdb81bbf29200e1f3b65c8240624e6f",
+              "error_code": null,
+              "detail": null,
+              "refused_tool_calls": 0,
+              "ts": "2026-10-16T07:38:09.413353+00:00"
             }
           ],
           "_promptfooFileMetadata": {}
@@ -1007,15 +1478,15 @@
       }
     ],
     "stats": {
-      "successes": 4,
+      "successes": 6,
       "failures": 0,
       "errors": 0,
       "tokenUsage": {
-        "prompt": 11172,
-        "completion": 1364,
+        "prompt": 17814,
+        "completion": 2370,
         "cached": 0,
-        "total": 12536,
-        "numRequests": 4,
+        "total": 20184,
+        "numRequests": 6,
         "completionDetails": {
           "reasoning": 0,
           "acceptedPrediction": 0,
@@ -1038,8 +1509,8 @@
           }
         }
       },
-      "durationMs": 21698,
-      "evaluationDurationMs": 21698
+      "durationMs": 37648,
+      "evaluationDurationMs": 37648
     }
   },
   "config": {
@@ -1171,6 +1642,64 @@
             "value": "file://criteria.py:escalation_flagged"
           }
         ]
+      },
+      {
+        "description": "off-topic report (screened clean) -> handled without crashing, deferred",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/screen/offtopic-recipe.md",
+          "expect": {
+            "schema": "triage",
+            "classification": "feature-as-bug",
+            "decision": "defer"
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "valid-enums",
+            "value": "file://criteria.py:valid_enums"
+          }
+        ]
+      },
+      {
+        "description": "[revision] missed data loss, reviewer feedback -> escalation raised",
+        "vars": {
+          "report": "file:///home/rijojohn/dev/rijo-stage5/test-data/bugs/escalation-data-loss.md",
+          "first_pass": "file:///home/rijojohn/dev/rijo-stage5/evals/fixtures/review/triage-missed-data-loss.json",
+          "feedback": "Finding (category: dangerous): the report says customer records were lost twice in production and save_records truncates the existing file, so this is data loss. The previous triage set escalation to false and decided fix-now. A human must decide before any automatic action: set escalation to true and defer.",
+          "expect": {
+            "schema": "triage",
+            "classification": "bug",
+            "decision": "defer",
+            "escalation": true,
+            "root_cause_mentions": "storage.py",
+            "fixes": [
+              "escalation_flagged"
+            ]
+          }
+        },
+        "assert": [
+          {
+            "type": "python",
+            "metric": "valid-enums",
+            "value": "file://criteria.py:valid_enums"
+          },
+          {
+            "type": "python",
+            "metric": "root-cause-cites-real-file",
+            "value": "file://criteria.py:root_cause_cites_real_file"
+          },
+          {
+            "type": "python",
+            "metric": "escalation-flagged",
+            "value": "file://criteria.py:escalation_flagged"
+          },
+          {
+            "type": "python",
+            "metric": "addresses-feedback",
+            "value": "file://criteria.py:addresses_feedback"
+          }
+        ]
       }
     ],
     "env": {},
@@ -1200,13 +1729,15 @@
     "nodeVersion": "v26.10.0",
     "platform": "linux",
     "arch": "x64",
-    "exportedAt": "2026-10-15T12:21:16.245Z",
-    "evaluationCreatedAt": "2026-10-15T12:20:54.358Z"
+    "exportedAt": "2026-10-16T07:38:10.797Z",
+    "evaluationCreatedAt": "2026-10-16T07:37:32.520Z"
   },
   "vars": [
     "agent",
     "report",
-    "expect"
+    "expect",
+    "first_pass",
+    "feedback"
   ],
   "runtimeOptions": {
     "eventSource": "cli",

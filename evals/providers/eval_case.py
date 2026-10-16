@@ -1,10 +1,10 @@
 """One eval case, parsed from a promptfoo test's `vars`.
 
 The var names are the contract between the promptfoo yamls and the provider:
-    agent      triage | plan | implement | escalate | writer | reviewer
+    agent      screen | triage | plan | implement | escalate | writer | reviewer
     target     for reviewer: the artifact under review
     report     bug report text (optional; a neutral stand-in is used otherwise)
-    triage, plan, implement, escalate    upstream artifacts, as JSON text or objects
+    screen, triage, plan, implement, escalate    upstream artifacts, as JSON text or objects
     diff       for reviewer on implement: the recorded unified diff
     draft      for reviewer on writer: the report draft markdown
     sources    for reviewer on writer: the artifacts the draft summarises

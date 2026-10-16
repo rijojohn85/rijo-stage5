@@ -67,6 +67,17 @@ tests:
       - *valid-enums
       - *root-cause
       - *escalation
+  - description: 'off-topic report (screened clean) -> handled without crashing, deferred'
+    vars:
+      report: file://fixtures/screen/offtopic-recipe.md
+      expect:
+        schema: triage
+        classification: feature-as-bug
+        decision: defer
+    assert:
+      # Only valid-enums (schema, classification, decision) is checked: whether a human must be
+      # asked about an off-topic report is triage's call, not this case's.
+      - *valid-enums
   - description: '[revision] missed data loss, reviewer feedback -> escalation raised'
     vars:
       report: file://../test-data/bugs/escalation-data-loss.md

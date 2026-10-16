@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Run the six helper eval suites (paid Fireworks calls) and log everything.
-# Usage: scripts/run_helper_evals.sh [suite ...]   (default: all six)
+# Run the seven helper eval suites (paid Fireworks calls) and log everything.
+# Usage: scripts/run_helper_evals.sh [suite ...]   (default: all seven)
 # Tail the log from another terminal:  tail -f results/eval.log
 set -euo pipefail
 
@@ -19,7 +19,7 @@ run_suite() {
     -o "results/$suite.json" "$@" 2>&1 | tee -a "$LOG" || true  # a failing suite must not stop the rest
 }
 
-SUITES=${*:-"triage plan implement escalate review writer"}
+SUITES=${*:-"screen triage plan implement escalate review writer"}
 for suite in $SUITES; do
   run_suite "$suite"
 done
