@@ -9,7 +9,7 @@ LAUNCH = ["launch_screen", "launch_triage", "launch_plan", "launch_implement",
 # Exact expectation from plan Section 3.
 EXPECTED_TOOLS = {
     "screen": [], "triage": ["read_file"], "plan": ["read_file"],
-    "implement": ["read_file", "edit_file", "run_test"],
+    "implement": ["read_file", "edit_file", "create_file", "run_test"],
     "reviewer": ["read_file"], "escalate": [], "writer": [],
 }
 REVIEWED = ["screen", "triage", "plan", "implement", "escalate", "writer"]
@@ -57,7 +57,7 @@ def test_no_extras_vs_plan(m):
 
 def test_only_implementer_has_mutation_tools(m):
     for name, a in m["agents"].items():
-        has = {"edit_file", "run_test"} & set(a["tools"])
+        has = {"edit_file", "create_file", "run_test"} & set(a["tools"])
         assert bool(has) == (name == "implement"), name
 
 

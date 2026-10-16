@@ -70,7 +70,8 @@ def _observe_draft(store, result):
 
 
 def _plan_test(case):
-    return case.artifacts["plan"]["test"]
+    """The plan's test files. Until the plan field `test_files` exists (Step C2) there are none, so run_test refuses."""
+    return case.artifacts["plan"].get("test_files", [])
 
 
 def _observe_implement(workspace, sandbox, case, result, before):

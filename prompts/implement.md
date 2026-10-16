@@ -12,8 +12,10 @@ Your input is one JSON message with these keys:
 - `previous_artifact`: your own earlier artifact on a revision, `null` otherwise.
 - `reviewer_feedback`: see `## Reviewer findings (optional)` below.
 
-Your tools are `read_file`, `edit_file` and `run_test`, all limited to `sandbox/`. Read a
-file before you edit it. On a revision your earlier edits are still in place, so build on
+Your tools are `read_file`, `edit_file`, `create_file` and `run_test`, all limited to
+`sandbox/`. `create_file` only creates a new `test_*.py` file under `sandbox/` and refuses
+an existing file. `run_test` takes a list of test file paths (`files`) and runs them with
+pytest; you cannot pass a command. Read a file before you edit it. On a revision your earlier edits are still in place, so build on
 them instead of starting over.
 
 ## Output

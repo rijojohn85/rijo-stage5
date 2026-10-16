@@ -1,4 +1,8 @@
 import os
+import shutil
+import subprocess
+import sys
+
 import pytest
 from harness import tools
 
@@ -125,29 +129,213 @@ def test_bad_inputs_do_not_raise(root):
     assert tools.run_test(None, root=root)["ok"] is False
 
 
+def add_test(root, name, body, directory="demo"):
+    folder = root / "sandbox" / directory
+    folder.mkdir(parents=True, exist_ok=True)
+    (root / "sandbox" / "pytest.ini").write_text("[pytest]\n")
+    (folder / name).write_text(body)
+    return f"sandbox/{directory}/{name}"
+
+
+def failed(res, code):
+    return res["ok"] is False and res["error_code"] == code and isinstance(res["detail"], str)
+
+
 def test_run_test_pass_and_fail(root):
-    ok = tools.run_test("python3 -c 'import sys; sys.exit(0)'", root=root)
-    assert ok["ok"] and ok["passed"] is True
-    bad = tools.run_test("python3 -c 'import sys; sys.exit(3)'", root=root)
-    assert bad["ok"] and bad["passed"] is False and bad["exit_code"] == 3
+    green = add_test(root, "test_ok.py", "def test_ok():\n    assert 1 + 1 == 2\n")
+    red = add_test(root, "test_bad.py", "def test_bad():\n    assert 1 + 1 == 3\n")
+    ok = tools.run_test([green], root=root)
+    assert ok["ok"] and ok["passed"] is True and ok["exit_code"] == 0 and "1 passed" in ok["stdout"]
+    bad = tools.run_test([red], root=root)
+    assert bad["ok"] and bad["passed"] is False and bad["exit_code"] == 1
+    both = tools.run_test([green, red], root=root)
+    assert both["ok"] and both["exit_code"] == 1
+
+
+def test_run_test_really_runs_pytest_and_leaves_no_cache_behind(root):
+    green = add_test(root, "test_ok.py", "def test_ok():\n    assert True\n")
+    assert tools.run_test([green], root=root)["passed"] is True
+    leftovers = [p.name for p in (root / "sandbox").rglob("*") if p.name in {".pytest_cache", "__pycache__"}]
+    assert leftovers == []
+
+
+def test_run_test_runs_the_interpreter_with_harness_built_arguments(root, monkeypatch):
+    green = add_test(root, "test_ok.py", "def test_ok():\n    assert True\n")
+    seen = {}
+
+    def fake_run(argv, **kwargs):
+        seen["argv"], seen["cwd"] = argv, kwargs["cwd"]
+        return subprocess.CompletedProcess(argv, 5, "no tests ran", "")
+
+    monkeypatch.setattr(tools.subprocess, "run", fake_run)
+    result = tools.run_test([green], root=root)
+    assert seen["argv"] == [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", green]
+    assert seen["cwd"] == str(root)
+    assert result["ok"] and result["exit_code"] == 5 and result["passed"] is False
 
 
 def test_run_test_timeout(root):
-    r = tools.run_test("python3 -c 'import time; time.sleep(5)'", root=root, timeout=1)
-    assert r["ok"] is False and r["error_code"] == "TIMEOUT"
+    slow = add_test(root, "test_slow.py", "import time\n\n\ndef test_slow():\n    time.sleep(10)\n")
+    assert failed(tools.run_test([slow], root=root, timeout=1), "TIMEOUT")
 
 
-def test_run_test_outside_path_refused(root):
-    assert refused(tools.run_test("python3 /etc/passwd", root=root))
-    assert refused(tools.run_test("python3 ../secret.txt", root=root))
+@pytest.mark.parametrize("files", [
+    "sandbox/demo/test_ok.py",                  # a string, not a list
+    [],
+    None,
+    [3],
+    ["-x"],
+    ["sandbox/demo/test_ok.py", "-x"],
+    ["sandbox/demo/test_ok.py::test_ok"],        # node ids are not allowed
+    ["sandbox/demo/a.txt"],                      # not a .py file
+    ["sandbox/demo/helper.py"],                  # not a test_*.py name
+    ["sandbox/demo/test_ok.py\n"],
+    ["sandbox/demo/test ok.py"],
+    ["sandbox/demo/../demo/test_ok.py"],
+    ["../test_x.py"],
+    ["sandbox/../test_x.py"],
+    ["/etc/test_passwd.py"],
+    ["demo/test_ok.py"],                         # not under sandbox/
+    ["sandbox/demo/test_ok.py"] * 4,             # more than 3
+])
+def test_run_test_refuses_anything_but_test_files(root, files):
+    add_test(root, "test_ok.py", "def test_ok():\n    assert True\n")
+    assert failed(tools.run_test(files, root=root), "BAD_ARGUMENT")
 
 
-def test_run_test_unknown_command(root):
-    assert tools.run_test("no-such-cmd-xyz", root=root)["error_code"] == "COMMAND_NOT_FOUND"
+def test_run_test_refuses_missing_file_and_symlinks(root, tmp_path_factory):
+    assert failed(tools.run_test(["sandbox/demo/test_none.py"], root=root), "NOT_FOUND")
+    outside = tmp_path_factory.mktemp("outside")
+    (outside / "test_evil.py").write_text("def test_evil():\n    assert True\n")
+    (root / "sandbox" / "demo").mkdir()
+    os.symlink(outside / "test_evil.py", root / "sandbox" / "demo" / "test_link.py")
+    assert refused(tools.run_test(["sandbox/demo/test_link.py"], root=root))
+    os.symlink(outside, root / "sandbox" / "elsewhere")
+    assert refused(tools.run_test(["sandbox/elsewhere/test_evil.py"], root=root))
 
 
-def test_real_sandbox_plan_command_runs():
-    cmd = ("python3 -c \"import sys; sys.path.insert(0, 'sandbox/demo-app'); "
-           "import calc; calc.average\"")
-    r = tools.run_test(cmd)
-    assert r["ok"] and r["passed"], r
+def test_run_test_reports_a_missing_pytest_instead_of_a_red_test(root, monkeypatch):
+    green = add_test(root, "test_ok.py", "def test_ok():\n    assert True\n")
+    monkeypatch.setattr(tools.importlib.util, "find_spec", lambda name: None)
+    assert failed(tools.run_test([green], root=root), "PYTEST_MISSING")
+
+
+def test_run_test_runs_a_real_sandbox_test_file_under_the_pinned_rootdir(tmp_path):
+    """The committed sandbox/pytest.ini, copied into a scratch root, is the config pytest picks."""
+    scratch = tmp_path / "scratch"
+    (scratch / "sandbox" / "demo").mkdir(parents=True)
+    shutil.copy(tools.PROJECT_ROOT / "sandbox" / "pytest.ini", scratch / "sandbox" / "pytest.ini")
+    (scratch / "pytest.ini").write_text("[pytest]\naddopts = --definitely-not-an-option\n")  # above sandbox/: ignored
+    (scratch / "sandbox" / "demo" / "test_ok.py").write_text("def test_ok():\n    assert True\n")
+    result = tools.run_test(["sandbox/demo/test_ok.py"], root=scratch)
+    assert result["ok"] and result["passed"] is True, result
+    assert "rootdir: " + str(scratch / "sandbox") in subprocess.run(
+        [sys.executable, "-m", "pytest", "-p", "no:cacheprovider", "sandbox/demo/test_ok.py"],
+        cwd=scratch, capture_output=True, text=True, env={"PYTHONDONTWRITEBYTECODE": "1"}).stdout
+
+
+def test_real_sandbox_has_the_pinned_pytest_ini():
+    assert (tools.PROJECT_ROOT / "sandbox" / "pytest.ini").read_text().startswith("[pytest]")
+
+
+# --- create_file ------------------------------------------------------------------------------
+
+NEW_TEST = "def test_new():\n    assert True\n"
+
+
+def test_create_file_creates_a_new_test_file(root):
+    (root / "sandbox" / "demo").mkdir()
+    result = tools.create_file("sandbox/demo/test_new.py", NEW_TEST, root=root)
+    assert result == {"ok": True, "path": "sandbox/demo/test_new.py", "bytes": len(NEW_TEST)}
+    assert (root / "sandbox/demo/test_new.py").read_text() == NEW_TEST
+
+
+@pytest.mark.parametrize("path", [
+    "sandbox/demo/x.py",
+    "sandbox/demo/test_new.txt",
+    "sandbox/demo/new_test.py",
+    "sandbox/demo/test_.py",
+    "sandbox/demo/test_new.py\n",
+    "sandbox/demo/test-new.py",
+    "../test_x.py",
+    "sandbox/../test_x.py",
+    "sandbox/demo/../test_x.py",
+    "/tmp/sandbox/test_x.py",
+    "test_x.py",
+    "secret/test_x.py",
+    "",
+    None,
+    7,
+])
+def test_create_file_refuses_non_test_paths_and_escapes(root, path):
+    (root / "sandbox" / "demo").mkdir()
+    before = sorted(p.relative_to(root).as_posix() for p in root.rglob("*"))
+    result = tools.create_file(path, NEW_TEST, root=root)
+    assert result["ok"] is False and result["error_code"] in {"BAD_ARGUMENT", "OUTSIDE_SANDBOX"}
+    assert sorted(p.relative_to(root).as_posix() for p in root.rglob("*")) == before
+
+
+def test_create_file_never_overwrites_a_file_or_a_symlink(root):
+    demo = root / "sandbox" / "demo"
+    demo.mkdir()
+    (demo / "test_old.py").write_text("original\n")
+    assert failed(tools.create_file("sandbox/demo/test_old.py", NEW_TEST, root=root), "FILE_EXISTS")
+    assert (demo / "test_old.py").read_text() == "original\n"
+    os.symlink(root / "secret.txt", demo / "test_link.py")
+    assert failed(tools.create_file("sandbox/demo/test_link.py", NEW_TEST, root=root), "FILE_EXISTS")
+    os.symlink(root / "nowhere.txt", demo / "test_dangling.py")
+    assert failed(tools.create_file("sandbox/demo/test_dangling.py", NEW_TEST, root=root), "FILE_EXISTS")
+    assert (root / "secret.txt").read_text() == "top secret" and not (root / "nowhere.txt").exists()
+
+
+def test_create_file_refuses_a_missing_parent_and_never_makes_directories(root):
+    assert failed(tools.create_file("sandbox/missing/test_new.py", NEW_TEST, root=root), "NOT_FOUND")
+    assert not (root / "sandbox" / "missing").exists()
+
+
+def test_create_file_refuses_a_symlinked_parent(root, tmp_path_factory):
+    outside = tmp_path_factory.mktemp("outside")
+    os.symlink(outside, root / "sandbox" / "elsewhere")
+    assert refused(tools.create_file("sandbox/elsewhere/test_new.py", NEW_TEST, root=root))
+    assert list(outside.iterdir()) == []
+    os.symlink(root / "sandbox" / "app", root / "sandbox" / "alias")  # inside sandbox/, still a symlink
+    assert refused(tools.create_file("sandbox/alias/test_new.py", NEW_TEST, root=root))
+    assert not (root / "sandbox" / "app" / "test_new.py").exists()
+
+
+def test_create_file_refuses_oversize_and_non_string_content(root):
+    (root / "sandbox" / "demo").mkdir()
+    assert failed(tools.create_file("sandbox/demo/test_big.py", "x" * (tools.MAX_CREATE_BYTES + 1), root=root), "TOO_LARGE")
+    assert failed(tools.create_file("sandbox/demo/test_none.py", None, root=root), "BAD_ARGUMENT")
+    assert not list((root / "sandbox" / "demo").iterdir())
+    assert tools.create_file("sandbox/demo/test_max.py", "x" * tools.MAX_CREATE_BYTES, root=root)["ok"]
+
+
+def test_create_file_never_raises(root, monkeypatch):
+    (root / "sandbox" / "demo").mkdir()
+
+    def boom(*args, **kwargs):
+        raise OSError("disk on fire")
+
+    monkeypatch.setattr("builtins.open", boom)
+    result = tools.create_file("sandbox/demo/test_new.py", NEW_TEST, root=root)
+    assert failed(result, "TOOL_ERROR")
+
+
+def test_create_file_cannot_reach_other_agents_files(root):
+    """Only a new test_*.py can be created, so it cannot be used to rewrite code or decisions."""
+    (root / "sandbox" / "demo").mkdir()
+    for path in ("decisions/decisions.jsonl", "sandbox/demo/calc.py", "sandbox/pytest.ini", "sandbox/demo/conftest.py"):
+        assert tools.create_file(path, "x", root=root)["ok"] is False
+
+
+def test_tool_results_have_the_documented_shape(root):
+    (root / "sandbox" / "demo").mkdir()
+    green = add_test(root, "test_ok.py", "def test_ok():\n    assert True\n")
+    results = [tools.create_file("sandbox/demo/test_new.py", NEW_TEST, root=root),
+               tools.create_file("sandbox/demo/x.py", NEW_TEST, root=root),
+               tools.run_test([green], root=root), tools.run_test(["-x"], root=root)]
+    for result in results:
+        assert isinstance(result["ok"], bool)
+        if not result["ok"]:
+            assert set(result) == {"ok", "error_code", "detail"}

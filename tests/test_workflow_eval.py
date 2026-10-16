@@ -51,6 +51,21 @@ def test_a_live_style_run_ends_verified_with_a_complete_audit_and_leaves_the_san
     assert not criteria.terminal_state_reached(response["output"], {"vars": {"expect": {"result": "DEFERRED"}}})["pass"]
 
 
+def test_the_reset_is_git_checkout_of_sandbox_and_keeps_the_committed_pytest_ini(workspace, monkeypatch):
+    commands = []
+    real_run = subprocess.run
+    monkeypatch.setattr(workflow.subprocess, "run", lambda argv, **kw: commands.append(argv) or real_run(argv, **kw))
+    (workspace / "sandbox" / "pytest.ini").write_text("dirty\n")
+    (workspace / "sandbox" / "test_stray.py").write_text("x\n")
+    workflow.reset_sandbox(workspace)
+    assert ["checkout", "HEAD", "--", "sandbox"] == commands[0][3:]
+    assert (workspace / "sandbox" / "pytest.ini").read_text().startswith("[pytest]")   # restored, not removed
+    assert not (workspace / "sandbox" / "test_stray.py").exists()                       # a created test file is cleaned
+    tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "sandbox/pytest.ini"],
+                             cwd=PROJECT_ROOT, capture_output=True, text=True)
+    assert tracked.returncode == 0, tracked.stderr
+
+
 def test_the_sandbox_is_reset_before_a_run_and_after_a_crash(workspace, tmp_path):
     (workspace / PLAN_FILE).write_text("dirty\n")
     (workspace / "sandbox" / "stray.txt").write_text("left over\n")

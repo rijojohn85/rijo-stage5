@@ -219,10 +219,11 @@ def test_helper_receives_only_its_manifest_tools(env, agent, tools):
     assert [t["function"]["name"] for t in sent] == tools
 
 
-def test_implement_receives_exactly_its_three_tools(env):
+def test_implement_receives_exactly_its_four_tools(env):
     planned(env)
     env.run("implement", json_reply(IMPLEMENT))
-    assert [t["function"]["name"] for t in env.llm.calls[-1]["tools"]] == ["read_file", "edit_file", "run_test"]
+    assert [t["function"]["name"] for t in env.llm.calls[-1]["tools"]] == [
+        "read_file", "edit_file", "create_file", "run_test"]
 
 
 def test_every_dispatch_is_a_fresh_conversation(env):

@@ -1,17 +1,23 @@
-"""Sandboxed tools for sub-agents: read_file, edit_file, run_test.
+"""Sandboxed tools for sub-agents: read_file, edit_file, create_file, run_test.
 
 Paths are project-root-relative (e.g. "sandbox/demo-app/calc.py", matching the plan's
 file list). Every path is resolved to its real location (symlinks followed) and must lie
 inside <project root>/sandbox. Every tool returns a dict and never raises:
     {"ok": True, ...}  or  {"ok": False, "error_code": "...", "detail": "..."}
 """
+import importlib.util
 import os
-import shlex
+import re
 import subprocess
+import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SANDBOX_DIRNAME = "sandbox"
+# The only paths run_test runs and create_file creates. No "..", flags, spaces or node ids.
+TEST_FILE_PATTERN = re.compile(r"^sandbox/(?:[A-Za-z0-9_-]+/)*test_[A-Za-z0-9_]+\.py$")
+MAX_TEST_FILES = 3
+MAX_CREATE_BYTES = 20_000
 MAX_READ_BYTES = 200_000
 MAX_LISTING_ENTRIES = 50
 TEST_TIMEOUT_SECONDS = 60
@@ -111,30 +117,69 @@ def edit_file(path, old_text, new_text, root=PROJECT_ROOT):
         return _err("TOOL_ERROR", f"{type(exc).__name__}: {exc}")
 
 
-def run_test(command, root=PROJECT_ROOT, timeout=TEST_TIMEOUT_SECONDS):
-    """Run the plan's test command (no shell) with a timeout.
+def create_file(path, content, root=PROJECT_ROOT):
+    """Create one NEW pytest file (sandbox/.../test_*.py). Never overwrites, never creates directories."""
+    try:
+        if not isinstance(path, str) or not TEST_FILE_PATTERN.fullmatch(path):
+            return _err("BAD_ARGUMENT", "create_file only creates test_*.py files under sandbox/")
+        if not isinstance(content, str):
+            return _err("BAD_ARGUMENT", "content must be a string")
+        data = content.encode("utf-8")
+        if len(data) > MAX_CREATE_BYTES:
+            return _err("TOO_LARGE", f"content exceeds {MAX_CREATE_BYTES} bytes")
+        parent = Path(root) / Path(path).parent
+        real_parent, err = _resolve(str(parent), root)
+        if err:
+            return err
+        if parent.is_symlink():
+            return _err("OUTSIDE_SANDBOX", f"parent directory is a symlink: {parent.relative_to(root)}")
+        if not real_parent.is_dir():
+            return _err("NOT_FOUND", f"directory does not exist: {Path(path).parent}")
+        target = real_parent / Path(path).name
+        if os.path.lexists(target):
+            return _err("FILE_EXISTS", f"already exists, create_file never overwrites: {path}")
+        try:
+            with open(target, "x", encoding="utf-8") as handle:  # exclusive create: a race cannot overwrite
+                handle.write(content)
+        except FileExistsError:
+            return _err("FILE_EXISTS", f"already exists, create_file never overwrites: {path}")
+        return {"ok": True, "path": path, "bytes": len(data)}
+    except Exception as exc:
+        return _err("TOOL_ERROR", f"{type(exc).__name__}: {exc}")
 
-    The working directory is the project root so plan commands that name
-    "sandbox/demo-app/..." work verbatim; any path-like argument that resolves outside
-    sandbox/ is refused before running.
+
+def _test_files_problem(files, root):
+    """An error dict when `files` is not 1 to MAX_TEST_FILES existing test files inside sandbox/, else None."""
+    if not isinstance(files, list) or not 1 <= len(files) <= MAX_TEST_FILES:
+        return _err("BAD_ARGUMENT", f"files must be a list of 1 to {MAX_TEST_FILES} test file paths")
+    for name in files:
+        if not isinstance(name, str) or not TEST_FILE_PATTERN.fullmatch(name):
+            return _err("BAD_ARGUMENT", f"not a sandbox/.../test_*.py path: {name!r}")
+        if (Path(root) / name).is_symlink():
+            return _err("OUTSIDE_SANDBOX", f"test file is a symlink: {name}")
+        real, err = _resolve(name, root)
+        if err:
+            return err
+        if not real.is_file():
+            return _err("NOT_FOUND", f"not a file: {name}")
+    return None
+
+
+def run_test(files, root=PROJECT_ROOT, timeout=TEST_TIMEOUT_SECONDS):
+    """Run the plan's pytest files. The harness builds the command; the model only names files.
+
+    `files` holds 1 to 3 existing sandbox/.../test_*.py paths. No flags, node ids or other
+    arguments get through. Honest limit: this narrows the command line only. pytest still
+    executes whatever Python the test file contains, so it is not a security boundary.
+    The backstops stay the plan-scope check and `git status`.
     """
     try:
-        if not isinstance(command, str) or not command.strip():
-            return _err("BAD_ARGUMENT", "command must be a non-empty string")
-        try:
-            argv = shlex.split(command)
-        except ValueError as exc:
-            return _err("BAD_ARGUMENT", f"cannot parse command: {exc}")
-        if not argv:
-            return _err("BAD_ARGUMENT", "empty command")
-        # Refuse obvious path arguments that point outside the sandbox.
-        for arg in argv[1:]:
-            if arg.startswith("-") or "\n" in arg or " " in arg or arg.startswith("import"):
-                continue
-            if arg.startswith("/") or ".." in Path(arg).parts:
-                _, err = _resolve(arg, root)
-                if err:
-                    return err
+        problem = _test_files_problem(files, root)
+        if problem:
+            return problem
+        if importlib.util.find_spec("pytest") is None:
+            return _err("PYTEST_MISSING", "pytest is not installed for this interpreter")
+        argv = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", *files]
         try:
             proc = subprocess.run(
                 argv, cwd=str(root), capture_output=True, text=True,
@@ -143,8 +188,6 @@ def run_test(command, root=PROJECT_ROOT, timeout=TEST_TIMEOUT_SECONDS):
             )
         except subprocess.TimeoutExpired:
             return _err("TIMEOUT", f"test exceeded {timeout}s")
-        except FileNotFoundError:
-            return _err("COMMAND_NOT_FOUND", f"not found: {argv[0]}")
         except OSError as exc:
             return _err("TOOL_ERROR", str(exc))
         return {
@@ -158,4 +201,4 @@ def run_test(command, root=PROJECT_ROOT, timeout=TEST_TIMEOUT_SECONDS):
         return _err("TOOL_ERROR", f"{type(exc).__name__}: {exc}")
 
 
-TOOLS = {"read_file": read_file, "edit_file": edit_file, "run_test": run_test}
+TOOLS = {"read_file": read_file, "edit_file": edit_file, "create_file": create_file, "run_test": run_test}

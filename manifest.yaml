@@ -29,7 +29,7 @@ agents:
     results: results/plan.json
   implement:
     model: accounts/fireworks/models/deepseek-v4p1-flash
-    tools: [read_file, edit_file, run_test]
+    tools: [read_file, edit_file, create_file, run_test]
     isolated_context: true
     workflow: implement
     eval: evals/promptfoo.implement.yaml

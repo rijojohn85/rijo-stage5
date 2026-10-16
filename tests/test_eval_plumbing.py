@@ -285,14 +285,16 @@ def test_implement_case_edits_a_scratch_copy_never_the_real_sandbox():
     report = {"changed": [CALC], "summary": "guard", "test_passed": True}
     case_vars = {"agent": "implement", "triage": json.dumps(TRIAGE), "plan": json.dumps(plan),
                  "expect": {"files_include": [CALC]}}
+    sandbox_status = ["git", "-C", str(PROJECT_ROOT), "status", "--porcelain", "--", "sandbox"]
+    status_before = subprocess.run(sandbox_status, capture_output=True, text=True).stdout
     response, _ = call(case_vars, edit, json_reply(report))
     assert (PROJECT_ROOT / CALC).read_text() == real_before
-    assert subprocess.run(["git", "-C", str(PROJECT_ROOT), "status", "--porcelain", "--", "sandbox"],
-                          capture_output=True, text=True).stdout == ""
+    assert subprocess.run(sandbox_status, capture_output=True, text=True).stdout == status_before  # unchanged by the eval
     metadata = response["metadata"]
     assert metadata["actual_changed"] == [CALC]
-    assert metadata["test_failed_before"] is True and metadata["test_passed_after"] is True
-    for function in ("changes_only_plan_files", "red_to_green", "no_unreported_edits"):
+    # red/green needs the plan's test_files (Step C2) and the original-code replay (C3); until then it is not measured
+    assert metadata["test_failed_before"] is False and metadata["test_passed_after"] is False
+    for function in ("changes_only_plan_files", "no_unreported_edits"):
         assert grade(function, response, case_vars)["pass"], function
 
 

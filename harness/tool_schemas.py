@@ -21,12 +21,28 @@ TOOL_SPECS = {
             "required": ["path", "old_text", "new_text"],
         },
     },
-    "run_test": {
-        "description": "Run the plan's test command (no shell) and return its exit code and output.",
+    "create_file": {
+        "description": ("Create one new pytest file listed in the plan's test_files. Refuses existing files "
+                        "and any path that is not sandbox/.../test_*.py."),
         "parameters": {
             "type": "object",
-            "properties": {"command": {"type": "string"}},
-            "required": ["command"],
+            "properties": {
+                "path": {"type": "string",
+                         "description": "a new test file from the plan's test_files, e.g. sandbox/demo-app/test_calc_empty.py"},
+                "content": {"type": "string"},
+            },
+            "required": ["path", "content"],
+        },
+    },
+    "run_test": {
+        "description": "Run the plan's test files with pytest; the harness builds the command.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "files": {"type": "array", "items": {"type": "string"},
+                          "description": "the plan's test_files, e.g. sandbox/demo-app/test_calc_empty.py"},
+            },
+            "required": ["files"],
         },
     },
 }
