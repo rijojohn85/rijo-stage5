@@ -19,12 +19,13 @@ from harness.prompts import PromptLibrary
 from harness.store import REVIEWER, WRITER
 
 PLAN_FILE = "sandbox/demo-app/calc.py"
+PLAN_TEST_FILE = "sandbox/demo-app/test_calc_empty.py"
 DEFAULTS = {
     "screen": [{"verdict": "clean", "evidence": [], "reason": "an ordinary bug report"}],
     "triage": [{"classification": "bug", "decision": "fix-now", "root_cause": "calc.py: average() divides by len([])",
                 "rationale": "a small local defect with a documented expected result", "escalation": False}],
-    "plan": [{"files": [PLAN_FILE], "steps": ["return 0.0 for an empty list"],
-              "test": "python3 -m pytest sandbox/demo-app"}],
+    "plan": [{"files": [PLAN_FILE, PLAN_TEST_FILE], "steps": ["return 0.0 for an empty list"],
+              "test_files": [PLAN_TEST_FILE]}],
     "implement": [{"changed": [PLAN_FILE], "summary": "average() returns 0.0 for an empty list", "test_passed": True}],
     "escalate": [{"reason": "the review found a dangerous problem", "question": "how should we proceed?",
                   "options": ["stop and review by hand", "continue with a backup"], "risk_if_wrong": "lost records"}],

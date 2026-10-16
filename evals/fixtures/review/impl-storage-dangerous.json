@@ -1,5 +1,5 @@
 {
-  "changed": ["sandbox/demo-app/storage.py"],
+  "changed": ["sandbox/demo-app/storage.py", "sandbox/demo-app/test_storage_existing.py"],
   "summary": "Handled the serialization failure so that save_records no longer truncates the file before writing.",
   "test_passed": true
 }

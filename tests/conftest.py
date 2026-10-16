@@ -21,7 +21,9 @@ PLAN_FILE = "sandbox/demo-app/calc.py"
 
 TRIAGE = {"classification": "bug", "decision": "fix-now", "root_cause": "calc.py:add subtracts",
           "rationale": "small local fix", "escalation": False}
-PLAN = {"files": [PLAN_FILE], "steps": ["fix add"], "test": "python3 -m pytest sandbox/demo-app"}
+PLAN_TEST_FILE = "sandbox/demo-app/test_calc.py"
+PLAN = {"files": [PLAN_FILE, PLAN_TEST_FILE], "steps": [f"fix add; {PLAN_TEST_FILE} asserts add(1, 2) == 3"],
+        "test_files": [PLAN_TEST_FILE]}
 IMPLEMENT = {"changed": [PLAN_FILE], "summary": "fixed add", "test_passed": True}
 ESCALATION = {"reason": "data loss", "question": "proceed?", "options": ["yes", "no"], "risk_if_wrong": "lost data"}
 

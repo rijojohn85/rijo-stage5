@@ -28,19 +28,24 @@ any level:
 {
   "files": ["repository-relative paths the fix will change"],
   "steps": ["ordered, concrete steps that make the fix"],
-  "test": "one command that fails before the fix and passes after it"
+  "test_files": ["one new pytest file per fix, for example sandbox/demo-app/test_calc_empty.py"]
 }
 ```
 
 ## Rules
 
-1. `files` names only the files the fix must change, each written as it appears in the
-   repository (for example `sandbox/demo-app/calc.py`). Never name a file you have not
-   read, and never name a file you would not edit. A one-file fix lists one file.
+1. `files` names only the files the fix must change, plus its new test files, each written as it appears in the
+   repository (for example `sandbox/demo-app/calc.py`). Never name an existing file you
+   have not read, and never name a file you would not edit. A one-file fix lists one file.
 2. `steps` is an ordered list of concrete edits. Every step names the file it touches, and
    no step may touch a file that is not in `files`.
-3. `test` is a single runnable check that fails against the current code and passes once
-   the fix is in place. Prefer a command that runs from the repository root.
+3. `test_files` names one new pytest file per fix (at most three), written as
+   `sandbox/<dir>/test_<name>.py` (for example `sandbox/demo-app/test_calc_empty.py`). The
+   file does not exist yet: the implementer creates it. Its tests fail against the current
+   code and pass once the fix is in place. List each test file in both `files` and
+   `test_files`, and add one step that names the test file path and says what it asserts
+   (the function under test and the expected result). You do not write a command: the harness
+   runs the files with pytest.
 4. Plan the smallest change that fixes the mechanism the triage result names. Do not
    refactor, do not add features, do not add dependencies, and do not touch files that
    merely look related.

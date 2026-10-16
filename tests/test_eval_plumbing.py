@@ -37,6 +37,8 @@ EXPECTED_METRICS = {
 FIXTURES = EVALS / "fixtures"
 NO_CHANGE_WORDS = ["no change", "leave", "do nothing", "keep", "hold", "wait", "as is", "unchanged", "no action", "defer"]  # as in promptfoo.escalate.yaml
 CALC = "sandbox/demo-app/calc.py"
+CALC_TEST = "sandbox/demo-app/test_calc_empty.py"
+CALC_TEST_CONTENT = "import calc\n\n\ndef test_average_of_empty_list_is_zero():\n    assert calc.average([]) == 0.0\n"
 
 
 def load_suite(name):
@@ -282,18 +284,21 @@ def test_implement_case_edits_a_scratch_copy_never_the_real_sandbox():
     plan = json.loads(fixture("plan/impl-calc.json"))
     edit = tool_reply("edit_file", {"path": CALC, "old_text": "    return sum(values) / len(values)",
                                     "new_text": "    if not values:\n        return 0.0\n    return sum(values) / len(values)"})
-    report = {"changed": [CALC], "summary": "guard", "test_passed": True}
+    new_test = tool_reply("create_file", {"path": CALC_TEST, "content": CALC_TEST_CONTENT})
+    run_tests = tool_reply("run_test", {"files": [CALC_TEST]})
+    report = {"changed": [CALC, CALC_TEST], "summary": "guard", "test_passed": True}
     case_vars = {"agent": "implement", "triage": json.dumps(TRIAGE), "plan": json.dumps(plan),
                  "expect": {"files_include": [CALC]}}
     sandbox_status = ["git", "-C", str(PROJECT_ROOT), "status", "--porcelain", "--", "sandbox"]
     status_before = subprocess.run(sandbox_status, capture_output=True, text=True).stdout
-    response, _ = call(case_vars, edit, json_reply(report))
+    response, _ = call(case_vars, new_test, edit, run_tests, json_reply(report))
+    assert not (PROJECT_ROOT / CALC_TEST).exists()
     assert (PROJECT_ROOT / CALC).read_text() == real_before
     assert subprocess.run(sandbox_status, capture_output=True, text=True).stdout == status_before  # unchanged by the eval
     metadata = response["metadata"]
-    assert metadata["actual_changed"] == [CALC]
-    # red/green needs the plan's test_files (Step C2) and the original-code replay (C3); until then it is not measured
-    assert metadata["test_failed_before"] is False and metadata["test_passed_after"] is False
+    assert metadata["actual_changed"] == [CALC, CALC_TEST]
+    # green is measured on the plan's test_files; red needs the original-code replay (Step C3), so it is not measured yet
+    assert metadata["test_failed_before"] is False and metadata["test_passed_after"] is True
     for function in ("changes_only_plan_files", "no_unreported_edits"):
         assert grade(function, response, case_vars)["pass"], function
 

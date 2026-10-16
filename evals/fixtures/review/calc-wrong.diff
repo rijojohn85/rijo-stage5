@@ -1,3 +1,13 @@
+diff --git a/sandbox/demo-app/test_calc_empty.py b/sandbox/demo-app/test_calc_empty.py
+new file mode 100644
+--- /dev/null
++++ b/sandbox/demo-app/test_calc_empty.py
+@@ -0,0 +1,5 @@
++import calc
++
++
++def test_average_of_empty_list_is_zero():
++    assert calc.average([]) == 0.0
 --- a/sandbox/demo-app/calc.py
 +++ b/sandbox/demo-app/calc.py
 @@ -6,4 +6,6 @@ Requirements live in SPEC.md.

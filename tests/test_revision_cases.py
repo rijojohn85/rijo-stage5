@@ -11,12 +11,13 @@ from providers.eval_case import EvalCase  # noqa: E402
 
 REVISION_SUITES = ("triage", "plan", "implement")
 STORAGE = "sandbox/demo-app/storage.py"
+CALC_TEST = "sandbox/demo-app/test_calc_empty.py"
 GOOD_REVISIONS = {
     "triage": {"classification": "bug", "decision": "defer", "escalation": True,
                "root_cause": "storage.py:save_records truncates the file before json.dumps runs",
                "rationale": "customer data was lost twice; a human must decide"},
-    "plan": {"files": [CALC], "steps": ["guard average()"],
-             "test": "python3 -c \"import calc; assert calc.average([]) == 0.0\"  # average"},
+    "plan": {"files": [CALC, CALC_TEST], "steps": [f"{CALC_TEST} asserts average([]) == 0.0", "guard average()"],
+             "test_files": [CALC_TEST]},
     "implement": {"changed": [CALC], "summary": "Added the empty-list guard in calc.py only.", "test_passed": True},
 }
 

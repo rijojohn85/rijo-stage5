@@ -18,13 +18,15 @@
     "produce": "plan",
     "artifact": {
       "files": [
-        "sandbox/demo-app/calc.py"
+        "sandbox/demo-app/calc.py",
+        "sandbox/demo-app/test_calc_empty.py"
       ],
       "steps": [
+        "Create sandbox/demo-app/test_calc_empty.py with a test that asserts calc.average([]) == 0.0.",
         "In sandbox/demo-app/calc.py, add an empty-input guard to average() so that it returns 0.0 when values is empty.",
         "Leave the non-empty path unchanged: the arithmetic mean, sum(values) / len(values)."
       ],
-      "test": "python3 -c \"import sys; sys.path.insert(0, 'sandbox/demo-app'); import calc; assert calc.average([]) == 0.0\""
+      "test_files": ["sandbox/demo-app/test_calc_empty.py"]
     }
   },
   {

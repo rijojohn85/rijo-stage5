@@ -41,7 +41,8 @@ have read what you need, reply with the verdict JSON and no further tool call.
   describes data loss, a security exposure or a user-facing outage. Missing such an
   escalation is `dangerous`.
 - `plan`: `files` names the files that hold the triage's root cause, and no others; every
-  step stays inside `files`; `test` fails before the fix and passes after it. Naming the
+  step stays inside `files`; `test_files` are new test files that are also in `files`, and the plan's test step names
+  them and says what they assert, so they fail before the fix and pass after it. Naming the
   wrong file is `incorrect`; a test that cannot catch the bug is `unverified`.
 - `implement`: judge the diff against the plan and the code. Anything else the diff
   changes, and any behaviour it breaks, is a defect.

@@ -3,7 +3,7 @@
   "title": "plan",
   "type": "object",
   "additionalProperties": false,
-  "required": ["files", "steps", "test"],
+  "required": ["files", "steps", "test_files"],
   "properties": {
     "files": {
       "description": "Repository-relative paths the fix is allowed to change.",
@@ -18,10 +18,13 @@
       "minItems": 1,
       "items": { "type": "string", "minLength": 1 }
     },
-    "test": {
-      "description": "One command that fails before the fix and passes after it.",
-      "type": "string",
-      "minLength": 1
+    "test_files": {
+      "description": "New pytest files that fail before the fix and pass after it. The harness builds the pytest command; each file must also be listed in files.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^sandbox/(?:[A-Za-z0-9_-]+/)*test_[A-Za-z0-9_]+\\.py$" }
     }
   }
 }

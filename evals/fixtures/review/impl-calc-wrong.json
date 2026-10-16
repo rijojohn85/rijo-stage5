@@ -1,5 +1,5 @@
 {
-  "changed": ["sandbox/demo-app/calc.py"],
+  "changed": ["sandbox/demo-app/calc.py", "sandbox/demo-app/test_calc_empty.py"],
   "summary": "Added an empty-input guard to average() returning 0.0 and simplified the mean calculation.",
   "test_passed": true
 }

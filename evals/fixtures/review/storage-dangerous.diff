@@ -1,3 +1,19 @@
+diff --git a/sandbox/demo-app/test_storage_existing.py b/sandbox/demo-app/test_storage_existing.py
+new file mode 100644
+--- /dev/null
++++ b/sandbox/demo-app/test_storage_existing.py
+@@ -0,0 +1,10 @@
++import storage
++
++
++def test_failed_save_keeps_existing_file(tmp_path):
++    path = tmp_path / "records.json"
++    path.write_text("[]")
++    try:
++        storage.save_records(str(path), {1, 2})
++    except Exception:
++        pass
++    assert path.read_text() == "[]"
 --- a/sandbox/demo-app/storage.py
 +++ b/sandbox/demo-app/storage.py
 @@ -8,8 +8,12 @@ Requirements live in SPEC.md.

@@ -78,6 +78,18 @@ class PlanScopeCheck:
         return None
 
 
+class TestFilesInPlanCheck:
+    """Every test file is also in the plan's `files`, so the plan-scope check covers the new test file."""
+    __test__ = False  # not a pytest class, despite the name
+
+    def run(self, ctx, artifact):
+        outside = [path for path in artifact["test_files"] if path not in artifact["files"]]
+        if outside:
+            return Failure(ErrorCode.SCHEMA_INVALID,
+                           f"test_files must also be listed in files; missing from files: {', '.join(outside)}")
+        return None
+
+
 class ReviewBindingCheck:
     """The reviewer must echo the requested target and hashes; missing or wrong values fail closed."""
 
