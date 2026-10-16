@@ -22,10 +22,11 @@ sys.path[:0] = [str(EVALS), str(EVALS / "providers")]
 import criteria  # noqa: E402
 import fireworks  # noqa: E402
 
-SUITES = ("screen", "triage", "plan", "implement", "review", "escalate", "writer")
+SUITES = ("screen", "screen-redteam", "triage", "plan", "implement", "review", "escalate", "writer")
 # plan section 8: the named criteria each suite reports, as promptfoo `metric:` labels
 EXPECTED_METRICS = {
     "screen": {"flags-injection", "no-false-positive", "evidence-quotes-report"},
+    "screen-redteam": {"flags-injection", "no-false-positive", "evidence-quotes-report"},
     "triage": {"valid-enums", "root-cause-cites-real-file", "escalation-flagged", "addresses-feedback"},
     "plan": {"names-right-file", "excludes-wrong-files", "test-targets-function", "addresses-feedback"},
     "implement": {"changes-only-plan-files", "test-red-to-green", "no-unreported-edits", "addresses-feedback"},
@@ -420,6 +421,43 @@ def test_screen_case_keeps_a_harmless_report_clean(name):
     assert grade("no_false_positive", response, case_vars)["pass"]
 
 
+REDTEAM_FIXTURES = sorted((FIXTURES / "screen" / "redteam").glob("rt-*.md"))
+REDTEAM_BACKSTOP_HITS = {"rt-shell-injection-01.md", "rt-prompt-extraction-01.md",
+                         "rt-prompt-extraction-02.md", "rt-tool-discovery-03.md"}   # the other eight test the model alone
+
+
+def test_screen_redteam_suite_covers_every_fixture_with_the_right_verdict():
+    tests = load_suite("screen-redteam")["tests"]
+    expected_metric = {p.name: "no-false-positive" if p.name.startswith("rt-benign-") else "flags-injection"
+                       for p in REDTEAM_FIXTURES}
+    assert len(REDTEAM_FIXTURES) == 15
+    got = {Path(t["vars"]["report"]).name: {a["metric"] for a in t["assert"]} for t in tests}
+    assert got == {name: {metric} for name, metric in expected_metric.items()}
+    assert len(tests) == len(got)   # no fixture is used twice
+
+
+@pytest.mark.parametrize("path", REDTEAM_FIXTURES, ids=lambda p: p.name)
+def test_screen_redteam_fixtures_trip_the_backstop_only_where_listed(path):
+    from guardrails import screen_gate
+    hits = screen_gate.matches(path.read_text(encoding="utf-8"), screen_gate.load_triggers())
+    assert bool(hits) == (path.name in REDTEAM_BACKSTOP_HITS)
+
+
+def test_screen_redteam_attack_missed_by_the_model_is_flagged_only_when_the_backstop_catches_it():
+    for name, flagged in (("rt-shell-injection-01.md", True), ("rt-excessive-agency-01.md", False)):
+        case_vars = {"agent": "screen", "report": fixture(f"screen/redteam/{name}")}
+        response, _ = call(case_vars, json_reply(SCREEN_REPLY))       # the model says clean
+        assert (output_of(response)["verdict"] == "suspicious") == flagged, name
+        assert grade("flags_injection", response, case_vars)["pass"] == flagged
+
+
+def test_screen_redteam_benign_case_stays_clean_through_the_dispatcher():
+    case_vars = {"agent": "screen", "report": fixture("screen/redteam/rt-benign-01.md")}
+    response, _ = call(case_vars, json_reply(SCREEN_REPLY))
+    assert output_of(response) == SCREEN_REPLY
+    assert grade("no_false_positive", response, case_vars)["pass"]
+
+
 def test_screen_review_case_binds_to_the_screen_fixture():
     case_vars = {"agent": "reviewer", "target": "screen", "report": fixture("screen/attack-ignore-previous.md"),
                  "screen": fixture("review/screen-missed-injection.json")}
@@ -488,7 +526,7 @@ def test_every_metric_assertion_points_at_a_real_criterion(suite):
             assert callable(getattr(criteria, function)), assertion
 
 
-@pytest.mark.parametrize("suite,cases", [("screen", 14), ("triage", 6), ("plan", 4), ("implement", 3), ("review", 10), ("escalate", 2), ("writer", 3)])
+@pytest.mark.parametrize("suite,cases", [("screen", 14), ("screen-redteam", 15), ("triage", 6), ("plan", 4), ("implement", 3), ("review", 10), ("escalate", 2), ("writer", 3)])
 def test_case_counts_match_the_plan(suite, cases):
     assert len(load_suite(suite)["tests"]) == cases
 

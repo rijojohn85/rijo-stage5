@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# screen red team — 12 attack reports (3 per theme) and 3 benign look-alikes, written by Claude Opus
+# because promptfoo's local generation produced mostly unusable cases (see evals/redteam.screen.yaml
+# and fixtures/screen/redteam-raw.yaml, kept as evidence). Themes are the four local plugins:
+# excessive-agency, shell-injection, prompt-extraction, tool-discovery. Remote generation is never
+# enabled. Same provider and criteria as promptfoo.screen.yaml: the real dispatcher runs the screen
+# check after the model, so an attack case measures the model plus its code backstop. Only four
+# attacks trip guardrails/screen_gate.py (shell-injection-01, prompt-extraction-01 and -02,
+# tool-discovery-03); the other eight test the model alone.
+description: screen red team — flag injection attempts across four themes, leave benign look-alikes alone
+prompts:
+  - '{{agent}}'  # unused by the provider; the test vars describe the case
+providers:
+  - id: file://providers/fireworks.py
+    label: deepseek-v4p1-flash
+    config:
+      timeout: 600000
+defaultTest:
+  vars:
+    agent: screen
+  assert:
+    - type: is-json
+    - { type: python, metric: evidence-quotes-report, value: 'file://criteria.py:evidence_quotes_report' }
+tests:
+  - description: 'attack: excessive-agency 01 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-excessive-agency-01.md
+    assert:
+      - &flags { type: python, metric: flags-injection, value: 'file://criteria.py:flags_injection' }
+  - description: 'attack: excessive-agency 02 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-excessive-agency-02.md
+    assert:
+      - *flags
+  - description: 'attack: excessive-agency 03 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-excessive-agency-03.md
+    assert:
+      - *flags
+  - description: 'attack: shell-injection 01 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-shell-injection-01.md
+    assert:
+      - *flags
+  - description: 'attack: shell-injection 02 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-shell-injection-02.md
+    assert:
+      - *flags
+  - description: 'attack: shell-injection 03 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-shell-injection-03.md
+    assert:
+      - *flags
+  - description: 'attack: prompt-extraction 01 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-prompt-extraction-01.md
+    assert:
+      - *flags
+  - description: 'attack: prompt-extraction 02 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-prompt-extraction-02.md
+    assert:
+      - *flags
+  - description: 'attack: prompt-extraction 03 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-prompt-extraction-03.md
+    assert:
+      - *flags
+  - description: 'attack: tool-discovery 01 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-tool-discovery-01.md
+    assert:
+      - *flags
+  - description: 'attack: tool-discovery 02 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-tool-discovery-02.md
+    assert:
+      - *flags
+  - description: 'attack: tool-discovery 03 -> suspicious'
+    vars:
+      report: file://fixtures/screen/redteam/rt-tool-discovery-03.md
+    assert:
+      - *flags
+  - description: 'benign look-alike 01 -> clean'
+    vars:
+      report: file://fixtures/screen/redteam/rt-benign-01.md
+    assert:
+      - &clean { type: python, metric: no-false-positive, value: 'file://criteria.py:no_false_positive' }
+  - description: 'benign look-alike 02 -> clean'
+    vars:
+      report: file://fixtures/screen/redteam/rt-benign-02.md
+    assert:
+      - *clean
+  - description: 'benign look-alike 03 -> clean'
+    vars:
+      report: file://fixtures/screen/redteam/rt-benign-03.md
+    assert:
+      - *clean
